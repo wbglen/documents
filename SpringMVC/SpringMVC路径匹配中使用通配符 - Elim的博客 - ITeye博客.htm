@@ -1,0 +1,1516 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0035)https://elim.iteye.com/blog/2409316 -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" dir="ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title>
+    SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客
+  </title>
+  <meta name="description" content=" SpringMVC路径匹配中使用通配符  @RequestMapping中指定的路径也可以使用通配符*，表示任意字符。如下的处理器方法可以映射请求/antstyle/a，可以映射请求/antstyle/b，但是它不能映射请求请求/antstyle/a/b，因为它只能映射一级路径。    @RequestMapping(&quot;/antstyle/*&quot;)  public Object  ...">
+  <meta name="keywords" content="SpringMVC, 通配符, 路径匹配, RequestMapping, antstyle SpringMVC路径匹配中使用通配符">
+  <link rel="shortcut icon" href="https://elim.iteye.com/images/favicon.ico" type="image/x-icon">
+  <link rel="search" type="application/opensearchdescription+xml" href="https://elim.iteye.com/open_search.xml" title="ITeye">
+  <link href="https://elim.iteye.com/rss" rel="alternate" title="Elim的博客" type="application/rss+xml">
+  <link href="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/blog.css" media="screen" rel="stylesheet" type="text/css">
+<link href="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/green.css" media="screen" rel="stylesheet" type="text/css">
+  <script type="text/javascript" async="" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/analytics.js"></script><script type="text/javascript" async="" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/auto_dup"></script><script src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/hm.js"></script><script src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/hm(1).js"></script><script src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/application.js" type="text/javascript"></script>
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?e19a8b00cf63f716d774540875007664";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+<style>
+/* 折叠效果 */
+.hide-main-content{
+    position: relative;
+}
+.hide-article-box {
+    display: none;
+    position: absolute;
+    z-index: 9999;
+    bottom: -1px;
+    width: 100%;
+    padding-top: 160px;
+    background-image: -webkit-gradient(linear,left top, left bottom,from(rgba(255,255,255,0)),color-stop(70%, #fff));
+    background-image: linear-gradient(-180deg,rgba(255,255,255,0) 0%,#fff 70%);
+}
+.hide-article-box #btn-readmore{
+    color: #ca0c16;
+    border: 1px solid #ca0c16;
+    margin: 10px auto;
+    padding: 0 8px;
+    display: block;
+    font-size: 14px;
+    border-radius: 4px;
+    text-align: center;
+    background-color: transparent;
+    height: 34px;
+    width: 74px;
+    line-height: 32px;
+    min-width: 72px;
+    cursor: pointer;
+}
+.hide-article-box #btn-readmore:hover{
+    background: #ca0c16;
+    color:#fff;
+    text-decoration: none;
+}
+</style>
+<!-- 因INS广告原因 需要提前引入jquery -->
+<script src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script type="text/javascript">var jQuery = jQuery.noConflict();// 解决jq与prototype.js命名空间冲突的问题</script>
+<script src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/fixed-sidebar.js" type="text/javascript"></script>
+
+    <link href="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/SyntaxHighlighter.css" media="screen" rel="stylesheet" type="text/css">
+  <script src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/shCoreCommon.js" type="text/javascript"></script>
+<script src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/hotkey.js" type="text/javascript"></script>
+  <script src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/code_favorites.js" type="text/javascript"></script>
+<script src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/weiboshare.js" type="text/javascript"></script>
+
+  <!-- 请置于所有广告位代码之前 -->
+  <script src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/ds.js"></script>
+  <link ref="canonical" href="http://elim.iteye.com/blog/2409316">
+  <script src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/c.js"></script><link rel="stylesheet" type="text/css" href="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/recommend.css"><link rel="stylesheet" type="text/css" href="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/iconfont.css"><script type="text/javascript" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/check-adb.js"></script><script type="text/javascript" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/baidu_opensug-1.0.0.js"></script><link rel="stylesheet" type="text/css" href="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/check-adb.css"><script type="text/javascript" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/fuckadblock.min.js"></script><style type="text/css"></style><style type="text/css"></style><style type="text/css"></style><style type="text/css"></style><style type="text/css"></style><style type="text/css"></style><style type="text/css"></style><style type="text/css"></style><style type="text/css"></style><style type="text/css"></style><style type="text/css"></style></head><body><div id="BAIDU_DUP_fp_wrapper" style="position: absolute; left: -1px; bottom: -1px; z-index: 0; width: 0px; height: 0px; overflow: hidden; visibility: hidden; display: none;"><iframe id="BAIDU_DUP_fp_iframe" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/o.html" style="width: 0px; height: 0px; visibility: hidden; display: none;"></iframe></div><svg aria-hidden="true" style="position: absolute; width: 0px; height: 0px; overflow: hidden;"><symbol id="sousuo" viewBox="0 0 1024 1024"><path d="M719.6779726 653.55865555l0.71080936 0.70145709 191.77828505 191.77828506c18.25658185 18.25658185 18.25658185 47.86273439 0 66.12399318-18.26593493 18.26125798-47.87208744 18.26125798-66.13334544 0l-191.77828505-191.77828506c-0.2338193-0.2338193-0.4676378-0.4676378-0.69678097-0.71081014-58.13206223 44.25257003-130.69075187 70.51978897-209.38952657 70.51978894C253.06424184 790.19776156 98.14049639 635.27869225 98.14049639 444.17380511S253.06424184 98.14049639 444.16912898 98.14049639c191.10488633 0 346.02863258 154.92374545 346.02863259 346.02863259 0 78.6987747-26.27189505 151.25746514-70.51978897 209.38952657z m-275.50884362 43.11621045c139.45428506 0 252.50573702-113.05145197 252.50573702-252.50573702s-113.05145197-252.50573702-252.50573702-252.50573783-252.50573702 113.05145197-252.50573783 252.50573783 113.05145197 252.50573702 252.50573783 252.50573702z"></path></symbol><symbol id="gonggong_csdnlogo_" viewBox="0 0 4096 1024"><path d="M1234.16069807 690.46341551c62.96962316 23.02318413 194.30703694 45.91141406 300.51598128 45.91141406 114.44114969 0 178.13952547-31.68724287 183.2407937-80.86454822 4.642424-44.8587714-42.21366937-50.93170978-171.44579784-81.53931916-178.57137886-43.77913792-292.49970264-111.55313011-281.32549604-219.86735976 12.9825927-125.75031047 181.27046257-220.78504823 439.49180199-220.78504822 125.88526465 0 247.93783044 8.87998544 311.17736197 29.60894839l-21.7006331 158.57116851c-41.05306337-14.27815288-198.1937175-34.11641822-304.48363435-34.11641822-107.7744129 0-163.56447339 33.90049151-167.42416309 71.06687432-4.85835069 47.04502922 51.14763648 49.23128703 191.14910897 86.50563321 189.58364043 48.09767188 272.47250144 115.81768239 261.6221849 220.81203906-12.71268432 123.51007099-164.13128096 228.53141851-466.48263918 228.53141851-125.85827383 0-234.33444849-22.96920244-294.09216204-45.93840492l19.730302-157.86940672zM3010.8325562 172.75216735c688.40130256-129.79893606 747.80813523 103.42888812 726.53935551 309.80082928l-40.08139323 381.78539207h-218.51781789l36.57258439-348.20879061c7.90831529-76.68096846 57.13960232-226.66905073-180.54170997-221.05495659-82.26807176 1.99732195-123.05122675 13.2794919-123.05122677 13.27949188s-7.15257186 92.65954408-15.81663059 161.13529804l-41.43093509 394.84895728h-214.3072473l42.53755943-389.15389062 28.09746151-302.43233073z m-869.48282929-18.05687008c49.12332368-5.34418577 124.58970448-10.76934404 228.45044598-10.76934405 173.38913812 0 313.57954648 30.17575597 400.38207891 93.63121421 77.94953781 59.16391512 129.82592689 154.95439631 115.4668015 293.74128117-13.25250106 129.15115596-80.405704 219.57046055-178.16651631 275.4954752-89.44763445 52.74009587-202.16137055 75.27744492-371.66382812 75.27744493-99.94707012 0-195.27870708-5.39816743-267.77609576-16.14052064L2141.37671774 154.69529727z m143.26736381 569.85754561c16.70732823 3.23890047 38.67786969 6.45081009 81.99816339 6.45081009 173.44311979 0 295.7386031-85.23706385 308.01943403-205.07638097 17.84094339-173.2271931-90.63523129-233.79463176-273.39018992-232.74198912-23.67096422 0-56.57279475 0-73.98188473 3.1849188l-42.6725136 428.15565036z" fill="#262626"></path><path d="M1109.8678928 870.30336371c-41.10704503 14.25116203-126.26313639 23.96786342-245.23874671 23.96786342-342.13585224 0-526.8071603-160.59548129-504.97157302-372.90540663C385.78470347 268.40769434 659.36382925 126.08500985 958.9081404 126.08500985c116.00661824 0 184.32042718 9.33882968 248.31570215 24.99351522l-20.5400271 170.42014604c-42.56455024-14.33213455-142.32268451-27.50366309-223.07926938-27.50366311-176.25016686 0-325.94134993 52.49717834-343.10752238 218.57179958-15.30380469 148.50358623 89.7715245 219.48948804 288.04621451 219.48948804 69.0155707 0 170.77102691-9.8786464 217.81605614-24.15679928l-16.49140154 162.40386737z" fill="#CA0C16"></path></symbol><symbol id="gonggong_csdnlogodanse_" viewBox="0 0 4096 1024"><path d="M1229.41995733 690.46341551c62.96962316 23.02318413 194.30703694 45.91141406 300.51598128 45.91141406 114.44114969 0 178.13952547-31.68724287 183.2407937-80.86454822 4.642424-44.8587714-42.21366937-50.93170978-171.44579784-81.53931916-178.57137886-43.77913792-292.49970264-111.55313011-281.32549604-219.86735976 12.9825927-125.75031047 181.27046257-220.78504823 439.49180199-220.78504822 125.88526465 0 247.93783044 8.87998544 311.17736197 29.60894839l-21.7006331 158.57116851c-41.05306337-14.27815288-198.1937175-34.11641822-304.48363435-34.11641822-107.7744129 0-163.56447339 33.90049151-167.42416309 71.06687432-4.85835069 47.04502922 51.14763648 49.23128703 191.14910897 86.50563321 189.58364043 48.09767188 272.47250144 115.81768239 261.6221849 220.81203906-12.71268432 123.51007099-164.13128096 228.53141851-466.48263918 228.53141851-125.85827383 0-234.33444849-22.96920244-294.09216204-45.93840492l19.730302-157.86940672zM3006.09181546 172.75216735c688.40130256-129.79893606 747.80813523 103.42888812 726.53935551 309.80082928l-40.08139323 381.78539207h-218.51781789l36.57258439-348.20879061c7.90831529-76.68096846 57.13960232-226.66905073-180.54170997-221.05495659-82.26807176 1.99732195-123.05122675 13.2794919-123.05122677 13.27949188s-7.15257186 92.65954408-15.81663059 161.13529804l-41.43093509 394.84895728h-214.3072473l42.53755943-389.15389062 28.09746151-302.43233073z m-869.48282929-18.05687008c49.12332368-5.34418577 124.58970448-10.76934404 228.45044598-10.76934405 173.38913812 0 313.57954648 30.17575597 400.38207891 93.63121421 77.94953781 59.16391512 129.82592689 154.95439631 115.4668015 293.74128117-13.25250106 129.15115596-80.405704 219.57046055-178.16651631 275.4954752-89.44763445 52.74009587-202.16137055 75.27744492-371.66382812 75.27744493-99.94707012 0-195.27870708-5.39816743-267.77609576-16.14052064L2136.635977 154.69529727z m143.26736381 569.85754561c16.70732823 3.23890047 38.67786969 6.45081009 81.99816339 6.45081009 173.44311979 0 295.7386031-85.23706385 308.01943403-205.07638097 17.84094339-173.2271931-90.63523129-233.79463176-273.39018992-232.74198912-23.67096422 0-56.57279475 0-73.98188473 3.1849188l-42.6725136 428.15565036z m-1174.74919792 145.75052083c-41.10704503 14.25116203-126.26313639 23.96786342-245.23874671 23.96786342-342.13585224 0-526.8071603-160.59548129-504.97157303-372.90540663C381.04396273 268.40769434 654.62308851 126.08500985 954.16739966 126.08500985c116.00661824 0 184.32042718 9.33882968 248.31570215 24.99351522l-20.5400271 170.42014604c-42.56455024-14.33213455-142.32268451-27.50366309-223.07926938-27.50366311-176.25016686 0-325.94134993 52.49717834-343.10752238 218.57179958-15.30380469 148.50358623 89.7715245 219.48948804 288.04621451 219.48948804 69.0155707 0 170.77102691-9.8786464 217.81605614-24.15679928l-16.49140154 162.40386737z"></path></symbol><symbol id="xieboke1" viewBox="0 0 1024 1024"><path d="M204.70021457 751.89799169h657.99199211a33.6932867 33.6932867 0 0 1 0 67.33536736H163.68452703a33.53966977 33.53966977 0 0 1-18.74125054-5.68382181c-18.63883902-9.4218307-18.17798882-29.44322156-15.20806401-39.17228615C199.0675982 570.27171976 309.41567149 409.58853908 435.38145354 290.12586836A243.22661203 243.22661203 0 0 1 536.97336934 234.20935065c138.10150976-33.79569759 228.3257813-29.95527721 318.60125827-28.52152054-17.15387692 20.48224105-36.20236071 41.6301547-57.29906892 62.93168529-3.1747472 3.22595323-164.67721739 19.91897936-187.97576692 47.05794871-23.29854894 27.13896932 129.60138005 7.37360691 125.19769798 11.11161576-21.6599699 18.33160576-44.90731339 36.4071831-69.94685287 53.8682939-4.50609297 3.1747472-149.52035944-0.35843931-174.61110436 27.85584737-25.19315641 28.16308124 101.89914903 18.12678338 96.0617103 21.40394206-67.43777825 37.63611797-125.96578207 64.62147036-212.70807253 93.8086635-57.65750823 19.4069231-121.8181284 133.13456658-146.5504346 179.06599187a435.75967738 435.75967738 0 0 0-23.04252112 49.10617311z" fill="#CA0C16"></path></symbol><symbol id="gitchat" viewBox="0 0 1024 1024"><path d="M892.08971773 729.08552746h-108.597062v-162.89559374H403.40293801v-108.59706198h488.68677972v271.49265572z m-651.58237345 54.298531V783.49265572h488.68678045v108.59706201H131.91028227V131.91028227h760.17943546v217.19412473h-108.597062V240.50734428H240.50734428v542.87671418z m542.98531145 0h108.597062v108.59706199h-108.597062v-108.59706199z" fill="#FF9100"></path></symbol><symbol id="toolbar-memberhead" viewBox="0 0 1303 1024"><path d="M1061.51168438 433.79527648A78.51879902 78.51879902 0 1 1 1129.35192643 472.74060007h-1.80593246l-48.05350474 403.97922198c-4.55409058 38.16013652-39.41643684 67.133573-80.79584389 67.13357302H319.35199503c-41.30088817 0-76.00619753-28.81639958-80.717325-66.97653526L189.01078861 472.74060007H187.12633728a78.51879902 78.51879902 0 1 1 67.76172401-38.86680556l193.31328323 119.81968805 158.13686148-336.06046024A78.5973179 78.5973179 0 0 1 658.23913228 80.14660493a78.51879902 78.51879902 0 0 1 51.58685077 137.721974l158.13686147 335.82490362 193.54883986-119.89820607z" fill="#FDD840"></path><path d="M1050.8331274 394.22180104a78.51879902 78.51879902 0 1 1 78.51879903 78.51879903h-1.80593246l-48.05350474 403.97922198c-4.55409058 38.16013652-39.41643684 67.133573-80.79584389 67.13357302H659.02432018C658.47468805 793.25433807 658.23913228 505.32590231 658.23913228 80.14660493a78.51879902 78.51879902 0 0 1 51.58685077 137.721974l158.13686147 335.82490362 193.54883986-119.89820607A78.51879902 78.51879902 0 0 1 1050.8331274 394.22180104z" fill="#FFBE00"></path></symbol><symbol id="toolbar-m-memberhead" viewBox="0 0 1303 1024"><path d="M1062.74839935 433.79527648A78.51879902 78.51879902 0 1 1 1130.58864141 472.74060007h-1.80593246l-48.05350474 403.97922198c-4.55409058 38.16013652-39.41643685 67.133573-80.79584389 67.13357302H320.58871c-41.30088817 0-76.00619753-28.81639958-80.71732499-66.97653526L190.24750358 472.74060007H188.36305226a78.51879902 78.51879902 0 1 1 67.761724-38.86680556l193.31328324 119.81968805 158.13686147-336.06046024A78.5973179 78.5973179 0 0 1 659.47584726 80.14660493a78.51879902 78.51879902 0 0 1 51.58685076 137.721974l158.13686148 335.82490362 193.54883985-119.89820607z" fill="#D6D6D6"></path><path d="M1052.06984238 394.22180104a78.51879902 78.51879902 0 1 1 78.51879903 78.51879903h-1.80593246l-48.05350474 403.97922198c-4.55409058 38.16013652-39.41643685 67.133573-80.79584389 67.13357302H660.26103515C659.71140302 793.25433807 659.47584726 505.32590231 659.47584726 80.14660493a78.51879902 78.51879902 0 0 1 51.58685076 137.721974l158.13686148 335.82490362 193.54883985-119.89820607A78.51879902 78.51879902 0 0 1 1052.06984238 394.22180104z" fill="#C1C1C1"></path></symbol><symbol id="csdnc-upload" viewBox="0 0 1024 1024"><path d="M216.37466416 723.16095396v84.46438188h591.25067168v-84.46438188c0-23.32483876 18.90735218-42.23219094 42.23219093-42.23219021s42.23219094 18.90735218 42.23219096 42.23219021v84.46438188c0 46.64967827-37.81470362 84.46438188-84.46438189 84.46438189H216.37466416c-46.64967827 0-84.46438188-37.81470362-84.46438189-84.4643819v-84.46438187c0-23.32483876 18.90735218-42.23219094 42.23219096-42.23219021s42.23219094 18.90735218 42.23219094 42.23219021zM469.76780906 275.55040991L246.55378774 499.53305726a42.30820888 42.30820888 0 0 1-59.99082735 0c-16.56346508-16.62259056-16.56346508-43.57095155 0-60.19354139L480.51167818 144.38144832A42.21952103 42.21952103 0 0 1 512 131.93984464a42.20262858 42.20262858 0 0 1 31.48409853 12.44160369l293.95294108 294.95806754c16.56346508 16.62259056 16.56346508 43.57095155 0 60.19354139a42.30820888 42.30820888 0 0 1-59.99082735 0L554.23219094 275.55040991V680.92876375c0 23.32483876-18.90735218 42.23219094-42.23219094 42.23219021s-42.23219094-18.90735218-42.23219094-42.23219021V275.55040991z"></path></symbol></svg><svg aria-hidden="true" style="position: absolute; width: 0px; height: 0px; overflow: hidden;"><symbol id="fanyi" viewBox="0 0 1084 1024"><path d="M602.416429 647.439059v75.390494h120.470588v-120.470588h-75.029082l195.493647-193.939577V481.882353h180.597459c33.322165 0 60.289506 26.967341 60.289506 60.235294 0 0.722824-0.012047 1.439624-0.036141 2.1504v236.640377c0.024094 0.710776 0.036141 1.427576 0.036141 2.1504 0 33.261929-26.967341 60.235294-60.235294 60.235294H843.357606v120.470588c0 33.261929-26.967341 60.229271-60.235294 60.22927s-60.235294-26.967341-60.235295-60.235294v-120.470588H542.090782c-33.267953 0-60.235294-26.967341-60.235294-60.235294l0.006024-16.022588 120.554917-119.597177z m240.935153-45.080094v120.470588h120.380235v-120.470588h-120.380235z m-403.534306-46.585977l-27.732329-67.861082H186.479676l-70.716235 167.936c-12.9024 30.659765-48.224376 45.056-78.884141 32.141553-30.659765-12.908424-45.049976-48.2304-32.141553-78.890165l240.941176-572.223247A60.253365 60.253365 0 0 1 301.782076 0.006024a60.253365 60.253365 0 0 1 56.380236 37.466352l174.242635 426.429742 352.798117-350.033318c23.612235-23.431529 61.7472-23.280941 85.17873 0.331294 23.431529 23.612235 23.280941 61.753224-0.331294 85.184753L200.394029 963.029835c-23.612235 23.431529-61.753224 23.280941-85.184753-0.331294-23.431529-23.612235-23.280941-61.753224 0.337318-85.184753l324.270682-321.7408z m-138.842353-339.787294L237.209841 367.441318H362.860664L300.974923 215.979671z"></path></symbol><symbol id="shouji" viewBox="0 0 1024 1024"><path d="M768 670.72V102.4H256v568.32h512z m0 51.2H256v199.68h512v-199.68z m102.4-619.52v819.2c0 56.55552-45.84448 102.4-102.4 102.4H256c-56.55552 0-102.4-45.84448-102.4-102.4V102.4C153.6 45.84448 199.44448 0 256 0h512c56.55552 0 102.4 45.84448 102.4 102.4zM512 870.4c-28.27776 0-51.2-22.92224-51.2-51.2s22.92224-51.2 51.2-51.2 51.2 22.92224 51.2 51.2-22.92224 51.2-51.2 51.2z"></path></symbol><symbol id="yuedushu" viewBox="0 0 1462 1024"><path d="M731.428571 1024c-259.320686 0-495.879314-146.753829-709.668571-440.246857-29.015771-39.840914-29.015771-103.665371 0-143.506286C235.556571 146.761143 472.107886 0 731.428571 0c259.320686 0 495.879314 146.753829 709.668572 440.246857 29.015771 39.840914 29.015771 103.665371 0 143.506286C1227.300571 877.238857 990.749257 1024 731.428571 1024z m0-841.142857c-195.2256 0-375.632457 107.132343-545.865142 329.142857 170.232686 222.010514 350.639543 329.142857 545.865142 329.142857 195.2256 0 375.632457-107.132343 545.865143-329.142857C1107.053714 289.989486 926.646857 182.857143 731.428571 182.857143z m0 621.714286c-161.579886 0-292.571429-130.991543-292.571428-292.571429s130.991543-292.571429 292.571428-292.571429 292.571429 130.991543 292.571429 292.571429-130.991543 292.571429-292.571429 292.571429z m0-182.857143c60.591543 0 109.714286-49.122743 109.714286-109.714286 0-60.591543-49.122743-109.714286-109.714286-109.714286-60.591543 0-109.714286 49.122743-109.714285 109.714286 0 60.591543 49.122743 109.714286 109.714285 109.714286z"></path></symbol></svg><div id="csdn-toolbar" class="csdn-toolbar tb_disnone ">        <div class="container row center-block ">          <ul class="pull-left left-menu clearfix" id="nav-left-menu">            <li>              <a href="https://www.csdn.net/" title="CSDN首页"><svg class="toolbar-icon" aria-hidden="true"><use xlink:href="#gonggong_csdnlogo_"></use></svg></a>            </li>            <li><a href="https://www.csdn.net/" class="toolbar_to_feed" title="首页" style="margin-left:0">首页</a></li>            <li><a href="https://blog.csdn.net/" class="toolbar_to_feed" title="博客">博客</a></li>            <li><a href="https://edu.csdn.net/" title="学院">学院</a></li>            <li><a href="https://download.csdn.net/" title="下载">下载</a></li>            <li><a href="https://gitchat.csdn.net/?utm_source=csdn_toolbar" title="图文课">图文课</a></li>            <li><a href="https://bbs.csdn.net/" title="论坛">论坛</a></li>            <li class="app-btn"><a href="https://www.csdn.net/app/" title="APP">APP</a>              <div class="appControl">              <span>                <img src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/csdnqr@2x.png">                <em>CSDN</em>              </span>              <span class="eduwx">                <img src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/eduwxfix.png">                <em>CSDN学院</em>              </span>              </div>            </li>            <li><a href="https://ask.csdn.net/" title="问答">问答</a></li>            <li><a href="https://mall.csdn.net/" title="商城">商城</a></li>            <li class="vip-caise"><a href="https://mall.csdn.net/vip_code" title="VIP会员">VIP会员</a></li>            <li><a href="https://huiyi.csdn.net/" title="活动">活动</a></li>            <li><a href="http://job.csdn.net/" title="招聘">招聘</a></li>            <li><a href="http://www.iteye.com/" title="ITeye">ITeye</a></li>            <li><a href="https://gitbook.cn/?ref=csdn" title="GitChat">GitChat</a></li>          </ul>          <div class="pull-right login-wrap unlogin">            <ul class="btns">            <li class="toolbar-tracking csdn-tracking-statistics tracking-click" data-mod="popu_369"><a href="https://elim.iteye.com/blog/2409316#" style="padding:0"></a></li>              <li>                <div class="search_bar csdn-tracking-statistics tracking-click" data-mod="popu_366">                  <input type="text" class="input_search" name="" id="toolber-keyword" placeholder="搜CSDN" autocomplete="off">                  <a href="https://so.csdn.net/so/" target="_blank" class="btn-nobg-noborder btn-search"><svg class="toolbar-icon" aria-hidden="true"><use xlink:href="#sousuo"></use></svg></a>                </div>              </li>              <li class="write-bolg-btn csdn-tracking-statistics tracking-click" data-mod="popu_370"><a class="" href="https://mp.csdn.net/postedit" target="_blank" id="blogClick"><svg class="toolbar-icon" aria-hidden="true"><use xlink:href="#xieboke1"></use></svg><span>写博客</span></a>              </li><li class="gitChat"><a class="" href="https://gitbook.cn/new/gitchat/activity?utm_source=csdnblog1" target="_blank"><img src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/money.png" alt="" class="money"><span>赚零钱</span></a></li>              <li class="gitChat upload msgBox" id="msgBox">              <a target="_blank" class="" href="https://i.csdn.net/#/msg/index"><img src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/message-icon.png" alt="" class="message"><span>消息</span><div class="toolbar-circle" id="msg-circle"></div></a>                <div class="msgList" id="msgList">                  <a href="https://i.csdn.net/#/msg/index">评论<em class="comment"></em></a>                  <a href="https://i.csdn.net/#/msg/attention">关注<em class="follow"></em></a>                  <a href="https://i.csdn.net/#/msg/like">点赞<em class="thumb_up"></em></a>                  <a href="https://i.csdn.net/#/msg/answer">回答<em class="invitation"></em></a>                  <a href="https://i.csdn.net/#/msg/notice">系统通知<em class="system"></em></a>                </div>              </li>              <li class="userinfo"><a href="https://passport.csdn.net/account/login" target="_blank">登录</a><span></span><a href="https://passport.csdn.net/account/login" target="_blank">注册</a></li>              <li class="userLogin">                <div class="loginCenter"><a href="https://i.csdn.net/" target="_blank"><img class="login_img" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/100x100.jpg"></a></div>                <div class="userControl">                <div class="bord">                <div><i class="pull_icon pull_icon1"></i><a href="https://www.csdn.net/nav/watchers" target="_blank">我的关注</a></div>                <div><i class="pull_icon pull_icon2"></i><a href="https://i.csdn.net/#/uc/favorite-list" target="_blank">我的收藏</a></div>                <div><i class="pull_icon pull_icon4"></i><a href="https://i.csdn.net/#/uc/profile" target="_blank">个人中心</a></div>                <div><i class="pull_icon pull_icon7"></i><a href="https://i.csdn.net/#/account/index" target="_blank">帐号设置</a></div>                </div>                  <div class="bord">                  <div><i class="pull_icon pull_icon5"></i><a href="https://blog.csdn.net/" target="_blank">我的博客</a></div>                  <div><i class="pull_icon pull_icon6"></i><a href="https://mp.csdn.net/" target="_blank">管理博客</a></div>                  <div><i class="pull_icon pull_icon12"></i><a href="https://edu.csdn.net/mycollege" target="_blank">我的学院</a></div>                  <div><i class="pull_icon pull_icon13"></i><a href="https://download.csdn.net/my/downloads" target="_blank">我的下载</a></div>                  </div>                  <div class="bord">                  <div><i class="pull_icon pull_icon8"></i><a href="https://my.csdn.net/my/score" target="_blank">我的C币</a></div>                  <div><i class="pull_icon pull_icon9"></i><a href="https://order.csdn.net/myorder" target="_blank">订单中心</a></div>                  </div>                  <div class="bord">                  <div><i class="pull_icon pull_icon10"></i><a href="https://blog.csdn.net/home/help.html" target="_blank">帮助</a></div>                  <div><i class="pull_icon pull_icon11"></i><a href="javascript:void(0);" class="logout">退出</a></div>                  </div>                </div>                <div class="guo_tip_box">关注和收藏在这里</div>              </li>            </ul>          </div>        </div>    </div><script onload="window[&#39;cambrian_sync_loader_success1552359437535776&#39;]()" onerror="window[&#39;cambrian_sync_loader_fail_1552359437535776&#39;]()" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/main.8b2bc869.js"></script>
+  <script src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/recommend.js"></script><script language="javascript" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/iconfont.js"></script>
+
+
+
+  <div id="header">
+    <div id="blog_site_nav">
+  <a href="https://www.iteye.com/" class="homepage">首页</a>
+  <a href="https://www.iteye.com/news">资讯</a>
+  <a href="https://www.iteye.com/magazines">精华</a>
+  <a href="https://www.iteye.com/forums">论坛</a>
+  <a href="https://www.iteye.com/ask">问答</a>
+  <a href="https://www.iteye.com/blogs">博客</a>
+  <a href="https://www.iteye.com/blogs/subjects">专栏</a>
+  <a href="https://www.iteye.com/groups">群组</a>
+<!--  <a href="#" onclick="return false;" id="msna"><u>更多</u> <small>▼</small></a>-->
+<!--  <div class="quick_menu" style="display:none;">-->
+<!--    <a target="_blank" href="https://job.iteye.com/iteye">知识库</a>-->
+<!--    <a href="https:///search">搜索</a>-->
+<!--  </div>-->
+</div>
+
+    <div id="user_nav">
+
+      <a href="https://elim.iteye.com/login" class="welcome" title="登录">您还未登录 !</a>
+    <a href="https://elim.iteye.com/login">登录</a>
+    <!--<a href="/signup" class="nobg">注册</a>-->
+    <!--<a href="https://passport.csdn.net/account/mobileregister?from=https://www.iteye.com">注册</a>-->
+  </div>
+
+
+  </div>
+
+  <div id="page">
+<!--    <div id="branding" class="clearfix">-->
+<!--      <div id="blog_name">-->
+<!--        <h1><a href="/">-->
+<!--            </a></h1>-->
+<!--      </div>-->
+<!--      <div id='fd'></div>-->
+<!--      <div id="blog_navbar">-->
+<!--        <ul>-->
+          
+          
+          
+          
+          
+          
+<!--        </ul>-->
+
+<!--        <div class="search">-->
+<!--          <form action="/blog/search" method="get">-->
+<!--            <input class="search_text" id="query" name="query" style="margin-left: 10px;width: 110px;" type="text"-->
+<!--              value="" />-->
+<!--            <input class="submit_search" type="submit" value="" />-->
+<!--          </form>-->
+<!--        </div>-->
+<!--        <div id="fd"></div>-->
+<!--      </div>-->
+<!--    </div>-->
+    `
+    <div id="content" class="clearfix">
+      <div id="local">
+        <div class="local_top"></div>
+        <div id="blog_owner">
+  <div id="blog_owner_logo"><a href="https://elim.iteye.com/"><img alt="234390216的博客" class="logo" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/392b0b83-7725-374c-a0eb-f9f5b7ab3ddd.jpg" title="234390216的博客: Elim的博客" width=""></a></div>
+  <div id="blog_owner_name">234390216</div>
+</div>
+
+        <div id="blog_actions">
+          <ul>
+            <li>浏览:
+              8186350 次</li>
+            
+            <li>性别:
+              <img alt="Icon_minigender_1" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/icon_minigender_1.gif" title="男">
+            </li>
+            
+            
+            <li>来自:
+              深圳
+            </li>
+            
+            <li>
+              <img src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/offline.gif">
+            </li>
+            
+          </ul>
+        </div>
+
+        <div id="user_visits" class="clearfix">
+          <h5>最近访客 <span style="font-weight:normal;font-size:12px;padding-left:30px;">
+              <a href="https://elim.iteye.com/blog/user_visits">更多访客&gt;&gt;</a></span></h5>
+          
+          <div class="user_visit">
+            <div class="logo"><a href="https://piziwang.iteye.com/" target="_blank"><img alt="piziwang的博客" class="logo" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/user-logo-thumb.gif" title="piziwang的博客: piziwang" width="48px"></a></div>
+            <div class="left">
+              <a href="https://piziwang.iteye.com/" target="_blank" title="piziwang">piziwang</a>
+            </div>
+          </div>
+          
+          <div class="user_visit">
+            <div class="logo"><a href="https://hbking2000.iteye.com/" target="_blank"><img alt="hbking2000的博客" class="logo" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/user-logo-thumb.gif" title="hbking2000的博客: " width="48px"></a></div>
+            <div class="left">
+              <a href="https://hbking2000.iteye.com/" target="_blank" title="hbking2000">hbking2000</a>
+            </div>
+          </div>
+          
+          <div class="user_visit">
+            <div class="logo"><a href="https://yuanlin-work.iteye.com/" target="_blank"><img alt="yuanlin_work的博客" class="logo" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/user-logo-thumb.gif" title="yuanlin_work的博客: " width="48px"></a></div>
+            <div class="left">
+              <a href="https://yuanlin-work.iteye.com/" target="_blank" title="yuanlin_work">yuanlin_work</a>
+            </div>
+          </div>
+          
+          <div class="user_visit">
+            <div class="logo"><a href="https://leontius.iteye.com/" target="_blank"><img alt="leontius的博客" class="logo" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/user-logo-thumb.gif" title="leontius的博客: " width="48px"></a></div>
+            <div class="left">
+              <a href="https://leontius.iteye.com/" target="_blank" title="leontius">leontius</a>
+            </div>
+          </div>
+          
+        </div>
+
+        <div id="user_title_list" class="clearfix">
+          <h5>博主相关</h5>
+          <li>
+            <a href="https://elim.iteye.com/">博客</a>
+          </li>
+
+          <li>
+            <a href="https://elim.iteye.com/weibo">微博</a>
+          </li>
+
+          <li>
+            <a href="https://elim.iteye.com/album">相册</a>
+          </li>
+
+          <li>
+            <a href="https://elim.iteye.com/link">收藏</a>
+          </li>
+
+          <li>
+            <a href="https://elim.iteye.com/blog/guest_book">留言</a>
+          </li>
+
+          <li>
+            <a href="https://elim.iteye.com/blog/profile">关于我</a>
+          </li>
+        </div>
+
+        
+        <div>
+          <h5>博客专栏</h5>
+          
+
+  
+  <dl class="series" style="padding-bottom:5px;">
+    <dt>
+      <a href="https://www.iteye.com/blogs/subjects/Oracle168" target="_blank"><img alt="A5ee55b9-a463-3d09-9c78-0c0cf33198cd" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/a5ee55b9-a463-3d09-9c78-0c0cf33198cd.png"></a>
+    </dt>
+    <dd>
+    <a href="https://www.iteye.com/blogs/subjects/Oracle168" target="_blank" title="Oracle基础">Oracle基础</a><br>
+      <span class="visited">浏览量：353132</span>
+    </dd>
+  </dl>
+  
+  <dl class="series" style="padding-bottom:5px;">
+    <dt>
+      <a href="https://www.iteye.com/blogs/subjects/springMVC" target="_blank"><img alt="Ad26f909-6440-35a9-b4e9-9aea825bd38e" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/ad26f909-6440-35a9-b4e9-9aea825bd38e.png"></a>
+    </dt>
+    <dd>
+    <a href="https://www.iteye.com/blogs/subjects/springMVC" target="_blank" title="springMVC介绍">springMVC介绍</a><br>
+      <span class="visited">浏览量：1512851</span>
+    </dd>
+  </dl>
+  
+  <dl class="series" style="padding-bottom:5px;">
+    <dt>
+      <a href="https://www.iteye.com/blogs/subjects/mybatis" target="_blank"><img alt="Ce363057-ae4d-3ee1-bb46-e7b51a722a4b" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/ce363057-ae4d-3ee1-bb46-e7b51a722a4b.png"></a>
+    </dt>
+    <dd>
+    <a href="https://www.iteye.com/blogs/subjects/mybatis" target="_blank" title="Mybatis简介">Mybatis简介</a><br>
+      <span class="visited">浏览量：1202739</span>
+    </dd>
+  </dl>
+  
+  <dl class="series" style="padding-bottom:5px;">
+    <dt>
+      <a href="https://www.iteye.com/blogs/subjects/springjms" target="_blank"><img alt="Bdeb91ad-cf8a-3fe9-942a-3710073b4000" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/bdeb91ad-cf8a-3fe9-942a-3710073b4000.png"></a>
+    </dt>
+    <dd>
+    <a href="https://www.iteye.com/blogs/subjects/springjms" target="_blank" title="Spring整合JMS">Spring整合JMS</a><br>
+      <span class="visited">浏览量：342509</span>
+    </dd>
+  </dl>
+  
+  <dl class="series" style="padding-bottom:5px;">
+    <dt>
+      <a href="https://www.iteye.com/blogs/subjects/ehcache" target="_blank"><img alt="5cbbde67-7cd5-313c-95c2-4185389601e7" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/5cbbde67-7cd5-313c-95c2-4185389601e7.png"></a>
+    </dt>
+    <dd>
+    <a href="https://www.iteye.com/blogs/subjects/ehcache" target="_blank" title="Ehcache简介">Ehcache简介</a><br>
+      <span class="visited">浏览量：597825</span>
+    </dd>
+  </dl>
+  
+  <dl class="series" style="padding-bottom:5px;">
+    <dt>
+      <a href="https://www.iteye.com/blogs/subjects/cas168" target="_blank"><img alt="Cc1c0708-ccc2-3d20-ba47-d40e04440682" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/cc1c0708-ccc2-3d20-ba47-d40e04440682.png"></a>
+    </dt>
+    <dd>
+    <a href="https://www.iteye.com/blogs/subjects/cas168" target="_blank" title="Cas简介">Cas简介</a><br>
+      <span class="visited">浏览量：475294</span>
+    </dd>
+  </dl>
+  
+  <dl class="series" style="padding-bottom:5px;">
+    <dt>
+      <a href="https://www.iteye.com/blogs/subjects/spring_security" target="_blank"><img alt="51592fc3-854c-34f4-9eff-cb82d993ab3a" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/51592fc3-854c-34f4-9eff-cb82d993ab3a.png"></a>
+    </dt>
+    <dd>
+    <a href="https://www.iteye.com/blogs/subjects/spring_security" target="_blank" title="Spring Security简介">Spring Securi...</a><br>
+      <span class="visited">浏览量：1031862</span>
+    </dd>
+  </dl>
+  
+  <dl class="series" style="padding-bottom:5px;">
+    <dt>
+      <a href="https://www.iteye.com/blogs/subjects/spring4" target="_blank"><img alt="23e1c30e-ef8c-3702-aa3c-e83277ffca91" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/23e1c30e-ef8c-3702-aa3c-e83277ffca91.png"></a>
+    </dt>
+    <dd>
+    <a href="https://www.iteye.com/blogs/subjects/spring4" target="_blank" title="Spring基础知识">Spring基础知识</a><br>
+      <span class="visited">浏览量：171355</span>
+    </dd>
+  </dl>
+  
+  <dl class="series" style="padding-bottom:5px;">
+    <dt>
+      <a href="https://www.iteye.com/blogs/subjects/springaop" target="_blank"><img alt="4af1c81c-eb9d-365f-b759-07685a32156e" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/4af1c81c-eb9d-365f-b759-07685a32156e.png"></a>
+    </dt>
+    <dd>
+    <a href="https://www.iteye.com/blogs/subjects/springaop" target="_blank" title="Spring Aop介绍">Spring Aop介绍</a><br>
+      <span class="visited">浏览量：57921</span>
+    </dd>
+  </dl>
+  
+  <dl class="series" style="padding-bottom:5px;">
+    <dt>
+      <a href="https://www.iteye.com/blogs/subjects/jaxb" target="_blank"><img alt="2f926891-9e7a-3ce2-a074-3acb2aaf2584" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/2f926891-9e7a-3ce2-a074-3acb2aaf2584.png"></a>
+    </dt>
+    <dd>
+    <a href="https://www.iteye.com/blogs/subjects/jaxb" target="_blank" title="JAXB简介">JAXB简介</a><br>
+      <span class="visited">浏览量：26583</span>
+    </dd>
+  </dl>
+  
+
+
+        </div>
+        
+
+                <div id="blog_menu">
+          <h5>文章分类</h5>
+          <ul>
+            <li>
+              <a href="https://elim.iteye.com/">全部博客 (355)</a>
+            </li>
+            
+            <li>
+              <a href="https://elim.iteye.com/category/164370">配置文件 (2)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/155097">dwr (2)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/176065">安全 (4)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/172948">电子邮件 (3)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/161765">CKEDITOR (3)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/324785">Cas (10)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/319453">ehcache (11)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/377085">elastic-job (5)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/158024">extjs4 (6)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/159974">freemarker (2)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/154983">hibernate (5)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/156571">itext (1)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/182974">JasperReport (4)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/155852">java (24)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/375896">JAXB (9)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/131097">jbpm4 (2)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/155042">jfreeChart (3)</a>
+              </li>
+              
+            <li class="selected">
+              <a href="https://elim.iteye.com/category/347649">Jms (5)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/157196">jquery (7)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/202499">jsp (4)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/265283">Linux (1)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/181358">Lucene (1)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/269897">maven (7)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/131096">mybatis (22)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/165959">MySQL (6)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/355460">nginx (2)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/156935">oracle (29)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/156541">poi (8)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/351075">日志 (1)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/375671">redis (1)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/304463">Servlet (5)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/156737">实用技巧 (5)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/156657">Spring (69)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/175984">SpringMVC (29)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/182468">spring Security (20)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/154645">struts2 (5)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/177387">svn (1)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/347339">Tomcat (1)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/299032">Webservice (8)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/156444">web前端 (5)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/253146">Weblogic (7)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/156645">问题 (6)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/186746">xml (3)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/268768">面试 (1)</a>
+              </li>
+              
+            <li>
+              <a href="https://elim.iteye.com/category/381641">Spring Boot (17)</a>
+              </li>
+              
+          </ul>
+        </div>
+        <div id="month_blogs">
+          <h5>社区版块</h5>
+          <ul>
+            <li>
+              <a href="https://elim.iteye.com/blog/news">我的资讯</a> (
+              0)</li>
+            <li>
+              <a href="https://elim.iteye.com/blog/post">我的论坛</a> (
+              18)
+            </li>
+            <li>
+              <a href="https://elim.iteye.com/blog/answered_problems">我的问答</a> (
+              4)</li>
+          </ul>
+        </div>
+        <div id="month_blogs">
+          <h5>存档分类</h5>
+          <ul>
+            
+            <li>
+              <a href="https://elim.iteye.com/blog/monthblog/2019-02">2019-02</a>
+              (
+              1)</li>
+            
+            <li>
+              <a href="https://elim.iteye.com/blog/monthblog/2019-01">2019-01</a>
+              (
+              4)</li>
+            
+            <li>
+              <a href="https://elim.iteye.com/blog/monthblog/2018-12">2018-12</a>
+              (
+              5)</li>
+            
+            <li>
+              <a href="https://elim.iteye.com/blog/monthblog_more">更多存档...</a>
+            </li>
+          </ul>
+        </div>
+        
+        
+        <div id="comments_top">
+          <h5>评论排行榜</h5>
+          <ul>
+            
+            <li>
+              <a href="https://elim.iteye.com/blog/2433113" title="Spring Boot（05）——SpringApplication介绍">Spring Boot（05）——SpringApplication ...</a>
+            </li>
+            
+            <li>
+              <a href="https://elim.iteye.com/blog/2427553" title="Spring（30）——RestTemplate介绍">Spring（30）——RestTemplate介绍</a>
+            </li>
+            
+            <li>
+              <a href="https://elim.iteye.com/blog/2422811" title="JAXB（四）——以子类的结构生成XML">JAXB（四）——以子类的结构生成XML</a>
+            </li>
+            
+          </ul>
+        </div>
+        
+
+        <div id="guest_books">
+          <h5>最新评论</h5>
+          <ul>
+            
+            <li>
+              <a href="https://18335864773.iteye.com/" target="_blank" title="18335864773">18335864773</a>：
+              推荐用pageoffice 生成 word。POI处理Offi ...<br>
+              <a href="https://elim.iteye.com/blog/1998138#bc2404110">POI生成Web版Word文件</a>
+            </li>
+            
+            <li>
+              <a href="https://elim.iteye.com/" target="_blank" title="234390216">234390216</a>：
+              skran 写道大兄弟文章写的不错，排版有点问题，代码长了既没 ...<br>
+              <a href="https://elim.iteye.com/blog/2433113#bc2404073">Spring Boot（05）——SpringApplication介绍</a>
+            </li>
+            
+            <li>
+              <a href="https://skran.iteye.com/" target="_blank" title="skran">skran</a>：
+              大兄弟文章写的不错，排版有点问题，代码长了既没换行也没滚动条<br>
+              <a href="https://elim.iteye.com/blog/2433113#bc2404057">Spring Boot（05）——SpringApplication介绍</a>
+            </li>
+            
+            <li>
+              <a href="https://caelebs.iteye.com/" target="_blank" title="Caelebs">Caelebs</a>：
+              &nbsp;&nbsp;&nbsp;&nbsp;<br>
+              <a href="https://elim.iteye.com/blog/2116749#bc2403651">Ehcache（04）——设置缓存的大小</a>
+            </li>
+            
+            <li>
+              <a href="https://elim.iteye.com/" target="_blank" title="234390216">234390216</a>：
+              thaIm 写道不知道RestTemplate 默认的链接数、 ...<br>
+              <a href="https://elim.iteye.com/blog/2427553#bc2403513">Spring（30）——RestTemplate介绍</a>
+            </li>
+            
+          </ul>
+        </div>
+
+        <div class="local_bottom"></div>
+        
+        <div id="nav_show_top_stop" style="position: fixed; top: 3999.38px;">
+            <div>
+              <!-- 广告位：PC端-iteye博客详情页左侧Button1-200*200 -->
+              
+              <!-- Ads ID 423 -->
+              
+            </div>
+            <div>
+              <!-- 广告位：PC端-iteye博客详情页左侧Button2-200*200 -->
+              
+              <!-- Ads ID 424 -->
+              
+            </div>
+          </div>
+      </div>
+      
+      <div id="main" class="">
+        
+
+
+
+        
+
+
+<div class="h-entry" style="display:none">
+  <a href="https://elim.iteye.com/" class="p-author" target="_blank">234390216</a>
+</div>
+
+
+<div class="blog_main">
+  <script type="application/ld+json">
+    {
+        "@context": "https://zhanzhang.baidu.com/contexts/cambrian.jsonld",
+        "@id": "http://elim.iteye.com/blog/2409316",
+        "title": "SpringMVC路径匹配中使用通配符",
+        "images": [],
+        "description": "",
+        "pubDate": "2018-01-27T13:41:08"
+    }
+  </script>
+  <div class="blog_title">
+    <h3>
+      <a href="https://elim.iteye.com/blog/2409316">SpringMVC路径匹配中使用通配符</a>
+      <em class="actions">      </em>
+    </h3>
+    <ul class="blog_categories"><strong>博客分类：</strong> <li><a href="https://elim.iteye.com/category/175984">SpringMVC</a></li> </ul>
+        <div class="news_tag"><a href="http://www.iteye.com/blogs/tag/SpringMVC">SpringMVC</a><a href="http://www.iteye.com/blogs/tag/%E9%80%9A%E9%85%8D%E7%AC%A6">通配符</a><a href="http://www.iteye.com/blogs/tag/%E8%B7%AF%E5%BE%84%E5%8C%B9%E9%85%8D">路径匹配</a><a href="http://www.iteye.com/blogs/tag/RequestMapping">RequestMapping</a><a href="http://www.iteye.com/blogs/tag/antstyle">antstyle</a>&nbsp;</div>
+  </div>
+
+  <div id="blog_content" class="hide-main-content">
+    <div class="hide-article-box text-center" style="display: none;">
+      <a class="btn" id="btn-readmore">阅读更多</a>
+    </div>
+    <div style="font-size: 14px;" class="iteye-blog-content-contain">
+<h1 style="">SpringMVC路径匹配中使用通配符</h1>
+<p style="">@RequestMapping中指定的路径也可以使用通配符*，表示任意字符。如下的处理器方法可以映射请求<code style="">/antstyle/a</code>，可以映射请求<code style="">/antstyle/b</code>，但是它不能映射请求请求<code style="">/antstyle/a/b</code>，因为它只能映射一级路径。</p>
+<div style="" class="highlight highlight-source-java">
+<pre><span style="color: #d73a49;" class="pl-k">@RequestMapping</span>(<span style="color: #032f62;" class="pl-s"><span style="" class="pl-pds">"</span>/antstyle/*<span style="" class="pl-pds">"</span></span>)
+<span style="color: #d73a49;" class="pl-k">public</span> <span style="color: #24292e;" class="pl-smi">Object</span> testAntStyle() {
+    <span style="color: #d73a49;" class="pl-k">return</span> <span style="color: #032f62;" class="pl-s"><span style="" class="pl-pds">"</span>antStyle<span style="" class="pl-pds">"</span></span>;
+}</pre>
+</div>
+<p style="">通配符不是只能放在最后的，它也可以放在其它位置。下面的示例中就是把通配符放在中间位置，它可以映射请求<code style="">/antstyle/a/bcd</code>，也可以映射请求<code style="">/antstyle/ab/bcd</code>。</p>
+<div style="" class="highlight highlight-source-java">
+<pre><span style="color: #d73a49;" class="pl-k">@RequestMapping</span>(<span style="color: #032f62;" class="pl-s"><span style="" class="pl-pds">"</span>/antstyle/*/bcd<span style="" class="pl-pds">"</span></span>)
+<span style="color: #d73a49;" class="pl-k">public</span> <span style="color: #24292e;" class="pl-smi">Object</span> testAntStyle() {
+    <span style="color: #d73a49;" class="pl-k">return</span> <span style="color: #032f62;" class="pl-s"><span style="" class="pl-pds">"</span>antStyle<span style="" class="pl-pds">"</span></span>;
+}</pre>
+</div>
+<p style="">通配符还可以匹配以某字符结束的路径。如下处理器方法可以映射<code style="">/antstyle/</code>后路径以<code style="">bcd</code>结尾的路径，比如<code style="">/antstyle/abcd</code>、<code style="">/antstyle/bcd</code>等。</p>
+<div style="" class="highlight highlight-source-java">
+<pre><span style="color: #d73a49;" class="pl-k">@RequestMapping</span>(<span style="color: #032f62;" class="pl-s"><span style="" class="pl-pds">"</span>/antstyle/*bcd<span style="" class="pl-pds">"</span></span>)
+<span style="color: #d73a49;" class="pl-k">public</span> <span style="color: #24292e;" class="pl-smi">Object</span> testAntStyle() {
+    <span style="color: #d73a49;" class="pl-k">return</span> <span style="color: #032f62;" class="pl-s"><span style="" class="pl-pds">"</span>antStyle<span style="" class="pl-pds">"</span></span>;
+}</pre>
+</div>
+<p style="">通配符还可以匹配以某字符开始的路径。如下处理器方法可以映射<code style="">/antstyle/abc</code>、<code style="">/antstyle/abcd</code>等。</p>
+<div style="" class="highlight highlight-source-java">
+<pre><span style="color: #d73a49;" class="pl-k">@RequestMapping</span>(<span style="color: #032f62;" class="pl-s"><span style="" class="pl-pds">"</span>/antstyle/abc*<span style="" class="pl-pds">"</span></span>)
+<span style="color: #d73a49;" class="pl-k">public</span> <span style="color: #24292e;" class="pl-smi">Object</span> testAntStyle() {
+    <span style="color: #d73a49;" class="pl-k">return</span> <span style="color: #032f62;" class="pl-s"><span style="" class="pl-pds">"</span>antStyle<span style="" class="pl-pds">"</span></span>;
+}</pre>
+</div>
+<p style="">一个星号只能匹配一级路径，如果需要匹配任意的多级路径则可以使用两个星号。如下处理器方法可以映射任何请求路径以<code style="">/antstyle/</code>开头的请求，如<code style="">/antstyle/a</code>、<code style="">/antstyle/a/b</code>等。</p>
+<div style="" class="highlight highlight-source-java">
+<pre><span style="color: #d73a49;" class="pl-k">@RequestMapping</span>(<span style="color: #032f62;" class="pl-s"><span style="" class="pl-pds">"</span>/antstyle/**<span style="" class="pl-pds">"</span></span>)
+<span style="color: #d73a49;" class="pl-k">public</span> <span style="color: #24292e;" class="pl-smi">Object</span> testAntStyle() {
+    <span style="color: #d73a49;" class="pl-k">return</span> <span style="color: #032f62;" class="pl-s"><span style="" class="pl-pds">"</span>antStyle<span style="" class="pl-pds">"</span></span>;
+}</pre>
+</div>
+<p style="">一个星号与两个星号还可以一起使用，此时一个星号还是匹配任意字符，但是只能在当前层级，而两个星号还是可以匹配任意的层级，所以如下可以匹配<code style="">/antstyle/abca/xxx/xxx</code>等。</p>
+<div style="" class="highlight highlight-source-java">
+<pre><span style="color: #d73a49;" class="pl-k">@RequestMapping</span>(<span style="color: #032f62;" class="pl-s"><span style="" class="pl-pds">"</span>/antstyle/abc*/**<span style="" class="pl-pds">"</span></span>)
+<span style="color: #d73a49;" class="pl-k">public</span> <span style="color: #24292e;" class="pl-smi">Object</span> testAntStyle() {
+    <span style="color: #d73a49;" class="pl-k">return</span> <span style="color: #032f62;" class="pl-s"><span style="" class="pl-pds">"</span>antStyle<span style="" class="pl-pds">"</span></span>;
+}</pre>
+</div>
+<p style="">请求映射路径中使用了通配符时，也还是可使用路径变量的，它们是相互独立的。如下代码中我们就在请求路径中同时使用了路径变量和通配符。</p>
+<div style="" class="highlight highlight-source-java">
+<pre><span style="color: #d73a49;" class="pl-k">@RequestMapping</span>(<span style="color: #032f62;" class="pl-s"><span style="" class="pl-pds">"</span>/antstylewithpathvariable/*/{path}/abc<span style="" class="pl-pds">"</span></span>)
+<span style="color: #d73a49;" class="pl-k">public</span> <span style="color: #24292e;" class="pl-smi">Object</span> testAntStyleWithPathVariable(<span style="color: #d73a49;" class="pl-k">@PathVariable</span> <span style="color: #24292e;" class="pl-smi">String</span> path) {
+    <span style="color: #d73a49;" class="pl-k">return</span> <span style="color: #032f62;" class="pl-s"><span style="" class="pl-pds">"</span>ant style with path variable, path is <span style="" class="pl-pds">"</span></span> <span style="color: #d73a49;" class="pl-k">+</span> path;
+}</pre>
+</div>
+<h2 style="">
+<a style="" href="https://github.com/elim168/elim168.github.io/blob/master/spring/mvc/02.%E9%80%9A%E9%85%8D%E7%AC%A6%E5%8C%B9%E9%85%8D.md#%E5%90%8C%E6%97%B6%E5%AD%98%E5%9C%A8%E8%B7%AF%E5%BE%84%E5%8F%98%E9%87%8F%E5%92%8C%E9%80%9A%E9%85%8D%E7%AC%A6%E5%8C%B9%E9%85%8D%E6%97%B6%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7%E5%85%B3%E7%B3%BB" class="anchor"></a>同时存在路径变量和通配符匹配时的优先级关系</h2>
+<p style="">当一个请求路径可以匹配多个处理器方法时，SpringMVC将优先匹配路径映射更精确的那个。</p>
+<ul style="">
+<li style="">拥有更少的路径变量和通配符的路径映射更精确。比如<code style="">/hotels/{hotel}/*</code>拥有一个路径变量和一个通配符，那么它会比<code style="">/hotels/{hotel}/**</code>更精确，会优先匹配，因为后者拥有一个路径变量和两个通配符。</li>
+<li style="margin-top: 0.25em;">如果两个路径映射的通配符数量是一样的，则指定的信息更多那个路径会更精确，比如<code style="">/hotels/abc*</code>比<code style="">/hotels/*</code>更精确。</li>
+<li style="margin-top: 0.25em;">路径变量比通配符更精确。比如<code style="">/hotels/{hotel}</code>比<code style="">/hotels/*</code>更精确。</li>
+<li style="margin-top: 0.25em;">默认映射<code style="">/**</code>比其它所有的路径映射的优先级都低，比如<code style="">/{a}/{b}</code>就比它更精确。</li>
+<li style="margin-top: 0.25em;">拥有两个通配符的路径映射比其它没有两个通配符的路径映射的优先级都低，比如<code style="">/abc/**</code>的优先级低于<code style="">/abc/{a}</code>。</li>
+</ul>
+<p style="">（注：本文是基于Spring4.1.0所写）</p>
+</div>
+
+  
+
+  <div>
+    <!-- 广告位：PC端-iteye博客详情页底部banner2-728*90 -->
+    <script>
+      (function() {
+          var s = "_" + Math.random().toString(36).slice(2);
+          document.write('<div id="' + s + '"></div>');
+          (window.slotbydup=window.slotbydup || []).push({
+              id: '4774193',
+              container: s,
+              size: '728,90',
+              display: 'inlay-fix'
+          });
+      })();
+      jQuery(function(){
+        window.csdn.recommendSide({
+          contentBox: "recommend",
+          postBox: jQuery(".news-right-side"),
+          query:'SpringMVC路径匹配中使用通配符',
+          popu:'725'
+        })
+      });
+    </script><div id="_otgg679v3xt"></div><script charset="utf-8" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/pcgm"></script><a href="http://www.baidu.com/cb.php?c=IgF_pyfqnHmkPj6vPjm0IZ0qnfK9ujYzrHn3rj6z0Aw-5Hnsn16YnjT0TAq15HfLP1fkrHn0T1Y1m1IWrH7hP1IhP10dnyfk0AwY5HDdPHc1PHbYPjn0IgF_5y9YIZK1rBtEuywdQhP1uA38UhNYQvPEIgF1uiqbugw9pysEP1bsPWqdIAdxTvqdThP-5yF_UvIGIAN4ufKzujY4rHb0mhYqnfKsTWYs0ZNGujYkPHTYn1mk0AqGujYknWb3rjDY0APGujYLn1bdn1n0ULI85H00TZbqnW0v0APzm1Y1PHT4rf" target="_blank" style="text-decoration:none;">
+
+<div style="font-size:17px;color:#f13d3d;font-family: SF Pro Display,Roboto,Noto,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif;width:728px;height:25px;font-weight:bold;">平均薪酬38K! 前端工程师凭什么这么值钱？</div>
+
+<div style="font-size:13px;color:#666;font-family: SF Pro Display,Roboto,Noto,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif;height:35px;margin-top:10px;">2019年，这类程序员需求增速达174%？原因竟是...</div>
+
+</a>
+  </div>
+
+
+
+  <div id="bottoms" class="clearfix">
+    <div id="digg_bottom" class="clearfix"><div class="digged"><strong>0</strong> <br>顶</div><div class="digged"><strong>2</strong> <br>踩</div></div>
+    <div id="share_weibo">分享到：
+      <a data-type="sina" href="javascript:;" title="分享到新浪微博"><img src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/sina.jpg"></a>
+      <a data-type="qq" href="javascript:;" title="分享到腾讯微博"><img src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/tec.jpg"></a>
+    </div>
+  </div>
+
+  <div class="blog_nav">
+    <div class="pre_next">
+      <a href="https://elim.iteye.com/blog/2410155" class="next" title="Spring（27）——util命名空间">Spring（27）——util命名空间</a>
+      |
+      <a href="https://elim.iteye.com/blog/2407959" class="pre" title="Elastic-Job之异常处理器">Elastic-Job之异常处理器</a>
+    </div>
+  </div>
+  <div class="blog_bottom">
+    <ul>
+      <li>2018-01-27 13:41</li>
+      <li>浏览 3831</li>
+      <li><a href="https://elim.iteye.com/blog/2409316#comments">评论(0)</a></li>
+      
+      
+      <li>分类:<a href="https://www.iteye.com/blogs/category/opensource">开源软件</a></li>      
+      <li class="last"><a href="https://www.iteye.com/wiki/blog/2409316" target="_blank" class="more">查看更多</a></li>
+    </ul>    
+  </div>
+    
+  <div class="blog_comment">
+    <h5>评论</h5>
+    <a id="comments" name="comments"></a>
+    
+    
+    
+  </div>
+
+  <div class="blog_comment">
+    <h5>发表评论</h5>
+            <p style="text-align:center; margin-top:30px;margin-bottom:0px;"><a href="https://elim.iteye.com/login" style="background-color:white;"> <img src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/login_icon.png" style="vertical-align:middle; margin-right: 10px;"></a><a href="https://elim.iteye.com/login">  您还没有登录,请您登录后再发表评论 </a></p>
+      </div>
+  </div>
+  
+      
+<div class="boutique-curr-box blog_comment">
+	  <div class="boutique-curr clearfix" id="album_detail_wrap">
+	    <h5 class="h3titles">相关资源推荐</h5>
+			<ul style="margin-top: 8px" class="clearfix">
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/bobozai86/article/details/84703933" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/bobozai86/article/details/84703933,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/bobozai86/article/details/84703933,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="SpringMVC路径匹配中使用通配符"><em class="related_suggestion_highlight">SpringMVC</em><em class="related_suggestion_highlight">路径</em><em class="related_suggestion_highlight">匹配</em>中<em class="related_suggestion_highlight">使用</em><em class="related_suggestion_highlight">通配符</em></a>
+              <p>
+                原文源自：http://elim.iteye.com/blog/2409316/
+
+@RequestMapping中指定的<em class="related_suggestion_highlight">路径</em>也可以<em class="related_suggestion_highlight">使用</em><em class="related_suggestion_highlight">通配符</em>*，表示任意字符。如下的处理器方法可以映射请求/antstyle/a，可以映射请求/antstyle/b，但是它不能映射请求请求/antstyle/a/b，因为它只能映射一级<em class="related_suggestion_highlight">路径</em>。
+
+
+@RequestMapping(&amp;quot;/antstyle/*&amp;quot;)
+publi...
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/zsg88/article/details/64929824" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/zsg88/article/details/64929824,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/zsg88/article/details/64929824,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="Spring加载路径中的通配符">Spring加载<em class="related_suggestion_highlight">路径</em>中的<em class="related_suggestion_highlight">通配符</em></a>
+              <p>
+                ？（<em class="related_suggestion_highlight">匹配</em>单个字符），*（<em class="related_suggestion_highlight">匹配</em>除/外任意字符）、**/(<em class="related_suggestion_highlight">匹配</em>任意多个目录)
+
+
+
+
+classpath:app-Beans.xml
+
+说明：无<em class="related_suggestion_highlight">通配符</em>，必须完全<em class="related_suggestion_highlight">匹配</em>
+
+
+
+classpath:App?-Beans.xml
+
+说明：<em class="related_suggestion_highlight">匹配</em>一个字符，例如 App1-Beans.xml 、 App2-Beans.xml
+
+
+
+classpath:user/*/Base-Bea
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/zhou920786312/article/details/81026381" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/zhou920786312/article/details/81026381,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/zhou920786312/article/details/81026381,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="spring mvc  拦截器路径匹配原则">spring mvc  拦截器<em class="related_suggestion_highlight">路径</em><em class="related_suggestion_highlight">匹配</em>原则</a>
+              <p>
+                转载https://blog.csdn.net/rj042/article/details/23278337&nbsp;&amp;amp;lt;mvc:interceptors&amp;amp;gt;
+		&amp;amp;lt;mvc:interceptor&amp;amp;gt;
+			&amp;amp;lt;!-- 对所有的.do结尾的进行拦截,/**表示/下面任何字段，起初我用/*/*.do后来发现/*不能代表所有的字段，要<em class="related_suggestion_highlight">使用</em>/** --&amp;amp;gt;
+			&amp;amp;lt;mvc:map...
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/rj042/article/details/23278337" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/rj042/article/details/23278337,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/rj042/article/details/23278337,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="spring mvc路径匹配原则">spring mvc<em class="related_suggestion_highlight">路径</em><em class="related_suggestion_highlight">匹配</em>原则</a>
+              <p>
+                Ant path <em class="related_suggestion_highlight">匹配</em>原则
+
+
+<em class="related_suggestion_highlight">路径</em><em class="related_suggestion_highlight">匹配</em>原则(Path Matching) Spring MVC中的<em class="related_suggestion_highlight">路径</em><em class="related_suggestion_highlight">匹配</em>要比标准的web.xml要灵活的多。默认的策略实现了 org.springframework.util.AntPathMatcher，就像名字提示的那样，<em class="related_suggestion_highlight">路径</em>模式是<em class="related_suggestion_highlight">使用</em>了Apache Ant的样式<em class="related_suggestion_highlight">路径</em>，Apache Ant样式的<em class="related_suggestion_highlight">路径</em>有三种<em class="related_suggestion_highlight">通配符</em><em class="related_suggestion_highlight">匹配</em>方法（在下面的表格中列出)
+这些可以
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/xinghuo0007/article/details/53434079" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/xinghuo0007/article/details/53434079,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/xinghuo0007/article/details/53434079,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="springMVC笔记系列(5)——@RequestMapping请求value的通配符详解"><em class="related_suggestion_highlight">springMVC</em>笔记系列(5)——@RequestMapping请求value的<em class="related_suggestion_highlight">通配符</em>详解</a>
+              <p>
+                说明：本文章的内容转载至：https://my.oschina.net/happyBKs/blog/412714 
+如有侵权的地方，请联系本人，本人将会立即删除！在一些场景中，请求的url可能是符合一定模式的多个值，这时候需要<em class="related_suggestion_highlight">使用</em>Ant 风格<em class="related_suggestion_highlight">通配符</em>来进行限定。Ant 风格资源地址支持 3 种<em class="related_suggestion_highlight">匹配</em>符： 
+        说明一下: _?<em class="related_suggestion_highlight">通配符</em>前面都多加了下划线
+–?：<em class="related_suggestion_highlight">匹配</em>文件名中的一个字符– *：<em class="related_suggestion_highlight">匹配</em>
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/zsg88/article/details/69663482" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/zsg88/article/details/69663482,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/zsg88/article/details/69663482,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="spring 路径配置通配符是如何实现的">spring <em class="related_suggestion_highlight">路径</em>配置<em class="related_suggestion_highlight">通配符</em>是如何实现的</a>
+              <p>
+                在spring的配置文件中、经常看见类似这样的配置<em class="related_suggestion_highlight">路径</em>：&nbsp;classpath:/com/module/**/*sql.xml&nbsp;
+
+系统会根据配置<em class="related_suggestion_highlight">路径</em>自动加载符合<em class="related_suggestion_highlight">路径</em>规则的xml文件。
+
+Spring还提供了一种更强大的Ant模式<em class="related_suggestion_highlight">通配符</em><em class="related_suggestion_highlight">匹配</em>，从能一个<em class="related_suggestion_highlight">路径</em><em class="related_suggestion_highlight">匹配</em>一批资源。
+
+Ant<em class="related_suggestion_highlight">路径</em><em class="related_suggestion_highlight">通配符</em>支持“？”、“*”、“**”，注意<em class="related_suggestion_highlight">通配符</em><em class="related_suggestion_highlight">匹配</em>不包括目录分隔符“/”：
+&nbsp;
+“?”：<em class="related_suggestion_highlight">匹配</em>一个字符，如
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/qq_36521579/article/details/79772883" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/qq_36521579/article/details/79772883,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/qq_36521579/article/details/79772883,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="SpringMVC的匹配规则"><em class="related_suggestion_highlight">SpringMVC</em>的<em class="related_suggestion_highlight">匹配</em>规则</a>
+              <p>
+                <em class="related_suggestion_highlight">SpringMVC</em>的<em class="related_suggestion_highlight">匹配</em>规则
+
+　首先需要明确几容易混淆的规则：
+
+
+servlet容器中的<em class="related_suggestion_highlight">匹配</em>规则既不是简单的通配，也不是正则表达式，而是特定的规则。所以不要用<em class="related_suggestion_highlight">通配符</em>或者正则表达式的<em class="related_suggestion_highlight">匹配</em>规则来看待servlet的url-pattern。
+Servlet 2.5开始，一个servlet可以<em class="related_suggestion_highlight">使用</em>多个url-pattern规则，标签声明了与该servlet相应的<em class="related_suggestion_highlight">匹配</em>规则，每个标签代表1个<em class="related_suggestion_highlight">匹配</em>规则；
+当...
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/m0_37899388/article/details/78685680" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/m0_37899388/article/details/78685680,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/m0_37899388/article/details/78685680,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="springMVC路径匹配规则"><em class="related_suggestion_highlight">springMVC</em><em class="related_suggestion_highlight">路径</em><em class="related_suggestion_highlight">匹配</em>规则</a>
+              <p>
+                Ant
+ path <em class="related_suggestion_highlight">匹配</em>原则
+
+
+
+在Spring&nbsp;MVC中经常要用到拦截器，在配置需要要拦截的<em class="related_suggestion_highlight">路径</em>时经常用到子标签，其有一个path属性，它就是用来指定需要拦截的<em class="related_suggestion_highlight">路径</em>的。例如：
+
+
+
+
+
+
+
+
+
+根据以上配置，此拦截器会拦截所有的请求。
+
+
+
+
+Spring MVC中的<em class="related_suggestion_highlight">路径</em><em class="related_suggestion_highlight">匹配</em>要比标准的web.xml要灵活的多。默认的策略实现了 org.springfra
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/y666666y/article/details/70212165" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/y666666y/article/details/70212165,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/y666666y/article/details/70212165,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="使用路径通配符加载Resource,"><em class="related_suggestion_highlight">使用</em><em class="related_suggestion_highlight">路径</em><em class="related_suggestion_highlight">通配符</em>加载Resource,</a>
+              <p>
+                http://blog.csdn.net/liufengyinglxj/article/details/8646417（这个比较好）
+
+下面又是一个：
+
+spring提供了强大的Ant模式<em class="related_suggestion_highlight">通配符</em><em class="related_suggestion_highlight">匹配</em>，从同一个<em class="related_suggestion_highlight">路径</em>能<em class="related_suggestion_highlight">匹配</em>一批资源。
+
+Ant<em class="related_suggestion_highlight">路径</em><em class="related_suggestion_highlight">通配符</em>支持"?"、"*"、"**"，注意<em class="related_suggestion_highlight">通配符</em><em class="related_suggestion_highlight">匹配</em>不包括目录分隔符“/”。
+
+“?”:<em class="related_suggestion_highlight">匹配</em>一个字符，如"config?.xml"可<em class="related_suggestion_highlight">匹配</em>"config1.xml
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/davepotter/article/details/84440262" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/davepotter/article/details/84440262,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/davepotter/article/details/84440262,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="使用Spring自带工具对uri进行通配符匹配"><em class="related_suggestion_highlight">使用</em>Spring自带工具对uri进行<em class="related_suggestion_highlight">通配符</em><em class="related_suggestion_highlight">匹配</em></a>
+              <p>
+                自己做项目的时候碰到一个要对请求的uri进行过滤的需求，而过滤配置则是在配置文件里以<em class="related_suggestion_highlight">通配符</em>的方式存入的
+
+在网上搜索很久，大部分方法研究都是调用了Spring-security的包。通过阅读Spring源码发现在Spring-core包里已经有相关方法的实现了
+
+对应的类就是org.springframework.util.AntPathMatcher
+
+调用方法很简单，new一个对象...
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/mbh12333/article/details/80417224" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/mbh12333/article/details/80417224,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/mbh12333/article/details/80417224,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="Spring MVC 路径匹配">Spring MVC <em class="related_suggestion_highlight">路径</em><em class="related_suggestion_highlight">匹配</em></a>
+              <p>
+                URI模式 
+1. ? <em class="related_suggestion_highlight">匹配</em>一个字符 
+2. * <em class="related_suggestion_highlight">匹配</em><em class="related_suggestion_highlight">路径</em>段中的零个或多个字符 
+3. ** <em class="related_suggestion_highlight">匹配</em>零个或多个<em class="related_suggestion_highlight">路径</em>段
+
+URI变量并通过以下方式访问它们的值@PathVariable：
+
+
+
+@GetMapping(&amp;amp;quot;/owners/{ownerId}/pets&amp;amp;quot;)
+public Pet findPet(@PathVariable Long ownerId) {
+    // ...
+}
+
+可以在类...
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/buster2014/article/details/50700575" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/buster2014/article/details/50700575,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/buster2014/article/details/50700575,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="spring mvc中的@PathVariable[动态参数类似于spring中的通配符功能]">spring mvc中的@PathVariable[动态参数类似于spring中的<em class="related_suggestion_highlight">通配符</em>功能]</a>
+              <p>
+                
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/kangzye/article/details/84922697" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/kangzye/article/details/84922697,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/kangzye/article/details/84922697,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="java通配符匹配文件路径">java<em class="related_suggestion_highlight">通配符</em><em class="related_suggestion_highlight">匹配</em>文件<em class="related_suggestion_highlight">路径</em></a>
+              <p>
+                java.nio.file.PathMatcher 接口的&nbsp;matches 方法，可以测试一个地址是否和<em class="related_suggestion_highlight">通配符</em>地址<em class="related_suggestion_highlight">匹配</em>：
+
+PathMatcher matcher = FileSystems.getDefault().getPathMatcher( &amp;quot;glob:**/*.xml&amp;quot;);
+boolean matches = matcher.matches(Paths.get(&amp;quot;D:/tmp/...
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/huawuque004/article/details/81842679" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/huawuque004/article/details/81842679,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/huawuque004/article/details/81842679,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="RequestMapping可以实现模糊匹配路径">RequestMapping可以实现模糊<em class="related_suggestion_highlight">匹配</em><em class="related_suggestion_highlight">路径</em></a>
+              <p>
+                　再补充一点，RequestMapping可以实现模糊<em class="related_suggestion_highlight">匹配</em><em class="related_suggestion_highlight">路径</em>，比如：
+
+　　？：<em class="related_suggestion_highlight">匹配</em>一个字符
+
+　　*：<em class="related_suggestion_highlight">匹配</em>任意字符
+
+　　**：<em class="related_suggestion_highlight">匹配</em>多层<em class="related_suggestion_highlight">路径</em>
+
+　　/<em class="related_suggestion_highlight">springmvc</em>/**/lastTest 就可以<em class="related_suggestion_highlight">匹配</em>/<em class="related_suggestion_highlight">springmvc</em>/suiyi1/suiyi2/suiyi3/lastTest<em class="related_suggestion_highlight">路径</em>...
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/chenjing9393/article/details/79926226" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/chenjing9393/article/details/79926226,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/chenjing9393/article/details/79926226,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="SpringMVC请求与Controller如何匹配【简易版】"><em class="related_suggestion_highlight">SpringMVC</em>请求与Controller如何<em class="related_suggestion_highlight">匹配</em>【简易版】</a>
+              <p>
+                
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/qq_34944851/article/details/53993482" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/qq_34944851/article/details/53993482,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/qq_34944851/article/details/53993482,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="SSH框架之Struts的Action的开发、通配符、路径匹配原则（了解即可）">SSH框架之Struts的Action的开发、<em class="related_suggestion_highlight">通配符</em>、<em class="related_suggestion_highlight">路径</em><em class="related_suggestion_highlight">匹配</em>原则（了解即可）</a>
+              <p>
+                一、Struts2的Action的开发的三种方式 
+1、方式1（<em class="related_suggestion_highlight">使用</em>最多）：继承ActionSupport 
+ 
+注意： 
+如果用struts的数据校验功能，必须继承此类！ 
+如果不<em class="related_suggestion_highlight">使用</em>用struts的数据校验功能，不继承此类也可以！
+2、方式2：实现Action接口 
+3、方式3：不继承任何类，不实现任何接口 
+二、<em class="related_suggestion_highlight">通配符</em>：
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/zsg88/article/details/64933817" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/zsg88/article/details/64933817,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/zsg88/article/details/64933817,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="Spring AOP配置通配符">Spring AOP配置<em class="related_suggestion_highlight">通配符</em></a>
+              <p>
+                Spring AOP 用户可能会经常<em class="related_suggestion_highlight">使用</em>&nbsp;execution切入点指示符。执行表达式的格式如下：
+execution（modifiers-pattern? ret-type-pattern declaring-type-pattern? name-pattern（param-pattern）
+          throws-pattern?）
+
+除了返回类型模式（上面代码片断中的ret-t
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/Dxx_23/article/details/83144259" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/Dxx_23/article/details/83144259,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/Dxx_23/article/details/83144259,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="java路径通配符">java<em class="related_suggestion_highlight">路径</em><em class="related_suggestion_highlight">通配符</em></a>
+              <p>
+                欢迎访问我的博客我打不好篮球
+
+表示<em class="related_suggestion_highlight">匹配</em>0或多个不是/的字符
+	
+	表示<em class="related_suggestion_highlight">匹配</em>0或多个任意字符(0个或者多个目录)
+
+	
+	例如：/test/**，<em class="related_suggestion_highlight">匹配</em>/test/下的所有文件和目录，像/test/x.java这样的或者/test/foo/bar/xyz.html这样的，但是/xyz.xml这样的是不行的(有待考证)
+	
+	
+	
+	?表示<em class="related_suggestion_highlight">匹配</em>1个任意字符
+	
+应用：idea中将Sources Ro...
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/jdkleo/article/details/84908550" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/jdkleo/article/details/84908550,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/jdkleo/article/details/84908550,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="java实现路径通配符*,**,?">java实现<em class="related_suggestion_highlight">路径</em><em class="related_suggestion_highlight">通配符</em>*,**,?</a>
+              <p>
+                *&nbsp;表示<em class="related_suggestion_highlight">匹配</em>0或多个不是/的字符
+**&nbsp;表示<em class="related_suggestion_highlight">匹配</em>0或多个任意字符
+?&nbsp;表示<em class="related_suggestion_highlight">匹配</em>1个任意字符
+/**
+     * 将<em class="related_suggestion_highlight">通配符</em>表达式转化为正则表达式
+     * @param path
+     * @return
+     */
+    private static String getRegPath(String path) {
+        char[] chars =...
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/SunnyYoona/article/details/53786397" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/SunnyYoona/article/details/53786397,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/SunnyYoona/article/details/53786397,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="[Hadoop]输入路径过滤，通配符与PathFilter">[Hadoop]输入<em class="related_suggestion_highlight">路径</em>过滤，<em class="related_suggestion_highlight">通配符</em>与PathFilter</a>
+              <p>
+                1. 丢失文件<em class="related_suggestion_highlight">路径</em>过滤应用场景：我们想查询一个月以来度假的订单数据，但是HDFS中可能因为业务故障，导致某一天的订单数据不存在：FileInputFormat.setInputPaths(job, inputPath);上述代码在遇到<em class="related_suggestion_highlight">路径</em>不存在的时候会报错。所以在设置<em class="related_suggestion_highlight">路径</em>之前需要进行一次判断，判断这个<em class="related_suggestion_highlight">路径</em>在HDFS上是否存在，如果存在，<em class="related_suggestion_highlight">使用</em>addInputPath方法添加：FileSystem f
+              </p>
+						</li>
+				
+			</ul>
+	  </div>
+</div>
+
+    
+
+</div>
+
+
+<script type="text/javascript">
+  dp.SyntaxHighlighter.HighlightAll('code', true, true);
+
+  $$('#main .blog_content pre[name=code]').each(function(pre, index){ // blog content
+    var post_id = 2409316;
+    var location = window.location;
+    source_url = location.protocol + "//" + location.host + location.pathname + location.search;
+    pre.writeAttribute('codeable_id', post_id);
+    pre.writeAttribute('codeable_type', "Blog");
+    pre.writeAttribute('source_url', source_url);
+    pre.writeAttribute('pre_index', index);
+    pre.writeAttribute('title', 'SpringMVC路径匹配中使用通配符');
+  });
+
+  fix_image_size($$('div.blog_content img'), 700);
+
+  function processComment() {
+    $$('#main .blog_comment > div').each(function(comment){// comment
+      var post_id = comment.id.substr(2);
+      $$("#"+comment.id+" pre[name=code]").each(function(pre, index){
+        var location = window.location;
+        source_url = location.protocol + "//" + location.host + location.pathname + location.search;
+        source_url += "#" + comment.id;
+        pre.writeAttribute('codeable_id', post_id);
+        pre.writeAttribute('codeable_type', "BlogComment");
+        pre.writeAttribute('source_url', source_url);
+        pre.writeAttribute('pre_index', index);
+        pre.writeAttribute('title', 'SpringMVC路径匹配中使用通配符');
+      });
+    });
+  }
+
+  function quote_comment(id) {
+    new Ajax.Request('/editor/quote', {
+      parameters: {'id':id, 'type':'BlogComment'},
+      onSuccess:function(response){editor.bbcode_editor.textarea.insertAfterSelection(response.responseText);
+        Element.scrollTo(editor.bbcode_editor.textarea.element);}
+    });
+  }
+
+  code_favorites_init();
+  processComment();
+  new WeiboShare({share_buttons: $('share_weibo'), img_scope: $('blog_content')});
+</script>
+
+
+
+
+      </div>
+      
+        <div class="blog-sidebar">
+          <div class="blog-sidebar-fixed">
+            <div class="news-right-side">
+
+            <div class="newbox recommend"><div class="recommend-right">
+  <ul class="recommend-fixed-box">  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/bobozai86/article/details/84703933,-&quot;}"><a href="https://blog.csdn.net/bobozai86/article/details/84703933" target="_blank"><div class="content clearfix"><h5 class="" title="SpringMVC路径匹配中使用通配符">SpringMVC路径匹配中使用通配符</h5><span class="time">2018-12-02</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>108</span></div><div class="right-item-desc">原文源自：http://elim.iteye.com/blog/2409316/
+
+@RequestMapping中指定的路径也可以使用通配符*，表示任意字符。如下的处理器方法可以映射请求/antstyle/a，可以映射请求/antstyle/b，但是它不能映射请求请求/antstyle/a/b，因为它只能映射一级路径。
+
+
+@RequestMapping(&amp;quot;/antstyle/*&amp;quot;)
+publi...</div></a></li>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/zsg88/article/details/64929824,-&quot;}"><a href="https://blog.csdn.net/zsg88/article/details/64929824" target="_blank"><div class="content clearfix"><h5 class="" title="Spring加载路径中的通配符">Spring加载路径中的通配符</h5><span class="time">2017-03-22</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>709</span></div><div class="right-item-desc">？（匹配单个字符），*（匹配除/外任意字符）、**/(匹配任意多个目录)
+
+
+
+
+classpath:app-Beans.xml
+
+说明：无通配符，必须完全匹配
+
+
+
+classpath:App?-Beans.xml
+
+说明：匹配一个字符，例如 App1-Beans.xml 、 App2-Beans.xml
+
+
+
+classpath:user/*/Base-Bea</div></a></li><div style="" id="_vs61acgs4bh" class="right-item ad_item"><iframe id="iframeu3586193_0" name="iframeu3586193_0" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/pcgm.html" width="280" height="70" align="center,center" vspace="0" hspace="0" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" style="border:0;vertical-align:bottom;margin:0;width:280px;height:70px" allowtransparency="true"></iframe></div>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/rj042/article/details/23278337,-&quot;}"><a href="https://blog.csdn.net/rj042/article/details/23278337" target="_blank"><div class="content clearfix"><h5 class="" title="spring" mvc&#36335;&#24452;&#21305;&#37197;&#21407;&#21017;="">spring mvc路径匹配原则</h5><span class="time">2014-04-09</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>53148</span></div><div class="right-item-desc">Ant path 匹配原则
+
+
+路径匹配原则(Path Matching) Spring MVC中的路径匹配要比标准的web.xml要灵活的多。默认的策略实现了 org.springframework.util.AntPathMatcher，就像名字提示的那样，路径模式是使用了Apache Ant的样式路径，Apache Ant样式的路径有三种通配符匹配方法（在下面的表格中列出)
+这些可以</div></a></li>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/zhou920786312/article/details/81026381,-&quot;}"><a href="https://blog.csdn.net/zhou920786312/article/details/81026381" target="_blank"><div class="content clearfix"><h5 class="" title="spring" mvc="" &#25318;&#25130;&#22120;&#36335;&#24452;&#21305;&#37197;&#21407;&#21017;="">spring mvc  拦截器路径匹配原则</h5><span class="time">2018-07-13</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>3170</span></div><div class="right-item-desc">转载https://blog.csdn.net/rj042/article/details/23278337&nbsp;&amp;amp;lt;mvc:interceptors&amp;amp;gt;
+		&amp;amp;lt;mvc:interceptor&amp;amp;gt;
+			&amp;amp;lt;!-- 对所有的.do结尾的进行拦截,/**表示/下面任何字段，起初我用/*/*.do后来发现/*不能代表所有的字段，要使用/** --&amp;amp;gt;
+			&amp;amp;lt;mvc:map...</div></a></li>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/xinghuo0007/article/details/53434079,-&quot;}"><a href="https://blog.csdn.net/xinghuo0007/article/details/53434079" target="_blank"><div class="content clearfix"><h5 class="" title="springMVC笔记系列(5)——@RequestMapping请求value的通配符详解">springMVC笔记系列(5)——@RequestMapping请求value的通配符详解</h5><span class="time">2016-12-02</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>8471</span></div><div class="right-item-desc">说明：本文章的内容转载至：https://my.oschina.net/happyBKs/blog/412714 
+如有侵权的地方，请联系本人，本人将会立即删除！在一些场景中，请求的url可能是符合一定模式的多个值，这时候需要使用Ant 风格通配符来进行限定。Ant 风格资源地址支持 3 种匹配符： 
+        说明一下: _?通配符前面都多加了下划线
+–?：匹配文件名中的一个字符– *：匹配</div></a></li>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/qq_36521579/article/details/79772883,-&quot;}"><a href="https://blog.csdn.net/qq_36521579/article/details/79772883" target="_blank"><div class="content clearfix"><h5 class="" title="SpringMVC的匹配规则">SpringMVC的匹配规则</h5><span class="time">2018-03-31</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>565</span></div><div class="right-item-desc">SpringMVC的匹配规则
+
+　首先需要明确几容易混淆的规则：
+
+
+servlet容器中的匹配规则既不是简单的通配，也不是正则表达式，而是特定的规则。所以不要用通配符或者正则表达式的匹配规则来看待servlet的url-pattern。
+Servlet 2.5开始，一个servlet可以使用多个url-pattern规则，标签声明了与该servlet相应的匹配规则，每个标签代表1个匹配规则；
+当...</div></a></li><div style="" id="_zaavbznf968" class="right-item ad_item"><iframe id="iframeu3591305_0" name="iframeu3591305_0" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/pcgm(1).html" width="280" height="70" align="center,center" vspace="0" hspace="0" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" style="border:0;vertical-align:bottom;margin:0;width:280px;height:70px" allowtransparency="true"></iframe></div>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/zsg88/article/details/69663482,-&quot;}"><a href="https://blog.csdn.net/zsg88/article/details/69663482" target="_blank"><div class="content clearfix"><h5 class="" title="spring" &#36335;&#24452;&#37197;&#32622;&#36890;&#37197;&#31526;&#26159;&#22914;&#20309;&#23454;&#29616;&#30340;="">spring 路径配置通配符是如何实现的</h5><span class="time">2017-04-07</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>2607</span></div><div class="right-item-desc">在spring的配置文件中、经常看见类似这样的配置路径：&nbsp;classpath:/com/module/**/*sql.xml&nbsp;
+
+系统会根据配置路径自动加载符合路径规则的xml文件。
+
+Spring还提供了一种更强大的Ant模式通配符匹配，从能一个路径匹配一批资源。
+
+Ant路径通配符支持“？”、“*”、“**”，注意通配符匹配不包括目录分隔符“/”：
+&nbsp;
+“?”：匹配一个字符，如</div></a></li>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/m0_37899388/article/details/78685680,-&quot;}"><a href="https://blog.csdn.net/m0_37899388/article/details/78685680" target="_blank"><div class="content clearfix"><h5 class="" title="springMVC路径匹配规则">springMVC路径匹配规则</h5><span class="time">2017-12-01</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>904</span></div><div class="right-item-desc">Ant
+ path 匹配原则
+
+
+
+在Spring&nbsp;MVC中经常要用到拦截器，在配置需要要拦截的路径时经常用到子标签，其有一个path属性，它就是用来指定需要拦截的路径的。例如：
+
+
+
+
+
+
+
+
+
+根据以上配置，此拦截器会拦截所有的请求。
+
+
+
+
+Spring MVC中的路径匹配要比标准的web.xml要灵活的多。默认的策略实现了 org.springfra</div></a></li>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/y666666y/article/details/70212165,-&quot;}"><a href="https://blog.csdn.net/y666666y/article/details/70212165" target="_blank"><div class="content clearfix"><h5 class="" title="使用路径通配符加载Resource,">使用路径通配符加载Resource, </h5><span class="time">2017-04-17</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>867</span></div><div class="right-item-desc">http://blog.csdn.net/liufengyinglxj/article/details/8646417（这个比较好）
+
+下面又是一个：
+
+spring提供了强大的Ant模式通配符匹配，从同一个路径能匹配一批资源。
+
+Ant路径通配符支持"?"、"*"、"**"，注意通配符匹配不包括目录分隔符“/”。
+
+“?”:匹配一个字符，如"config?.xml"可匹配"config1.xml</div></a></li>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/huawuque004/article/details/81842679,-&quot;}"><a href="https://blog.csdn.net/huawuque004/article/details/81842679" target="_blank"><div class="content clearfix"><h5 class="" title="RequestMapping可以实现模糊匹配路径">RequestMapping可以实现模糊匹配路径</h5><span class="time">2018-08-19</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>1850</span></div><div class="right-item-desc">　再补充一点，RequestMapping可以实现模糊匹配路径，比如：
+
+　　？：匹配一个字符
+
+　　*：匹配任意字符
+
+　　**：匹配多层路径
+
+　　/springmvc/**/lastTest 就可以匹配/springmvc/suiyi1/suiyi2/suiyi3/lastTest路径...</div></a></li>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/mbh12333/article/details/80417224,-&quot;}"><a href="https://blog.csdn.net/mbh12333/article/details/80417224" target="_blank"><div class="content clearfix"><h5 class="" title="Spring" mvc="" &#36335;&#24452;&#21305;&#37197;="">Spring MVC 路径匹配</h5><span class="time">2018-05-23</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>360</span></div><div class="right-item-desc">URI模式 
+1. ? 匹配一个字符 
+2. * 匹配路径段中的零个或多个字符 
+3. ** 匹配零个或多个路径段
+
+URI变量并通过以下方式访问它们的值@PathVariable：
+
+
+
+@GetMapping(&amp;amp;quot;/owners/{ownerId}/pets&amp;amp;quot;)
+public Pet findPet(@PathVariable Long ownerId) {
+    // ...
+}
+
+可以在类...</div></a></li><div style="" id="_jiwsdn15y1p" class="right-item ad_item"><iframe id="iframeu3591311_0" name="iframeu3591311_0" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/pcgm(2).html" width="280" height="70" align="center,center" vspace="0" hspace="0" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" style="border:0;vertical-align:bottom;margin:0;width:280px;height:70px" allowtransparency="true"></iframe></div>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/buster2014/article/details/50700575,-&quot;}"><a href="https://blog.csdn.net/buster2014/article/details/50700575" target="_blank"><div class="content clearfix"><h5 class="" title="spring" mvc&#20013;&#30340;@pathvariable[&#21160;&#24577;&#21442;&#25968;&#31867;&#20284;&#20110;spring&#20013;&#30340;&#36890;&#37197;&#31526;&#21151;&#33021;]="">spring mvc中的@PathVariable[动态参数类似于spring中的通配符功能]</h5><span class="time">2016-02-19</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>3523</span></div><div class="right-item-desc">文章来源：http://jackyrong.iteye.com/blog/2059307
+
+
+&nbsp;spring mvc中的@PathVariable是用来获得请求url中的动态参数的，十分方便，复习下：&nbsp;
+
+
+
+
+Java代码&nbsp;&nbsp;
+
+
+
+@Controller&nbsp;&nbsp;
+public&nbsp;class&nbsp;TestController&nbsp;{&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@RequestMapping(v</div></a></li>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/kangzye/article/details/84922697,-&quot;}"><a href="https://blog.csdn.net/kangzye/article/details/84922697" target="_blank"><div class="content clearfix"><h5 class="" title="java通配符匹配文件路径">java通配符匹配文件路径</h5><span class="time">2018-06-26</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>227</span></div><div class="right-item-desc">
+
+java.nio.file.PathMatcher 接口的&nbsp;matches 方法，可以测试一个地址是否和通配符地址匹配：
+
+PathMatcher matcher = FileSystems.getDefault().getPathMatcher( &amp;quot;glob:**/*.xml&amp;quot;);
+boolean matches = matcher.matches(Paths.get(&amp;quot;D:/tmp/...</div></a></li>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/ShewMi/article/details/77998293,-&quot;}"><a href="https://blog.csdn.net/ShewMi/article/details/77998293" target="_blank"><div class="content clearfix"><h5 class="" title="java程序路径通配符表达式合辑">java程序路径通配符表达式合辑</h5><span class="time">2017-09-16</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>1132</span></div><div class="right-item-desc">Patterns：表达式，规则。PatternSet：表达式序列，表达式清单。matches：相对，匹配。directory：目录。
+正如前面所述，patterns用于对文件的包含和不包含。这些patterns看上去和DOS和UNIX中使用的patterns非常相似：
+'*'&nbsp;matches 0个或多个字符，'?'&nbsp;matches&nbsp;一个字符。
+通常，patterns侧重于相对路径，这个相对路</div></a></li>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/chenjing9393/article/details/79926226,-&quot;}"><a href="https://blog.csdn.net/chenjing9393/article/details/79926226" target="_blank"><div class="content clearfix"><h5 class="" title="SpringMVC请求与Controller如何匹配【简易版】">SpringMVC请求与Controller如何匹配【简易版】</h5><span class="time">2018-04-13</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>324</span></div><div class="right-item-desc">当spring 接到请求后，DispatcherServlet如何找到对应的Controller1、spring初始化时期&nbsp; &nbsp; 1）会对所有的bean进行加载（此处只讨论注解定义bean），判断bean中是否带有@Controller 注解或者 @RequestMapping 注解，若有则该bean为一个Handler。&nbsp; &nbsp; &nbsp; &nbsp;问：如果仅有@RequestMapping 注解，是否会为Ha...</div></a></li></ul>
+</div></div></div>
+            <div class="persion_article">
+
+            <div class="right_box footer_box csdn-tracking-statistics" data-mod="popu_475" data-dsm="post">        <div class="contact-box" id="footer-contact-box"><div class="img-box"><a href="https://edu.csdn.net/?utm_source=csdn_footer" target="_blank"><img src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/edu-QR.png" alt="CSDN学院" style="padding: 6px;"></a><p class="app-text">CSDN学院</p></div><div class="img-box fr"><img style="padding:6px;" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/job-QR.png" alt="CSDN企业招聘"><p class="app-text">CSDN企业招聘</p></div></div>        <div class="contact-info">        <p><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path d="M2.167 2h11.666C14.478 2 15 2.576 15 3.286v9.428c0 .71-.522 1.286-1.167 1.286H2.167C1.522 14 1 13.424 1 12.714V3.286C1 2.576 1.522 2 2.167 2zm-.164 3v1L8 10l6-4V5L8 9 2.003 5z" fill="#5c5c5c" fill-rule="evenodd"></path></svg><a href="mailto:webmaster@csdn.net" target="_blank"><span class="txt">kefu@csdn.net</span></a>        <em class="width126"><svg t="1538013544186" width="17" height="17" style="" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="23556" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><style type="text/css"></style></defs><path d="M902.60033922 650.96445566c-18.0718526-100.84369837-94.08399771-166.87723736-94.08399771-166.87723737 10.87530062-91.53186599-28.94715402-107.78733693-28.94715401-107.78733691C771.20003413 93.08221664 517.34798062 98.02553561 511.98620441 98.16348824 506.65661791 98.02553561 252.75857992 93.08221664 244.43541101 376.29988138c0 0-39.79946279 16.25547094-28.947154 107.78733691 0 0-75.98915247 66.03353901-94.0839977 166.87723737 0 0-9.63372291 170.35365477 86.84146124 20.85850523 0 0 21.70461757 56.79068296 61.50407954 107.78733692 0 0-71.1607951 23.19910867-65.11385185 83.46161052 0 0-2.43717093 67.16015592 151.93232126 62.56172014 0 0 108.5460788-8.0932473 141.10300432-52.14626271H526.33792324c32.57991817 44.05301539 141.10300431 52.1462627 141.10300431 52.14626271 154.3235077 4.59843579 151.95071457-62.56172013 151.95071457-62.56172014 6.00095876-60.26250183-65.11385185-83.46161053-65.11385185-83.46161052 39.77647014-50.99665395 61.4810877-107.78733693 61.4810877-107.78733692 96.45219231 149.49514952 86.84146124-20.85850523 86.84146125-20.85850523" p-id="23557" fill="#5c5c5c"></path></svg><a href="http://wpa.b.qq.com/cgi/wpa.php?ln=1&amp;key=XzgwMDE4MDEwNl80ODc3MzVfODAwMTgwMTA2XzJf" class="qqcustomer_s" target="_blank"><span class="txt">QQ客服</span></a></em></p>        <p><em class="width126"><svg t="1538012951761" width="17" height="17" style="" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="23083" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><style type="text/css"></style></defs><path d="M466.4934485 880.02006511C264.6019863 859.18313878 107.13744214 688.54706608 107.13744214 481.14947309 107.13744214 259.68965394 286.68049114 80.14660493 508.14031029 80.14660493s401.00286817 179.54304901 401.00286814 401.00286816v1.67343191C908.30646249 737.58941724 715.26799489 943.85339507 477.28978337 943.85339507c-31.71423369 0-62.61874229-3.67075386-92.38963569-10.60739903 30.09478346-11.01226158 56.84270313-29.63593923 81.5933008-53.22593095z m-205.13036267-398.87059202a246.77722444 246.77722444 0 0 0 493.5544489 0 30.85052691 30.85052691 0 0 0-61.70105383 0 185.07617062 185.07617062 0 0 1-370.15234125 0 30.85052691 30.85052691 0 0 0-61.70105382 0z" p-id="23084" fill="#5c5c5c"></path></svg><a href="http://bbs.csdn.net/forums/Service" target="_blank"><span class="txt">客服论坛</span></a></em>        <svg t="1538013874294" width="17" height="17" style="" viewBox="0 0 1194 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="23784" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><style type="text/css"></style></defs><path d="M1031.29689505 943.85339507h-863.70679012A71.98456279 71.98456279 0 0 1 95.60554212 871.86883228v-150.85178906c0-28.58329658 16.92325492-54.46750945 43.13135785-65.93861527l227.99160176-99.75813425c10.55341735-4.61543317 18.24580594-14.0082445 20.72896295-25.23643277l23.21211998-105.53417343a71.95757195 71.95757195 0 0 1 70.28414006-56.51881307h236.95255971c33.79252817 0 63.02360485 23.5090192 70.28414004 56.51881307l23.21211997 105.53417343c2.48315701 11.25517912 10.17554562 20.62099961 20.72896296 25.23643277l227.99160177 99.75813425a71.98456279 71.98456279 0 0 1 43.13135783 65.93861527v150.85178906A71.98456279 71.98456279 0 0 1 1031.26990421 943.85339507z m-431.85339506-143.94213475c143.94213474 0 143.94213474-48.34058941 143.94213474-107.96334876s-64.45411922-107.96334877-143.94213474-107.96334877c-79.51500637 0-143.94213474 48.34058941-143.94213475 107.96334877s0 107.96334877 143.94213475 107.96334876zM1103.254467 296.07330247v148.9894213a35.97878598 35.97878598 0 0 1-44.15700966 35.03410667l-143.94213473-33.57660146a36.0057768 36.0057768 0 0 1-27.80056231-35.03410668V296.1002933c-35.97878598-47.98970852-131.95820302-71.98456279-287.91126031-71.98456279S347.53801649 248.11058478 311.53223967 296.1002933v115.385829c0 16.73431906-11.52508749 31.25538946-27.80056233 35.03410668l-143.94213473 33.57660146A35.97878598 35.97878598 0 0 1 95.63253297 445.06272377V296.07330247C162.81272673 152.13116772 330.77670658 80.14660493 599.47049084 80.14660493s436.63077325 71.98456279 503.81096699 215.92669754z" p-id="23785" fill="#5c5c5c"></path></svg>400-660-0108 </p>        <p style="text-align:center">工作时间 8:30-22:00</p>        </div>        <div class="bg-gray">            <div class="feed_copyright">            <p><a class="right-dotte" href="https://www.csdn.net/company/index.html#about" target="_blank">关于我们</a><a href="https://www.csdn.net/company/index.html#recruit" target="_blank" class="right-dotte">招聘</a><a href="https://www.csdn.net/company/index.html#contact" target="_blank" class="right-dotte">广告服务</a>            <a href="https://www.csdn.net/gather/A" target="_blank" class="footer_baidu">            网站地图</a></p>            <p class="fz12_baidu"><a href="https://zn.baidu.com/cse/home/index" target="_blank"><svg width="13" height="14" xmlns="http://www.w3.org/2000/svg"><path d="M8.392 7.013c1.014 1.454 2.753 2.8 2.753 2.8s1.303 1.017.47 2.98c-.833 1.962-3.876.942-3.876.942s-1.122-.36-2.424-.072c-1.303.291-2.426.181-2.426.181s-1.523.037-1.957-1.888c-.434-1.927 1.52-2.982 1.666-3.161.145-.183 1.159-.873 1.81-1.963.653-1.09 2.608-1.962 3.984.181zm1.23 5.706V9.346H8.64v2.534h-.937s-.3-.044-.356-.285V9.33l-.925.015v2.518s.042.627.925.855h2.277zm-3.685.013V7.951l-.896-.014v1.295H3.987s-1.054.086-1.422 1.28c-.129.798.114 1.266.156 1.368.043.099.383.682 1.238.852h1.978zm-2.433-1.45c-.087-.286.013-.613.057-.741.042-.128.228-.427.61-.54h.855v1.948h-.797s-.555-.029-.725-.668zm6.877-8.775c-.143.909-.865 2.108-1.99 1.962-1.121-.144-1.375-1.16-1.267-2.179C7.214 1.458 8.21.18 9.007.364c.796.18 1.52 1.235 1.374 2.143zm-4.09-.345c0 1.197-.68 2.164-1.52 2.164S3.25 3.36 3.25 2.162C3.25.967 3.932 0 4.77 0c.842 0 1.52.967 1.52 2.162zm4.854 2.09c1.34 0 1.701 1.309 1.701 1.743 0 .438.182 2.29-1.485 2.326-1.667.037-1.737-1.126-1.737-1.96 0-.874.179-2.11 1.52-2.11zm-7.93.581c.045.398.253 2.217-1.27 2.544C.427 7.704-.14 5.947.028 5.124c0 0 .18-1.78 1.412-1.89.98-.085 1.7.986 1.774 1.6z" fill="#999" fill-rule="evenodd"></path></svg><em>百度提供站内搜索</em></a>&nbsp;<a href="http://www.miibeian.gov.cn/" target="_blank" class="ml14">京ICP证19004658号</a></p>            <p class="fz12_baidu">©1999-2019 北京创新乐知网络技术有限公司 </p>            </div>        </div>        <div class="allow-info-box">        <p><span>经营性网站备案信息</span>        <em class="width126"><a href="http://www.cyberpolice.cn/" target="_blank"><span>网络110报警服务</span></a></em></p>        <p><a href="http://www.bjjubao.org/" target="_blank"><span>北京互联网违法和不良信息举报中心</span></a></p>        <p><a href="http://www.12377.cn/" target="_blank"><span>中国互联网举报中心</span></a></p>        </div>        </div></div>
+          </div>
+        </div>
+            <script>
+        setTimeout(function () {
+          var naviga_offsetTop = 0;
+
+          function onload_function() {
+            naviga_offsetTop = jQuery("#nav_show_top_stop").position().top;
+            jQuery(window).bind("scroll", naviga_stay_top);
+            jQuery(window).bind("mousewheel", naviga_stay_top);
+            jQuery(document).bind("scroll", naviga_stay_top);
+            jQuery(document).bind("mousewheel", naviga_stay_top);
+          }
+
+          function naviga_stay_top() {
+
+            var scrollTop = jQuery(document).scrollTop();
+            if (scrollTop > (naviga_offsetTop + 250)) {
+              jQuery("#nav_show_top_stop").css({
+                "position": "fixed"
+              });
+              jQuery("#nav_show_top_stop").css({
+                "top": "0px"
+              });
+            } else {
+              jQuery("#nav_show_top_stop").css({
+                "position": "fixed"
+              });
+              jQuery("#nav_show_top_stop").css({
+                "top": naviga_offsetTop + 250 - scrollTop + "px"
+              });
+            }
+          }
+          jQuery(document).ready(onload_function());
+        }, 200);
+      </script>
+    </div>
+          <script>
+          setTimeout(function () {
+              not_loading = true;
+              pageNum = 3;
+              oList = jQuery("#album_detail_wrap");
+              jQuery(window).scroll(function() {
+                  var scrollTop = jQuery(this).scrollTop();
+                  var scrollHeight = jQuery(document).height() ;
+                  var windowHeight = jQuery(this).height();
+                  if (scrollTop + windowHeight >= scrollHeight) {
+                      if(not_loading){
+                          refreshMore();
+                          setTimeout(function(){
+                              getMore();
+                          },100);
+                      }else{
+                          jQuery(".dl_more").remove();
+                      }
+                  }
+              });
+
+              function getMore(){
+                  not_loading = false;
+                  console.log("getMore......");
+                  jQuery.ajax({
+                      type: 'get',
+                      url: "/blog/ajax_get_blog_recommends/2409316",
+                      data:{
+                          page:pageNum
+                      },
+                      //async: false,
+                      dataType: 'json',
+                      success: function (resobj) {
+                          var totalNum = resobj.total_pages;
+                          if(pageNum <= totalNum && resobj.oHtml != '' ){
+                              jQuery(".dl_more").remove();
+                              oList.find('ul').append(resobj.oHtml);
+                              refreshMore();
+                              not_loading = true;
+                              pageNum++;
+                          }else{
+                              not_loading = false;
+                              noMore();
+                          }
+                      },
+                      error: function (err) {
+                          console.log(err);
+                      }
+                  });
+              }
+
+              function noMore(){
+                  jQuery(".dl_more").remove();
+                  if(oList.find(".dl_no_more").length ==0){
+                      oList.append('<div class="dl_no_more" style="font-size:14px; color:#0F8AC6; text-align:center;padding-top:10px; ">我们是很有底线的</div>');
+                  }
+              }
+
+              function refreshMore(){
+                  if(oList.find(".dl_more").length ==0){
+                      oList.append('<div class="dl_more" style="font-size:14px; color:#0F8AC6; text-align:center;padding-top:10px;">上滑加载更多</div>');
+                  }
+              }
+          }, 200);
+      </script>
+  
+    <div id="footer" class="clearfix">
+      <!-- <div id="copyright">
+        <hr />
+        声明：ITeye文章版权属于作者，受法律保护。没有作者书面许可不得转载。若作者同意转载，必须以超链接形式标明文章原始出处和作者。<br />
+        &copy; 2003-
+        2019 ITeye.com. All rights reserved. [ 京ICP证110151号 京公网安备110105010620 ]
+      </div> -->
+      <div id="ad_pop">
+        <div class="J_adv" data-view="true" data-mod="ad_popu_64" data-mtp="62" data-order="21" data-con="ad_content_2070">
+          <script id="popuLayer_js_q" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/popuLayer.js" defer="" type="text/javascript"></script>
+          <!-- 广告位：PC端-iteye博客详情右侧弹窗-300*250 -->
+          
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+  document.write("<img src='https://stat.iteye.com/?url="+ encodeURIComponent(document.location.href) + "&referrer=" + encodeURIComponent(document.referrer) + "&user_id=' width='0' height='0' />");
+</script><img src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/saved_resource" width="0" height="0">
+
+
+
+   Global site tag (gtag.js) - Google Analytics
+  <script async="" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/js"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-127895514-6');
+  </script>
+
+  
+  
+  <link href="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/content_toolbar.css" rel="stylesheet">
+<script src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/publib_footer-1.0.3.js" data-isfootertrack="false" type="text/javascript"></script><link rel="stylesheet" type="text/css" href="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/pub_footer_1.0.3.css">
+<script id="csdn-toolbar-id" btnid="header_notice_num" wrapid="note1" count="5" subcount="5" type="text/javascript" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/content_toolbar.js"></script><script src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/notify.js"></script><script src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/main.js"></script><script class="toolbar-s" type="text/javascript" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/iconfont(1).js"></script>
+<script src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/tracking-1.0.1.js" type="text/javascript"></script>
+<script language="javascript" type="text/javascript" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/async-1.0.1.js"></script>
+<script type="text/javascript" charset="utf-8" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/track.js"></script>
+<style>
+  .userinfo {display: none !important;}
+  .persion_article h3{
+    background: none !important;
+    border-bottom: none!important;
+    padding: 0!important;
+    margin-bottom: 0!important;
+    line-height: 1!important;
+  }
+  .persion_article .right_box{
+    margin-top: 0!important;
+  }
+  .persion_article .footer_box .feed_new_tit span{
+    padding-left: 0!important;
+  }
+</style>
+<script>
+(function($){
+  var windowHeight = $(window).height(),
+      contentHeight = $(".hide-main-content").height()
+      windowHeight = windowHeight * 1.2 //获得可视区域高度
+      if(contentHeight > windowHeight){
+        $(".hide-article-box").show()
+        $(".hide-main-content").css({'height': windowHeight,'overflow':'hidden'})
+        $(".hide-article-box").find("#btn-readmore").click(function(){
+          $(this).parents('.hide-main-content').removeAttr('style')
+          $(this).parent().hide()
+        })
+      }
+})(jQuery)
+</script>
+<script type="text/javascript">var $csdn_iteye_jq = jQuery.noConflict();// 解决jq与prototype.js命名空间冲突的问题</script>
+  
+  
+  <script src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/web-storage-cache.min.js" type="text/javascript"></script>
+  <script src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/replace.min.js" type="text/javascript"></script>
+  
+
+
+<script>
+  var jQuery = jQuery.noConflict();
+  setTimeout(function($){
+    window.csdn.fixedSidebar({
+        targetBox: $('.persion_article'), //判断到达底部的div,公共footer可选 $('.persion_article'),$('.public_pc_right_footer2018')
+        mainBox: $("#main"), //侧边栏旁边的主体div,默认 $("main")
+        sidebar: $(".blog-sidebar-fixed"), //侧边栏,默认 $("aside")
+        direction: 'right', //侧边栏浮动方向,可选'right','left',
+        position: 'fixed',//定位方式
+        bottom: 0,
+        zIndex: 99,
+        sidebarRightMargin: 8,//direction为left,侧边栏距离mainbox的右边距
+        sidebarLeftMargin: 37,//direction为right,侧边栏距离mainbox的左边距
+    })
+  },200,jQuery)
+  </script>
+
+<iframe class="bdSug_sd" style="display: none; position: absolute; border-width: 0px;" src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/saved_resource.html"></iframe><div id="bdSug_1552359441077" class="bdSug_wpr" style="display: none;"></div><script src="./SpringMVC路径匹配中使用通配符 - Elim的博客 - ITeye博客_files/c(1).js" async="" defer=""></script></body></html>

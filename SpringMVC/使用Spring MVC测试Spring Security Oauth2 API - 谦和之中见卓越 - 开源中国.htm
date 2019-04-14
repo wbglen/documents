@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)https://my.oschina.net/merryyou/blog/1813546 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="Content-Language" content="zh-CN">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="referrer" content="always">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国</title>
+            <meta name="keywords" content="Spring Security,Oauth2,Security Oauth2,郑龙飞,merryyou,使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越,开源中国博客">
+                <meta name="description" content="不是因为看到希望了才去坚持，而坚持了才知道没有希望。">
+        <link rel="stylesheet" type="text/css" href="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/semantic.min.css">
+                <link type="text/css" rel="stylesheet" href="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/space.be7a2494.css">        <script src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/hm.js"></script><script src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/push.js"></script><script src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/osd.js"></script><script src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/ca-pub-7090564139599510.js"></script><script type="text/javascript">window.__STATIC_DOMAIN = "https://static.oschina.net";</script>
+    <script src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/jquery.min.js"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="https://static.oschina.net/new-osc/img/favicon.ico">
+    <link rel="alternate" type="application/rss+xml" title="最新开源项目" href="https://www.oschina.net/project/rss">
+    <link rel="alternate" type="application/rss+xml" title="最新开源资讯" href="https://www.oschina.net/news/rss">
+    <link rel="alternate" type="application/rss+xml" title="最新问题列表" href="https://www.oschina.net/question/rss">
+    <link rel="alternate" type="application/rss+xml" title="最新翻译列表" href="https://www.oschina.net/translate/rss">
+    <link rel="alternate" type="application/rss+xml" title="最新博客列表" href="https://www.oschina.net/blog/rss">
+    <link rel="alternate" type="application/rss+xml" title="推荐博客列表" href="https://www.oschina.net/blog/rss?show=more">
+    <link rel="alternate" type="application/rss+xml" title="推荐软件列表" href="https://www.oschina.net/project/rss?show=recomms">
+    <link rel="alternate" type="application/rss+xml" title="最新代码分享列表" href="https://www.oschina.net/code/rss">
+    <link rel="alternate" type="application/rss+xml" title="开源中国 - 源码列表" href="https://www.oschina.net/code/source_rss">
+<script src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/share.js"></script><link rel="preload" href="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/f(4).txt" as="script"><script type="text/javascript" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/f(4).txt"></script><link rel="preload" href="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/f(5).txt" as="script"><script type="text/javascript" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/f(5).txt"></script><link rel="preload" href="https://pagead2.googlesyndication.com/pagead/js/r20190304/r20190131/show_ads_impl.js" as="script"><script type="text/javascript" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/jquery.serialize-object.min.js"></script><script type="text/javascript" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/jquery.serialize-object.min.js"></script><script type="text/javascript" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/radarChart.js"></script><script type="text/javascript" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/jquery.serialize-object.min.js"></script><script type="text/javascript" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/jquery.serialize-object.min.js"></script><script type="text/javascript" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/vue.min.js"></script><link rel="stylesheet" type="text/css" href="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/viewer.min.css"><script type="text/javascript" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/viewer.min.js"></script><script type="text/javascript" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/vue.min.js"></script><script type="text/javascript" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/osc-message.js"></script><script type="text/javascript" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/osc-message.js"></script><script type="text/javascript" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/osc-message.js"></script><script type="text/javascript" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/osc-message.js"></script><script type="text/javascript" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/jquery-viewer.min.js"></script><script type="text/javascript" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/jquery.caret.min.js"></script><script type="text/javascript" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/jquery.atwho.min.js"></script></head>
+<body class="pushable"><svg aria-hidden="true" style="position: absolute; width: 0px; height: 0px; overflow: hidden;"><symbol id="oicon-world" viewBox="0 0 1024 1024"><path d="M921.6 204.8h-1.024A510.464 510.464 0 0 0 512 0C229.696 0 0 229.696 0 512s229.696 512 512 512c167.04 0 315.072-80.64 408.576-204.8h1.024v-1.28C985.6 732.416 1024 626.816 1024 512s-38.4-220.416-102.4-305.92V204.8zM358.4 891.456A409.984 409.984 0 0 1 102.4 512c0-17.408 1.408-34.432 3.52-51.2H153.6l51.2 102.4v102.4L307.2 768l51.2 51.2v72.256zM512 921.6a408.32 408.32 0 0 1-96.448-11.904L460.8 819.2l51.2-102.4V614.4H409.6l-51.2-51.2h-51.2L256 460.8l51.2-102.4 51.2-51.2 51.2-51.2 51.2-102.4v-47.68c16.768-2.112 33.792-3.52 51.2-3.52a407.04 407.04 0 0 1 256 90.368V256l-51.2 102.4 51.2 51.2v51.2l-102.4 51.2-51.2 52.032 51.2 50.368 51.2 51.2 51.2 102.4 33.472 33.472A408.32 408.32 0 0 1 512 921.6z"></path></symbol><symbol id="oicon-setting" viewBox="0 0 1162 1024"><path d="M1055.479204 128.810127H442.676311c-10.415913-55.551537-57.287523-97.21519-116.311031-97.21519-57.287523 0-105.895118 41.663653-116.31103 97.21519H53.815552c-10.415913 0-19.095841 8.679928-19.095841 20.831826s8.679928 20.831826 20.831826 20.831826h156.238698c10.415913 55.551537 57.287523 97.21519 116.311031 97.21519 57.287523 0 105.895118-41.663653 116.311031-97.21519h611.066907c12.151899 0 20.831826-8.679928 20.831827-20.831826s-8.679928-20.831826-20.831827-20.831826zM328.101266 224.289331c-41.663653 0-76.383363-34.719711-76.383364-76.383364 0-41.663653 34.719711-76.383363 76.383364-76.383363 41.663653 0 76.383363 34.719711 76.383363 76.383363 0 41.663653-34.719711 76.383363-76.383363 76.383364zM1055.479204 840.564195H637.106691c-10.415913-55.551537-57.287523-97.21519-116.311031-97.21519-57.287523 0-105.895118 41.663653-116.311031 97.21519H55.551537c-12.151899 0-20.831826 8.679928-20.831826 20.831827s8.679928 20.831826 20.831826 20.831826h348.933092c10.415913 55.551537 57.287523 97.21519 116.311031 97.21519 57.287523 0 105.895118-41.663653 116.311031-97.21519H1055.479204c12.151899 0 20.831826-8.679928 20.831827-20.831826 0-10.415913-8.679928-20.831826-20.831827-20.831827z m-534.683544 97.21519c-41.663653 0-76.383363-34.719711-76.383363-76.383363 0-41.663653 34.719711-76.383363 76.383363-76.383364 41.663653 0 76.383363 34.719711 76.383364 76.383364-1.735986 41.663653-34.719711 76.383363-76.383364 76.383363zM1055.479204 484.687161h-67.703435c-10.415913-55.551537-57.287523-97.21519-116.311031-97.21519-57.287523 0-105.895118 41.663653-116.311031 97.21519H55.551537c-12.151899 0-20.831826 8.679928-20.831826 20.831826s8.679928 20.831826 20.831826 20.831827h699.60217c10.415913 55.551537 57.287523 97.21519 116.311031 97.21519 57.287523 0 105.895118-41.663653 116.311031-97.21519h67.703435c12.151899 0 20.831826-8.679928 20.831827-20.831827s-8.679928-20.831826-20.831827-20.831826z m-184.014466 97.21519c-41.663653 0-76.383363-34.719711-76.383364-76.383364 0-41.663653 34.719711-76.383363 76.383364-76.383363 41.663653 0 76.383363 34.719711 76.383363 76.383363 0 41.663653-34.719711 76.383363-76.383363 76.383364z"></path></symbol><symbol id="oicon-gitee" viewBox="0 0 1024 1024"><path d="M966.524718 400.672821H456.520205c-24.497231 0-44.347077 19.954872-44.347077 44.557128v133.540102c0 24.602256 19.849846 44.530872 44.347077 44.530872h288.295385c33.266872 0 44.320821 11.132718 44.347077 44.530872 0.026256 89.035487-50.884923 133.566359-133.041231 133.566359h-376.779487c-24.602256 0-44.530872-19.954872-44.530872-44.530872v-400.67282c0-73.780513 59.575795-133.592615 133.014974-133.592616h598.593641c24.470974 0 44.320821-19.928615 44.320821-44.504615V44.530872C1010.740513 19.928615 990.916923 0 966.419692 0H367.826051C171.979487 0 13.128205 159.455179 13.128205 356.168205v623.32718C13.128205 1004.045128 32.978051 1024 57.475282 1024h598.646154c196.187897 0 352.439795-170.325333 354.619077-367.327179 0.131282-11.106462 0.131282-200.33641 0.131282-211.442872a44.478359 44.478359 0 0 0-44.347077-44.530872z"></path></symbol><symbol id="oicon-trending" viewBox="0 0 1106 1024"><path d="M0 290.766798m55.308301 0l0 0q55.308301 0 55.3083 55.3083l0 608.391307q0 55.308301-55.3083 55.3083l0 0q-55.308301 0-55.308301-55.3083l0-608.391307q0-55.308301 55.308301-55.3083Z" fill="#F5A623"></path><path d="M331.849803 14.225295m55.308301 0l0 0q55.308301 0 55.308301 55.3083l0 884.93281q0 55.308301-55.308301 55.3083l0 0q-55.308301 0-55.308301-55.3083l0-884.93281q0-55.308301 55.308301-55.3083Z" fill="#F5A623" opacity=".8"></path><path d="M663.699607 401.383399m55.3083 0l0 0q55.308301 0 55.308301 55.3083l0 497.774706q0 55.308301-55.308301 55.3083l0 0q-55.308301 0-55.3083-55.3083l0-497.774706q0-55.308301 55.3083-55.3083Z" fill="#F5A623" opacity=".6"></path><path d="M995.54941 124.841896m55.308301 0l0 0q55.308301 0 55.3083 55.308301l0 774.316208q0 55.308301-55.3083 55.3083l0 0q-55.308301 0-55.308301-55.3083l0-774.316208q0-55.308301 55.308301-55.308301Z" fill="#F5A623" opacity=".4"></path></symbol></svg>
+        <val data-name="space_user_url" data-value="https://my.oschina.net/merryyou"></val>      <val data-name="g_user_url" data-value=""></val>      <val data-name="api_prefix" data-value="/action"></val>      <val data-name="g_user_code" data-value=""></val>     <val data-name="g_user_id" data-value=""></val>     <val data-name="g_user" data-value=""></val>     <val data-name="login_page" data-value="https://www.oschina.net/home/login?goto_page=https%3A%2F%2Fmy.oschina.net%2Fmerryyou%2Fblog%2F1813546"></val>     
+    
+                <val data-name="weixinAppId" data-value="wx880def15e694b905"></val>
+        <val data-name="weixinTimestamp" data-value="1552003250935"></val>
+        <val data-name="weixinNonceStr" data-value="4b995d59-9612-422e-a0ee-f6c988451ca3"></val>
+        <val data-name="weixinSignature" data-value="8ca828c62fb3c7fd26985ba400035a4f5df9f9ca"></val>
+        <val data-name="weixinShareUrl" data-value="https://my.oschina.net/merryyou/blog/1813546"></val>                             
+                <val data-name="is_detail_page" data-value="true"></val>
+
+        
+        <div class="ui left inverted sidebar vertical menu" id="mobileNavSidebar">
+        <a href="https://www.oschina.net/project" class="item project">开源软件</a>
+        <a href="https://www.oschina.net/question" class="item question">问答</a>
+        <a href="https://www.oschina.net/tweets" class="item tweet">动弹</a>
+        <a href="https://www.oschina.net/blog" class="item blog">博客</a>
+        <a href="https://www.oschina.net/translate" class="item translate">翻译</a>
+        <a href="https://www.oschina.net/news" class="item news">资讯</a>
+        <a href="https://gitee.com/?from=osc-index" class="item gitee" target="_blank">码云</a>
+        <a href="https://zb.oschina.net/" class="item" target="_blank">众包</a>
+        <a href="https://www.oschina.net/event/ych" class="item meetup">源创会</a>
+        <a href="https://www.oschina.net/event" class="item">活动</a>
+        <a href="https://job.oschina.net/" class="item" target="_blank">求职/招聘</a>
+        <a href="https://www.oschina.net/question/topic/masteronline" class="item">高手问答</a>
+        <a href="https://www.oschina.net/question/topic/osc-interview" class="item">开源访谈</a>
+        <a href="https://my.oschina.net/editorial-story" class="item">周刊</a>
+        <a href="https://www.oschina.net/company" class="item">公司开源导航页</a>
+    </div>
+        <div class="ui right inverted sidebar vertical menu" id="mobileUserSidebar">
+                    <a class="item" href="https://www.oschina.net/home/login?goto_page=https%3A%2F%2Fmy.oschina.net%2Fmerryyou%2Fblog%2F1813546">登录</a>
+            <a class="item" href="https://www.oschina.net/home/reg?goto_page=https%3A%2F%2Fmy.oschina.net%2Fmerryyou%2Fblog%2F1813546">注册</a>
+            </div>
+
+        <div class="ui vertical inverted right sidebar menu" id="sideMenu">
+    <div class="header">
+        <b>文档章节</b>
+    </div>
+    <div class="ui basic segment" id="sideMenuBody"><ul><li><a href="https://my.oschina.net/merryyou/blog/1813546#h2_1">前言</a></li>
+<ul><li><a href="https://my.oschina.net/merryyou/blog/1813546#h3_2">修改pom.xml</a></li>
+<li><a href="https://my.oschina.net/merryyou/blog/1813546#h3_3">修改MerryyouResourceServerConfig配置</a></li>
+<li><a href="https://my.oschina.net/merryyou/blog/1813546#h3_4">增加/user和/forbidden请求映射</a></li>
+<li><a href="https://my.oschina.net/merryyou/blog/1813546#h3_5">增加测试类SecurityOauth2Test</a></li>
+<ul><li><a href="https://my.oschina.net/merryyou/blog/1813546#h4_6">obtainAccessToken</a></li>
+<li><a href="https://my.oschina.net/merryyou/blog/1813546#h4_7">测试obtainAccessToken</a></li>
+<li><a href="https://my.oschina.net/merryyou/blog/1813546#h4_8">UnauthorizedTest</a></li>
+<li><a href="https://my.oschina.net/merryyou/blog/1813546#h4_9">forbiddenTest</a></li>
+<li><a href="https://my.oschina.net/merryyou/blog/1813546#h4_10">accessTokenOk</a></li>
+</ul></ul><li><a href="https://my.oschina.net/merryyou/blog/1813546#h2_11">代码下载</a></li>
+<li><a href="https://my.oschina.net/merryyou/blog/1813546#h2_12">推荐文章</a></li>
+</ul></div>
+</div>
+<div class="ui black big launch right attached fixed button" id="sideMenuLauncher" style="display: block;">
+    <i class="list icon"></i>
+    <span class="text">文档章节</span>
+</div>
+
+
+        <div class="pusher  mobile-disabled-fixed-menu  ">
+                <div class="ui secondary inverted fixed menu" id="headerNavMenu">
+            <a class="item logo" href="https://www.oschina.net/" title="开源中国"><img src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/logo.svg" alt="开源中国"></a>
+                                                <form action="https://www.oschina.net/search" class="item search-item">
+                <div class="ui icon input">
+                    <input type="hidden" name="scope" value="blog">
+                    <input placeholder="大家都在搜...." id="keyword" name="q" size="24" value="" type="text">
+                    <i class="search link icon"></i>
+                </div>
+                <div class="results"></div>
+            </form>
+            <div class="item download-item">
+                <a class="ui primary button" id="btnDownloadApp" href="https://www.oschina.net/app" target="_blank">下载APP</a>
+            </div>
+            <div class="ui popup top left transition hidden" id="btnDownloadAppContent">
+                <h3 class="header">开源中国 App —— <br>关注技术领域的头条文章</h3>
+                <p>聚合全网技术文章，根据你的阅读喜好进行个性推荐</p>
+                <img width="200" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/osc_app_download_qrcode.png" alt="下载APP">
+            </div>
+            <div class="ui secondary text menu" id="menuList">
+                <a href="https://www.oschina.net/project" class="item project">开源软件</a>
+                <a href="https://www.oschina.net/question" class="item question">问答</a>
+                <a href="https://www.oschina.net/tweets" class="item tweet">动弹</a>
+                <a href="https://www.oschina.net/blog" class="item blog">博客</a>
+                <a href="https://www.oschina.net/translate" class="item translate">翻译</a>
+                <a href="https://www.oschina.net/news" class="item news">资讯</a>
+                <a href="https://gitee.com/?from=osc-index" class="item gitee" target="_blank">码云<span class="floating ui red label giteetip">代码托管</span></a>
+                <a href="https://zb.oschina.net/" class="item" target="_blank">众包</a>
+                <a href="https://www.oschina.net/event" class="item event">活动</a>
+            </div>
+            <div class="ui dropdown item" id="moreMenu" tabindex="0">
+                更多 <i class="dropdown icon" tabindex="0"><div class="menu" tabindex="-1"></div></i>
+                <div class="menu" tabindex="-1">
+                    <a href="https://www.oschina.net/event/ych" class="item meetup"><i class="world icon"></i>源创会</a>
+                    <a href="https://job.oschina.net/" class="item" target="_blank"><i class="address card outline icon"></i>求职/招聘</a>
+                    <a href="https://www.oschina.net/question/topic/masteronline" class="item"><i class="spy icon"></i>高手问答</a>
+                    <a href="https://www.oschina.net/question/topic/osc-interview" class="item"><i class="coffee icon"></i>开源访谈</a>
+                    <a href="https://my.oschina.net/editorial-story" class="item"><i class="calendar outline icon"></i>周刊</a>
+                    <a href="https://www.oschina.net/company" class="item"><i class="building outline icon"></i>公司开源导航页</a>
+                </div>
+            </div>
+            <div class="right menu">
+                                    <a class="item" href="https://www.oschina.net/home/login?goto_page=https%3A%2F%2Fmy.oschina.net%2Fmerryyou%2Fblog%2F1813546">登录</a>
+                    <a class="item" href="https://www.oschina.net/home/reg?goto_page=https%3A%2F%2Fmy.oschina.net%2Fmerryyou%2Fblog%2F1813546">注册</a>
+                            </div>
+        </div>
+                <div class="ui secondary inverted fixed menu" id="mobileHeaderNavMenu">
+            <a class="icon item toggle-mobile-nav-sidebar">
+                <i class="large content icon"></i>
+            </a>
+            <div class="logo back-to-top-toggle"><img src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/logo.svg" alt="开源中国"></div>
+            <a class="icon item toggle-mobile-user-sidebar">
+                                    <i class="large user outline icon"></i>
+                            </a>
+        </div>
+                <div id="mainScreen">
+            <div class="ui container">
+                
+
+
+
+
+
+
+
+
+
+
+
+<x-foo-define data-define="space-blog-detail"></x-foo-define> 
+<val data-name="objId" data-value="1813546"></val> <val data-name="author_id" data-value="3038361"></val> <val data-name="space_user_id" data-value="3038361"></val> 
+<val data-name="fetchCommentsUrl" data-value="?type=comments"></val>              <val data-name="publishCommentUrl" data-value="/space/blog/add_comment"></val>    <val data-name="replyCommentUrl" data-value="/space/blog/add_comment"></val>      <val data-name="deleteCommentUrl" data-value="/space/blog/delete_blog_comments"></val>  
+<val data-name="weixinShareTitle" data-value="使用Spring MVC测试Spring Security Oauth2 API"></val> <val data-name="weixinShareImgUrl" data-value="https://static.oschina.net/uploads/space/2017/0606/104418_CPLl_2733728.png"></val> 
+<div class="ui internally grid blog-detail bg-wrap">
+    <div class="row">
+        <div class="two wide computer only column" style="height: 6597px; min-height: 342px;">
+            <div class="ui sticky float-menu fixed top" id="floatMenu" style="left: 342.5px; width: 128px !important; height: 342px !important; margin-top: 200px;">
+                <div class="ui vertical large compact menu">
+                                            <a class="item donate" donate="" data-id="1813546" data-obj-type="16344358" data-subject="使用Spring MVC测试Spring Security Oauth2 API" data-donater="" data-author="3038361" data-return-url="https://my.oschina.net/merryyou/blog/1813546" data-notify-url="https://my.oschina.net/action/donate/paySuccess">                             <i class="yen icon"></i>打赏</a>
+                                        <a class="item comment-btn" href="https://my.oschina.net/merryyou/blog/1813546#comments" title="共有 0 条评论"><i class="comment outline icon"></i>评论</a>
+                    <a class="item collect-btn " data-id="1813546" data-user-id="3038361" data-obj-type="3" data-max="99" data-tag-required="" data-current-user-id="" data-recommend-tags="Spring Security,Oauth2,Security Oauth2"><i class="star outline icon"></i>收藏</a>
+                    <a class="item like article-like " data-id="1813546"><i class="thumbs up outline icon"></i>点赞</a>
+                    <h5 class="ui item inverted brown header">分享文章</h5>
+                    <div class="bdsharebuttonbox reset left-menu bdshare-button-style0-16" data-tag="share-news" data-bd-bind="1552003257761">
+                        <a class="item" data-cmd="tsina" title="分享到新浪微博"><i class="weibo icon"></i>微博</a>
+                        <a class="item" data-cmd="sqq" title="分享到QQ好友"><i class="qq icon"></i>QQ</a>
+                        <a class="item" data-cmd="weixin" title="分享到微信"><i class="weixin icon"></i>微信</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="twelve wide computer sixteen wide tablet sixteen wide mobile column body-container">
+            <div class="float-menu-content">
+                <div class="ui large breadcrumb">
+                    <a class="section" href="https://my.oschina.net/merryyou">谦和之中见卓越</a>
+                                                                <i class="right chevron icon divider"></i>
+                        <a class="section" href="https://my.oschina.net/merryyou?tab=newest&amp;catalogId=3801868">spring</a>
+                                        <i class="right chevron icon divider"></i>
+                    <div class="active section">正文</div>
+                </div>
+                <div class="article-detail">
+                                            <div class="ad-wrap">
+                                                    <div id="blog-title-ad" data-traceid="blog_ali" data-tracepid="blogup" style="">
+<script async="" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/f(6).txt"></script>
+<!-- oschina-blog-728x90 -->
+<ins class="adsbygoogle" style="display: block; width: 824px; height: 90px;" data-ad-client="ca-pub-7090564139599510" data-ad-slot="5590362768" data-adsbygoogle-status="done"><ins id="aswift_0_expand" style="display:inline-table;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:824px;background-color:transparent;"><ins id="aswift_0_anchor" style="display:block;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:824px;background-color:transparent;"><iframe width="824" height="90" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;border:0px;width:824px;height:90px;" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/saved_resource(2).html"></iframe></ins></ins></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+                                    </div>
+                                        <h2 class="header">
+                        使用Spring MVC测试Spring Security Oauth2 API
+                                                                            <div class="ui teal label horizontal" data-tooltip="原创">原</div>
+                                                                            <div class="ui orange label horizontal" data-tooltip="推荐">荐</div>
+                                                                    </h2>
+                    <div class="extra ui horizontal list meta-wrap">
+                        <div class="item">
+                            <a href="https://my.oschina.net/merryyou" class="__user">                        <div class="osc-avatar small-portrait _35x35 avatar" title="郑龙飞" data-user-id="3038361">
+                <img src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/50x50" alt="郑龙飞" title="郑龙飞">
+            </div>
+            &nbsp;<span>郑龙飞</span></a>
+                            发布于 2018/05/16 15:21</div>
+                        <div class="item">字数 799</div>
+                        <div class="item">阅读 489</div>
+                        <div class="item collect-btn " data-id="1813546" data-user-id="3038361" data-obj-type="3" data-max="99" data-tag-required="" data-current-user-id="" data-recommend-tags="Spring Security,Oauth2,Security Oauth2">收藏 <span data-collect-count="" data-id="1813546" data-obj-type="3">13</span></div>
+                        <div class="item"><a class="normal like article-like " data-id="1813546">点赞 <span data-article-like-count="">1</span></a></div>
+                        <div class="item comment-count"><a href="https://my.oschina.net/merryyou/blog/1813546#comments" class="normal"><i class="comment outline icon"></i> 评论 <span data-article-reply-count="">0</span></a></div>
+                                            </div>
+                                                                        <div class="tags">
+                                <a class="ui horizontal label" href="https://my.oschina.net/merryyou?q=Spring%20Security">Spring Security</a><a class="ui horizontal label" href="https://my.oschina.net/merryyou?q=Oauth2">Oauth2</a><a class="ui horizontal label" href="https://my.oschina.net/merryyou?q=Security%20Oauth2">Security Oauth2</a>                            </div>
+                                                                <div class="content" id="articleContent">
+                                                    <div class="ad-wrap">
+                                                        <p style="margin:0 0 10px 0;"><a data-traceid="blog_detail_above_text_link_1" data-tracepid="blog_detail_above_text_link" style="color:#A00;font-weight:bold;" href="https://my.oschina.net/u/3985214/blog/3018099?tdsourcetag=s_pcqq_aiomsg" target="_blank">开发十年，就只剩下这套架构体系了！
+&gt;&gt;&gt; </a>&nbsp;&nbsp;<img src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/hot3.png" align="absmiddle" style="max-height: 32px; max-width: 32px;"></p>
+                                        </div>
+                                                <blockquote>
+<p>不是因为看到希望了才去坚持，而坚持了才知道没有希望。</p>
+</blockquote>
+<p><a href="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/spring-security-OAuth206.png" title="https://raw.githubusercontent.com/longfeizheng/longfeizheng.github.io/master/images/security/spring-security-OAuth206.png"><img src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/spring-security-OAuth206.png" alt="https://raw.githubusercontent.com/longfeizheng/longfeizheng.github.io/master/images/spring-security-OAuth206.png" title="https://raw.githubusercontent.com/longfeizheng/longfeizheng.github.io/master/images/security/spring-security-OAuth206.png"></a></p>
+<h2 id="h2_1">前言</h2>
+<p>在<a href="https://longfeizheng.github.io/2018/01/23/Spring-Security%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8D%81%E4%B8%80-Spring-Security-OAuth2%E6%95%B4%E5%90%88JWT/">Spring Security源码分析十一：Spring Security OAuth2整合JWT</a>和<a href="https://longfeizheng.github.io/2018/04/29/Spring-Boot-2.0-%E6%95%B4%E5%90%88-Spring-Security-Oauth2/">Spring Boot 2.0 整合 Spring Security Oauth2</a>中，我们都是使用<a href="https://chrome.google.com/webstore/detail/restlet-client-rest-api-t/aejoelaoggembcahagimdiliamlcdmfm">Restlet Client - REST API Testing</a>测试被<code>Oauth2</code>保护的<code>API</code>。在本章中，我们将展示如何使用<code>MockMvc</code>测试<code>Oauth2</code>的<code>API</code>。</p>
+<h3 id="h3_2">修改pom.xml</h3>
+<p>添加<code>spring-security-test</code>依赖</p>
+<pre><code class="hljs xml"> 		<span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+			<span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.security<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+			<span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-security-test<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+		<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span>
+</code></pre>
+<h3 id="h3_3">修改MerryyouResourceServerConfig配置</h3>
+<pre><code class="hljs java">   <span class="hljs-meta">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">configure</span><span class="hljs-params">(HttpSecurity http)</span> <span class="hljs-keyword">throws</span> Exception </span>{
+
+        <span class="hljs-comment">// @formatter:off</span>
+        http.formLogin()
+                .successHandler(appLoginInSuccessHandler)<span class="hljs-comment">//登录成功处理器</span>
+                .and()
+                .authorizeRequests()
+                .antMatchers(<span class="hljs-string">"/user"</span>).hasRole(<span class="hljs-string">"USER"</span>)
+                .antMatchers(<span class="hljs-string">"/forbidden"</span>).hasRole(<span class="hljs-string">"ADMIN"</span>)
+                .anyRequest().authenticated().and()
+                .csrf().disable();
+
+        <span class="hljs-comment">// @formatter:ON</span>
+    }
+
+</code></pre>
+<ul>
+<li>修改<code>MerryyouResourceServerConfig</code>配置，增加对指定路径的角色校验。</li>
+<li>默认角色为<code>ROLE_USER</code>，详见<code>MyUserDetailsService</code></li>
+</ul>
+<pre><code class="hljs java"><span class="hljs-meta">@Component</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyUserDetailsService</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">UserDetailsService</span> </span>{
+
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> UserDetails <span class="hljs-title">loadUserByUsername</span><span class="hljs-params">(String username)</span> <span class="hljs-keyword">throws</span> UsernameNotFoundException </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> User(username, <span class="hljs-string">"123456"</span>, AuthorityUtils.commaSeparatedStringToAuthorityList(<span class="hljs-string">"ROLE_USER"</span>));
+    }
+}
+</code></pre>
+<ul>
+<li>关于为何是<code>hasRole("USER")</code>而不是<code>hasRole("ROLE_USER")</code>请参考：<a href="https://longfeizheng.github.io/2018/01/30/Spring-Security%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8D%81%E4%B8%89-Spring-Security%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6/#%E5%B8%B8%E8%A7%81%E7%9A%84%E8%A1%A8%E8%BE%BE%E5%BC%8F">Spring Security源码分析十三：Spring Security 基于表达式的权限控制</a></li>
+<li><code>@formatter:off</code>和<code>@formatter:ON</code>此段代码不进行格式化</li>
+</ul>
+<h3 id="h3_4">增加/user和/forbidden请求映射</h3>
+<pre><code class="hljs java"><span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">"/user"</span>)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> Object <span class="hljs-title">getCurrentUser1</span><span class="hljs-params">(Authentication authentication, HttpServletRequest request)</span> <span class="hljs-keyword">throws</span> UnsupportedEncodingException </span>{
+        log.info(<span class="hljs-string">"【SecurityOauth2Application】 getCurrentUser1 authenticaiton={}"</span>, JsonUtil.toJson(authentication));
+
+        String header = request.getHeader(<span class="hljs-string">"Authorization"</span>);
+        String token = StringUtils.substringAfter(header, <span class="hljs-string">"bearer "</span>);
+
+        Claims claims = Jwts.parser().setSigningKey(oAuth2Properties.getJwtSigningKey().getBytes(<span class="hljs-string">"UTF-8"</span>)).parseClaimsJws(token).getBody();
+        String blog = (String) claims.get(<span class="hljs-string">"blog"</span>);
+        log.info(<span class="hljs-string">"【SecurityOauth2Application】 getCurrentUser1 blog={}"</span>, blog);
+
+        <span class="hljs-keyword">return</span> authentication;
+    }
+
+    <span class="hljs-meta">@GetMapping</span>(<span class="hljs-string">"/forbidden"</span>)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getForbidden</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-string">"forbidden"</span>;
+    }
+</code></pre>
+<ul>
+<li><code>/user</code>请求需要<code>USER</code>角色</li>
+<li><code>/forbidden</code>请求需要<code>ADMIN</code>角色</li>
+</ul>
+<h3 id="h3_5">增加测试类SecurityOauth2Test</h3>
+<pre><code class="hljs java"><span class="hljs-meta">@RunWith</span>(SpringRunner.class)
+<span class="hljs-meta">@WebAppConfiguration</span>
+<span class="hljs-meta">@SpringBootTest</span>(classes = SecurityOauth2Application.class)
+<span class="hljs-meta">@Slf</span>4j
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Oauth2MvcTest</span> </span>{
+
+    <span class="hljs-meta">@Autowired</span>
+    <span class="hljs-keyword">private</span> WebApplicationContext wac;
+
+    <span class="hljs-meta">@Autowired</span>
+    <span class="hljs-keyword">private</span> FilterChainProxy springSecurityFilterChain;
+
+    <span class="hljs-keyword">private</span> MockMvc mockMvc;
+
+    <span class="hljs-comment">//clientId</span>
+    <span class="hljs-keyword">final</span> <span class="hljs-keyword">static</span> String CLIENT_ID = <span class="hljs-string">"merryyou"</span>;
+    <span class="hljs-comment">//clientSecret</span>
+    <span class="hljs-keyword">final</span> <span class="hljs-keyword">static</span> String CLIENT_SECRET = <span class="hljs-string">"merryyou"</span>;
+    <span class="hljs-comment">//用户名</span>
+    <span class="hljs-keyword">final</span> <span class="hljs-keyword">static</span> String USERNAME = <span class="hljs-string">"admin"</span>;
+    <span class="hljs-comment">//密码</span>
+    <span class="hljs-keyword">final</span> <span class="hljs-keyword">static</span> String PASSWORD = <span class="hljs-string">"123456"</span>;
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String CONTENT_TYPE = <span class="hljs-string">"application/json;charset=UTF-8"</span>;
+
+    <span class="hljs-meta">@Before</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setup</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">this</span>.mockMvc = MockMvcBuilders.webAppContextSetup(<span class="hljs-keyword">this</span>.wac).addFilter(springSecurityFilterChain).build();<span class="hljs-comment">//初始化MockMvc对象,添加Security过滤器链</span>
+    }
+</code></pre>
+<ul>
+<li>初始化<code>Oauth2</code>信息</li>
+</ul>
+<h4 id="h4_6">obtainAccessToken</h4>
+<pre><code class="hljs java">  <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">obtainAccessToken</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>{
+        <span class="hljs-keyword">final</span> MultiValueMap&lt;String, String&gt; params = <span class="hljs-keyword">new</span> LinkedMultiValueMap&lt;&gt;();
+        params.add(<span class="hljs-string">"grant_type"</span>, <span class="hljs-string">"password"</span>);
+        params.add(<span class="hljs-string">"client_id"</span>, CLIENT_ID);
+        params.add(<span class="hljs-string">"username"</span>, USERNAME);
+        params.add(<span class="hljs-string">"password"</span>, PASSWORD);
+
+        <span class="hljs-comment">// @formatter:off</span>
+
+        ResultActions result = mockMvc.perform(post(<span class="hljs-string">"/oauth/token"</span>)
+                .params(params)
+                .with(httpBasic(CLIENT_ID, CLIENT_SECRET))
+                .accept(CONTENT_TYPE))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(CONTENT_TYPE));
+
+        <span class="hljs-comment">// @formatter:on</span>
+
+        String resultString = result.andReturn().getResponse().getContentAsString();
+
+        JacksonJsonParser jsonParser = <span class="hljs-keyword">new</span> JacksonJsonParser();
+<span class="hljs-comment">//        System.out.println(jsonParser.parseMap(resultString).get("access_token").toString());</span>
+        <span class="hljs-keyword">return</span> jsonParser.parseMap(resultString).get(<span class="hljs-string">"access_token"</span>).toString();
+    }
+</code></pre>
+<h4 id="h4_7">测试obtainAccessToken</h4>
+<pre><code class="hljs java"> <span class="hljs-meta">@Test</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">getAccessToken</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>{
+        <span class="hljs-keyword">final</span> String accessToken = obtainAccessToken();
+        log.info(<span class="hljs-string">"access_token={}"</span>, accessToken);
+    }
+</code></pre>
+<p>控制台打印：</p>
+<pre><code class="hljs java">access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFsbCJdLCJleHAiOjE1MjY0NjEwMzgsImJsb2ciOiJodHRwczovL2xvbmdmZWl6aGVuZy5naXRodWIuaW8vIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImp0aSI6ImE1MmE2NDI4LTcwNzctNDcwZC05M2MwLTc0ZWNlNjFhYTlkMCIsImNsaWVudF9pZCI6Im1lcnJ5eW91In0.CPmkZmfOkgDII29RMIoMO7ufAe5WFrQDB7SaMDKa128
+</code></pre>
+<h4 id="h4_8">UnauthorizedTest</h4>
+<pre><code class="hljs java">    <span class="hljs-comment">/**
+     * 未授权 401
+     *
+     * <span class="hljs-doctag">@throws</span> Exception
+     */</span>
+    <span class="hljs-meta">@Test</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">UnauthorizedTest</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>{
+<span class="hljs-comment">//        mockMvc.perform(get("/user")).andExpect(status().isUnauthorized());</span>
+        ResultActions actions = mockMvc.perform(get(<span class="hljs-string">"/user"</span>));
+        <span class="hljs-keyword">int</span> status = actions.andReturn().getResponse().getStatus();
+        Assert.assertTrue(status == HttpStatus.UNAUTHORIZED.value());
+    }
+</code></pre>
+<ul>
+<li>未授权 <code>401</code></li>
+</ul>
+<h4 id="h4_9">forbiddenTest</h4>
+<pre><code class="hljs java">   <span class="hljs-comment">/**
+     * 禁止访问 403
+     *
+     * <span class="hljs-doctag">@throws</span> Exception
+     */</span>
+    <span class="hljs-meta">@Test</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">forbiddenTest</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>{
+        <span class="hljs-keyword">final</span> String accessToken = obtainAccessToken();
+        log.info(<span class="hljs-string">"access_token={}"</span>, accessToken);
+        mockMvc.perform(get(<span class="hljs-string">"/forbidden"</span>).header(<span class="hljs-string">"Authorization"</span>, <span class="hljs-string">"bearer "</span> + accessToken)).andExpect(status().isForbidden());
+    }
+</code></pre>
+<ul>
+<li>禁止访问 <code>403</code></li>
+</ul>
+<h4 id="h4_10">accessTokenOk</h4>
+<pre><code class="hljs java">    <span class="hljs-comment">/**
+     * 允许访问 200
+     *
+     * <span class="hljs-doctag">@throws</span> Exception
+     */</span>
+    <span class="hljs-meta">@Test</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">accessTokenOk</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>{
+        <span class="hljs-keyword">final</span> String accessToken = obtainAccessToken();
+        log.info(<span class="hljs-string">"access_token={}"</span>, accessToken);
+        mockMvc.perform(get(<span class="hljs-string">"/user"</span>).header(<span class="hljs-string">"Authorization"</span>, <span class="hljs-string">"bearer "</span> + accessToken)).andExpect(status().isOk());
+    }
+</code></pre>
+<ul>
+<li>允许访问 <code>200</code></li>
+</ul>
+<h2 id="h2_11">代码下载</h2>
+<ul>
+<li>github:<a href="https://github.com/longfeizheng/security-oauth2">https://github.com/longfeizheng/security-oauth2</a></li>
+<li>gitee:<a href="https://gitee.com/merryyou/security-oauth2">https://gitee.com/merryyou/security-oauth2</a></li>
+</ul>
+<h2 id="h2_12">推荐文章</h2>
+<ol>
+<li><a href="https://longfeizheng.github.io/categories/#%E5%8C%BA%E5%9D%97%E9%93%BE">Java创建区块链系列</a></li>
+<li><a href="https://longfeizheng.github.io/categories/#Security">Spring Security源码分析系列</a></li>
+<li><a href="https://longfeizheng.github.io/categories/#JPA">Spring Data Jpa 系列</a></li>
+<li><a href="https://longfeizheng.github.io/2018/04/16/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%AD%E4%BD%A0%E9%9C%80%E8%A6%81%E7%9F%A5%E9%81%93%E7%9A%84%E5%85%B3%E4%BA%8E%E6%A0%91%E7%9A%84%E4%B8%80%E5%88%87/">【译】数据结构中关于树的一切（java版）</a></li>
+<li><a href="https://longfeizheng.github.io/2018/04/22/SpringBoot+Docker+Git+Jenkins%E5%AE%9E%E7%8E%B0%E7%AE%80%E6%98%93%E7%9A%84%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E5%92%8C%E9%83%A8%E7%BD%B2/">SpringBoot+Docker+Git+Jenkins实现简易的持续集成和持续部署</a></li>
+</ol>
+<hr>
+<p><a href="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/xiaochengxu.png" title="https://raw.githubusercontent.com/longfeizheng/longfeizheng.github.io/master/images/wechat/xiaochengxu.png"><img src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/xiaochengxu.png" alt="https://raw.githubusercontent.com/longfeizheng/longfeizheng.github.io/master/images/wechat/xiaochengxu.png" title="https://raw.githubusercontent.com/longfeizheng/longfeizheng.github.io/master/images/wechat/xiaochengxu.png"></a></p>
+<blockquote>
+<p>🙂🙂🙂关注微信小程序<strong>java架构师历程</strong>
+上下班的路上无聊吗？还在看小说、新闻吗？不知道怎样提高自己的技术吗？来吧这里有你需要的java架构文章，1.5w+的java工程师都在看，你还在等什么？</p>
+</blockquote>
+
+                                                    <div class="ad-wrap" style="margin-top: 12px;">
+                                                        <div id="blog-title-ad" data-traceid="blog_ali" data-tracepid="blogdown" style="">
+<script async="" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/f(6).txt"></script>
+<!-- oschina-blog-728x90 -->
+<ins class="adsbygoogle" style="display: block; width: 824px; height: 90px;" data-ad-client="ca-pub-7090564139599510" data-ad-slot="5590362768" data-adsbygoogle-status="done"><ins id="aswift_1_expand" style="display:inline-table;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:824px;background-color:transparent;"><ins id="aswift_1_anchor" style="display:block;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:824px;background-color:transparent;"><iframe width="824" height="90" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_1" name="aswift_1" style="left:0;position:absolute;top:0;border:0px;width:824px;height:90px;" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/saved_resource(3).html"></iframe></ins></ins></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<!--
+<script>
+    function success_jsonpCallback(data) {
+        var obj = eval(data);
+        if( obj.success ){
+            var contents = eval(obj.data[0].content);
+            if(contents.length > 0){
+                var content = contents[0];
+                $('#blog-title-ad').prepend("<a  href='"+ content.url +"' target='_blank' style='max-width:780px;'><img src='"+content.img+"'/></a>");
+                $('#blog-title-ad').show();
+            }
+            
+        }else {
+            $('#blog-title-ad').hide();
+        }
+    }
+    window.addEventListener("load", function() {
+         var url="  http://clickc.admaster.com.cn/c/a116493,b2949390,c3159,i0,m101,8a1,8b2,h";
+        $.ajax({
+            type: 'POST',
+            url: url,
+            jsonp: "callback",
+            dataType: 'jsonp',
+            jsonpCallback: 'success_jsonpCallback',
+            contentType: "application/json; charset=utf-8",
+            success: function( response ) {
+                // do in callback
+            },
+            error:function(){
+                $('#blog-title-ad').hide();
+            }
+        });
+    }, false);
+</script>
+-->
+                                        </div>
+                                            </div>
+                    <div class="ui hidden divider"></div>
+                    <p style="text-align:center;">
+                                                    © 著作权归作者所有
+                                            </p>
+                </div>
+
+                                <div class="ui basic center aligned segment action">
+                    <div class="ui huge buttons">
+                                                    <a class="ui green button donate" donate="" data-id="1813546" data-obj-type="16344358" data-subject="使用Spring MVC测试Spring Security Oauth2 API" data-donater="" data-author="3038361" data-return-url="https://my.oschina.net/merryyou/blog/1813546" data-notify-url="https://my.oschina.net/action/donate/paySuccess">                                 <i class="yen icon"></i>打赏</a>
+                                                <a class="ui basic button like article-like " data-id="1813546">
+                            <i class="thumbs up outline icon"></i>点赞 (<span data-article-like-count="">1</span>)
+                        </a>
+                        <a class="ui basic button collect-btn hover" data-id="1813546" data-user-id="3038361" data-obj-type="3" data-max="99" data-tag-required="" data-current-user-id="" data-recommend-tags="Spring Security,Oauth2,Security Oauth2"><i class="star outline icon"></i>收藏 (<span data-collect-count="" data-id="1813546" data-obj-type="3">13</span>)</a>
+                        <div class="ui basic dropdown share button bdsharebuttonbox reset dropdown-share bdshare-button-style0-16" data-tag="share-blog" tabindex="0" data-bd-bind="1552003257761">
+                            <i class="share icon"></i> <span>分享</span>
+                            <div class="menu" tabindex="-1">
+                                <a class="item" data-cmd="tsina"><i class="weibo icon"></i>微博</a>
+                                <a class="item" data-cmd="sqq"><i class="qq icon"></i>QQ</a>
+                                <a class="item" data-cmd="weixin"><i class="weixin icon"></i>微信</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui basic segment">
+                        <a class="ban" style="cursor: pointer" ban-report="" data-id="1813546" data-obj-type="3" data-url="https://my.oschina.net/merryyou/blog/1813546">
+                            <i class="flag red icon"></i>举报</a>
+                    </div>
+                </div>
+
+                                                    <div class="reward-list hide">
+                        <div class="reward-list-title">
+                            共有 <span id="reward-num"></span> 人打赏支持<span id="donate_money"></span>
+                        </div>
+                                                <div class="donate-user-list" id="donate_user_list"></div>
+                    </div>
+                
+                                <div class="around-articles-wrap">
+                                                            <div class="around-item around-left">
+                        <i class="angle left icon"></i>
+                        <span class="text">上一篇：</span>
+                        <a class="link" href="https://my.oschina.net/merryyou/blog/1816321"> Spring Security Oauth2 permitAll()方法小记</a>
+                    </div>
+                    
+                                                            <div class="around-item around-right">
+                        <span class="text">下一篇：</span>
+                        <a class="link" href="https://my.oschina.net/merryyou/blog/1803206">Spring Boot 2.0 整合 Spring Security Oauth2</a>
+                        <i class="angle right icon"></i>
+                    </div>
+                                    </div>
+
+                                <div class="ui info message author-card">
+                    <div class="ui items">
+                        <div class="item author-card-item">
+                            <a class="ui avatar tiny image" href="https://my.oschina.net/merryyou">
+                                                        <div class="osc-avatar large-portrait _80x80" title="郑龙飞" data-user-id="3038361">
+                <img src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/200x200" alt="郑龙飞" title="郑龙飞">
+            </div>
+                                        </a>
+                            <div class="content author-card-info">
+                                <div class="author-header clearfix">
+                                                                        <h3 class="author-name"><a class="__user" href="https://my.oschina.net/merryyou">郑龙飞</a></h3>
+                                                                                                                <div class="ui mini images medals">
+                                                                                                                                                                                                        <img class="ui image popup-oscer" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/slogo1541993084965.png" alt="">
+                                                        <div class="ui flowing popup hidden items">
+                                                            <div class="medal-popup-box item">
+                                                                <img class="ui image" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/logo1541993084863.png">
+                                                                <div class="content">
+                                                                    <h3 class="header">参与源创会</h3>
+                                                                    <div class="desc text">“<a href="http://www.oschina.net/events">源创会</a>”在线下联结了各位 OSCer，推广开源项目和理念，很荣幸有你的参与~</div>
+                                                                    <div class="extra text">
+                                                                        领取时间：2016/12/04
+                                                                        <div class="text">领取条件：参与过开源中国“源创会”的 OSCer 可以领取</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                                                                                                                                                        </div>
+                                                                    </div>
+                                <div class="ui horizontal list">
+                                    <div class="item">粉丝 52</div>
+                                    <div class="item">博文 52</div>
+                                    <div class="item">码字总数 67675</div>
+                                    <div class="item">作品 0</div>
+                                </div>
+                                <div class="ui hidden fitted clearing divider"></div>
+                                                                                                    <div class="ui horizontal list">
+                                                                                    <div class="item"><i class="map marker alternate icon"></i> 邯郸</div>
+                                                                                                                            <div class="item"><i class="address card outline icon"></i> 程序员 </div>
+                                                                            </div>
+                                                                                                    <div class="ui hidden fitted clearing divider"></div>
+                                                                                                                    <a class="ui green compact button follow-btn" data-user-id="3038361" data-follow-status="1"><i class="heart outline icon"></i><span class="text">关注</span></a>
+                                                                                                            <a class="ui green basic compact button send-message-btn" data-user-id="3038361" data-user-name="郑龙飞"><i class="envelope outline icon"></i>私信</a>
+                                                                        <a class="ui green basic compact button" href="https://www.oschina.net/question/ask?user=3038361" target="_blank"><i class="comment outline icon"></i>提问</a>
+                                                            </div>
+                            <div class="content panel-skills-radar" style="">
+                                <div class="skills-radar">
+                                    <div class="radar-wrap" radar="" data-user-id="3038361" data-skills-num="5" data-detail-url="https://my.oschina.net/merryyou/radar" data-container=".panel-skills-radar">
+                                        <div class="radar-map" style="position: relative;"><canvas width="280" height="122" style="width: 280px; height: 122px;"></canvas></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                                                            </div>
+                        <div class="ui basic segment article-list">
+                <div class="scroll-tab hidden-scroll">
+                    <div class="ui green pointing secondary massive menu spaceBlog-tab">
+                        <a class="active item" data-tab="relArticleList">相关文章</a>
+                        <a class="item" data-tab="newArticleList">最新文章</a>
+                    </div>
+                </div>
+                <div class="ui basic segment active tab article-list" data-tab="relArticleList" id="relArticleList">
+                                          
+
+    <div class="ui very relaxed items list-container blog-detail-list-container">
+                                    <div class="item blog-item">
+                    <div class="content">
+                        <a class="header" href="https://www.oschina.net/news/69565" target="_blank" title="spring-oauth-server 0.4 发布, Oauth2 与 Spring Security 安全应用整合">spring-oauth-server 0.4 发布, Oauth2 与 Spring Security 安全应用整合</a>
+                        <div class="description">
+                            <p class="line-clamp">在spring-oauth-server 0.4-beta版本从2015-11-18发布一个多月后, 0.4版本正式发布. 在这期间主要测试各项新增功能. spring-oauth-server 是一个整合Oauth2与Spring Security的安全应用项目,...</p>
+                        </div>
+                        <div class="extra">
+                            <div class="ui horizontal list">
+                                <div class="item">monkeyk7</div>
+                                <div class="item">2016/01/02</div>
+
+                                <div class="item"><i class="eye icon"></i> 1K</div>
+                                <div class="item"><i class="comment outline icon"></i> 0</div>
+                            </div>
+                        </div>
+                    </div>
+                                                        </div>
+                                                <div class="item blog-item">
+                    <div class="content">
+                        <a class="header" href="https://www.oschina.net/news/100366" target="_blank" title="Spring Security 5.1 GA 正式发布！">Spring Security 5.1 GA 正式发布！</a>
+                        <div class="description">
+                            <p class="line-clamp">Spring 安全框架 Spring Security 5.1 GA 现已正式发布！ POM 该版本关闭了 50+ 的 issue，此外，Spring Security 5.1 也提供了大量的新特性，值得关注的有： Servlet 通过 UserDetailsPassw...</p>
+                        </div>
+                        <div class="extra">
+                            <div class="ui horizontal list">
+                                <div class="item">局长</div>
+                                <div class="item">2018/09/28</div>
+
+                                <div class="item"><i class="eye icon"></i> 2.8K</div>
+                                <div class="item"><i class="comment outline icon"></i> 4</div>
+                            </div>
+                        </div>
+                    </div>
+                                                        </div>
+                                                <div class="item blog-item">
+                    <div class="content">
+                        <a class="header" href="https://www.oschina.net/news/73933" target="_blank" title="spring-oauth-server 0.5 发布，OAuth2 与 Spring Security 安全应用整合">spring-oauth-server 0.5 发布，OAuth2 与 Spring Security 安全应用整合</a>
+                        <div class="description">
+                            <p class="line-clamp">spring-oauth-server 0.5版本发布，该版本的功能更新如下： (144) - Add MongoDB branch (143) - Add project API document (139) - User Overview/ user add/archive (138) - OAuth Restfu......</p>
+                        </div>
+                        <div class="extra">
+                            <div class="ui horizontal list">
+                                <div class="item">monkeyk7</div>
+                                <div class="item">2016/06/02</div>
+
+                                <div class="item"><i class="eye icon"></i> 1K</div>
+                                <div class="item"><i class="comment outline icon"></i> 1</div>
+                            </div>
+                        </div>
+                    </div>
+                                                        </div>
+                                                <div class="item blog-item">
+                    <div class="content">
+                        <a class="header" href="https://www.oschina.net/news/68164" target="_blank" title="spring-oauth-server 0.4-beta 发布, Oauth2 与 Spring Security 安全应用整合">spring-oauth-server 0.4-beta 发布, Oauth2 与 Spring Security 安全应用整合</a>
+                        <div class="description">
+                            <p class="line-clamp">spring-oauth-server 0.4-beta版本发布, spring-oauth-server 是一个整合Oauth2与Spring Security的安全应用项目,是从https://github.com/spring-projects/spring-security-oauth/tree/maste......</p>
+                        </div>
+                        <div class="extra">
+                            <div class="ui horizontal list">
+                                <div class="item">monkeyk7</div>
+                                <div class="item">2015/11/18</div>
+
+                                <div class="item"><i class="eye icon"></i> 2.4K</div>
+                                <div class="item"><i class="comment outline icon"></i> 3</div>
+                            </div>
+                        </div>
+                    </div>
+                                                        </div>
+                                                <div class="item blog-item">
+                    <div class="content">
+                        <a class="header" href="https://my.oschina.net/u/140403/blog/1800541" target="_blank" title="Secures your applications with Spring Security 5 and Keycloak">Secures your applications with Spring Security 5 and Keycloak</a>
+                        <div class="description">
+                            <p class="line-clamp">Spring Security 5 brought new OAuth2/OIDC client instead of the legacy client support in the old Spring Security OAuth sub project. The new OAuth2 umbrella modules in the core p......</p>
+                        </div>
+                        <div class="extra">
+                            <div class="ui horizontal list">
+                                <div class="item">hantsy</div>
+                                <div class="item">2018/04/24</div>
+
+                                <div class="item"><i class="eye icon"></i> 0</div>
+                                <div class="item"><i class="comment outline icon"></i> 0</div>
+                            </div>
+                        </div>
+                    </div>
+                                                        </div>
+                        </div>
+    <div class="page-load-status">
+        <p class="infinite-scroll-request">
+            <i class="ui active small inline loader" style="display: none;"></i>
+        </p>
+        <p class="infinite-scroll-last">没有更多内容</p>
+        <p class="infinite-scroll-error">加载失败，请刷新页面</p>
+    </div>
+    <a class="ui fluid button load-more-button">加载更多</a>
+                <p class="pagination" style="display: none;">
+            <a class="rel-pagination pagination__next" style="display: none" href="https://my.oschina.net/merryyou/blog/widgets/_blog_detail_list_rel?obj=1813546&amp;p=2&amp;type=ajax">下一页</a>
+        </p>
+                    </div>
+                <div class="ui basic segment tab article-list" data-tab="newArticleList" id="newArticleList">
+                                          
+
+    <div class="ui very relaxed items list-container blog-detail-list-container">
+                                                        <div class="item blog-item">
+                        <div class="content">
+                            <a class="header" href="https://my.oschina.net/xxiaobian/blog/3019542" target="_blank" title="OSChina 周五乱弹 —— 女装大佬可以放假嘛">OSChina 周五乱弹 —— 女装大佬可以放假嘛</a>
+                            <div class="description">
+                                <p class="line-clamp">Osc乱弹歌单（2019）请戳（这里） 【今日歌曲】 @-冰冰棒- ：#今日歌曲推荐# 吃煲仔饭，突然响起了回忆中的旋律， Westlife《Soledad》(《紫藤花》英文版) Westlife《Soledad》(《紫藤花》英...</p>
+                            </div>
+                            <div class="extra">
+                                <div class="ui horizontal list">
+                                    <div class="item">小小编辑</div>
+                                    <div class="item">今天</div>
+
+                                    <div class="item"><i class="eye icon"></i> 25</div>
+                                    <div class="item"><i class="comment outline icon"></i> 3</div>
+                                                                    </div>
+                            </div>
+                        </div>
+                                                                            <div class="images">
+                                <a class="ui small image" href="https://my.oschina.net/xxiaobian/blog/3019542" target="_blank" title="OSChina 周五乱弹 —— 女装大佬可以放假嘛">
+                                    <img src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/0fe6046a0c23fba14f4f097c0991424a78f.jpg" alt="" data-img-render="" style="width: auto; height: 100%;">
+                                </a>
+                            </div>
+                                            </div>
+                                                                                    <div class="item blog-item">
+                        <div class="content">
+                            <a class="header" href="https://my.oschina.net/u/232911/blog/3019540" target="_blank" title="Thread 运行状态">Thread 运行状态</a>
+                            <div class="description">
+                                <p class="line-clamp">根据JDK文档的描述，Thread 运行状态一共可分为6种。 NEW 尚未启动的线程的线程状态。 RUNNABLE 一个可运行的线程的线程状态。在运行状态的线程在java虚拟机执行，但它可能在等待其他资源，如...</p>
+                            </div>
+                            <div class="extra">
+                                <div class="ui horizontal list">
+                                    <div class="item">gaob2001</div>
+                                    <div class="item">今天</div>
+
+                                    <div class="item"><i class="eye icon"></i> 2</div>
+                                    <div class="item"><i class="comment outline icon"></i> 0</div>
+                                                                    </div>
+                            </div>
+                        </div>
+                                                                            <div class="images">
+                                <a class="ui small image" href="https://my.oschina.net/u/232911/blog/3019540" target="_blank" title="Thread 运行状态">
+                                    <img src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/f3e91d35db02cdee09b930cfff1aedb57a3.jpg" alt="" data-img-render="" style="width: 100%; height: auto;">
+                                </a>
+                            </div>
+                                            </div>
+                                                                                    <div class="item blog-item">
+                        <div class="content">
+                            <a class="header" href="https://my.oschina.net/u/2371923/blog/3019535" target="_blank" title="大数据教程（13.3）azkaban简介&amp;安装">大数据教程（13.3）azkaban简介&amp;安装</a>
+                            <div class="description">
+                                <p class="line-clamp">上一节介绍了Flume多个agent连接配合使用。本节博主将为小伙伴们介绍azkaban的相关概念、简单的安装使用。由于azkaban使用新版本太耗时间，需要编译安装，所以博主此次就使用编译好的老版本2...</p>
+                            </div>
+                            <div class="extra">
+                                <div class="ui horizontal list">
+                                    <div class="item">em_aaron</div>
+                                    <div class="item">今天</div>
+
+                                    <div class="item"><i class="eye icon"></i> 5</div>
+                                    <div class="item"><i class="comment outline icon"></i> 0</div>
+                                                                    </div>
+                            </div>
+                        </div>
+                                                                            <div class="images">
+                                <a class="ui small image" href="https://my.oschina.net/u/2371923/blog/3019535" target="_blank" title="大数据教程（13.3）azkaban简介&amp;安装">
+                                    <img src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/3ea561ba610dcbf3798dd5c30939fdaec3e.jpg" alt="" data-img-render="" style="width: auto; height: 100%;">
+                                </a>
+                            </div>
+                                            </div>
+                                                                                    <div class="item blog-item">
+                        <div class="content">
+                            <a class="header" href="https://my.oschina.net/junko2013/blog/3019534" target="_blank" title="vue spa 微信jssdk二次分享不显示自定义分享内容问题解决">vue spa 微信jssdk二次分享不显示自定义分享内容问题解决</a>
+                            <div class="description">
+                                <p class="line-clamp">本问题仅限于vue单页应用开发时的讨论。 1、不带参数的网页，如：http://xxx.com/#/CS350001/pray/buddha，分享后打开的网址, 会变成这样：http://xxx.com/?from=singlemessage&amp;isappinstall...</p>
+                            </div>
+                            <div class="extra">
+                                <div class="ui horizontal list">
+                                    <div class="item">陈俊凯</div>
+                                    <div class="item">今天</div>
+
+                                    <div class="item"><i class="eye icon"></i> 3</div>
+                                    <div class="item"><i class="comment outline icon"></i> 0</div>
+                                                                    </div>
+                            </div>
+                        </div>
+                                                                    </div>
+                                                                                    <div class="item blog-item">
+                        <div class="content">
+                            <a class="header" href="https://my.oschina.net/u/3836229/blog/3019532" target="_blank" title="《活着》读后感4500字">《活着》读后感4500字</a>
+                            <div class="description">
+                                <p class="line-clamp">《活着》读后感4500字： 听说张艺谋在转型拍商业电影前，拍过一部电影《活着》，被誉为是他拍得最好的电影。想看已经有大半年了，却一直没看。年底有空，想培养一下“艺术细胞”去学习下，看...</p>
+                            </div>
+                            <div class="extra">
+                                <div class="ui horizontal list">
+                                    <div class="item">原创小博客</div>
+                                    <div class="item">今天</div>
+
+                                    <div class="item"><i class="eye icon"></i> 5</div>
+                                    <div class="item"><i class="comment outline icon"></i> 0</div>
+                                                                    </div>
+                            </div>
+                        </div>
+                                                                            <div class="images">
+                                <a class="ui small image" href="https://my.oschina.net/u/3836229/blog/3019532" target="_blank" title="《活着》读后感4500字">
+                                    <img src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/f6711cd7dbd8ab54b2fb4162fc898253922.jpg" alt="" data-img-render="" style="width: 100%; height: auto;">
+                                </a>
+                            </div>
+                                            </div>
+                                        </div>
+    <div class="page-load-status">
+        <p class="infinite-scroll-request">
+            <i class="ui active small inline loader" style="display: none"></i>
+        </p>
+        <p class="infinite-scroll-last">没有更多内容</p>
+        <p class="infinite-scroll-error">加载失败，请刷新页面</p>
+    </div>
+    <a class="ui fluid button load-more-button">加载更多</a>
+                <p class="pagination">
+            <a class="news-pagination pagination__next" style="display: none" href="https://my.oschina.net/merryyou/blog/widgets/_blog_detail_list_news?p=2&amp;type=ajax">下一页</a>
+        </p>
+                    </div>
+            </div>
+        </div>
+        <div class="two wide computer only column">
+                        <div class="ad-wrap">
+                                        <div data-traceid="blog_left_1" data-tracepid="blog_left">
+
+<script async="" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/f(6).txt"></script>
+<!-- ios-zone-home-120x600 -->
+<ins class="adsbygoogle" style="display: inline-block; width: 120px; height: 0px;" data-ad-client="ca-pub-7090564139599510" data-ad-slot="7907495427" data-adsbygoogle-status="done"><ins id="aswift_2_expand" style="display: inline-table; border: none; height: 0px; margin: 0px; padding: 0px; position: relative; visibility: visible; width: 120px; background-color: transparent;"><ins id="aswift_2_anchor" style="display: block; border: none; height: 0px; margin: 0px; padding: 0px; position: relative; visibility: visible; width: 120px; background-color: transparent; overflow: hidden; opacity: 0;"><iframe width="120" height="600" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_2" name="aswift_2" style="left:0;position:absolute;top:0;border:0px;width:120px;height:600px;" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/saved_resource(4).html"></iframe></ins></ins></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+</div>
+                        </div>
+                    </div>
+    </div>
+</div>
+
+
+<div class="ui mini delete-blog modal">
+    <div class="header">删除文章</div>
+    <div class="content">
+        <p>文章删除后无法恢复，确定取消删除此文章吗？</p>
+    </div>
+    <div class="actions">
+        <div class="ui cancel button">取消</div>
+        <div class="ui red ok button">确定</div>
+    </div>
+</div>
+<div class="ui mini recommend-self modal">
+    <div class="header">自荐文章</div>
+    <div class="content">
+        <p>亲，自荐的博客将通过私信方式通知管理员，优秀的博客文章审核通过后将在博客推荐列表中显示</p>
+    </div>
+    <div class="actions">
+        <div class="ui cancel button">取消</div>
+        <div class="ui red ok button">确定</div>
+    </div>
+</div>
+<div class="ui mini recommend-blog modal">
+    <div class="header">推荐文章</div>
+    <div class="content">
+        <p>确定推荐此文章吗？</p>
+    </div>
+    <div class="actions">
+        <div class="ui cancel button">取消</div>
+        <div class="ui green ok button">确定</div>
+    </div>
+</div>
+<div class="ui mini recommend-author modal">
+    <div class="header">推荐博主</div>
+    <div class="content">
+        <p>确定推荐此博主吗？</p>
+    </div>
+    <div class="actions">
+        <div class="ui cancel button">取消</div>
+        <div class="ui green ok button">确定</div>
+    </div>
+</div>
+
+<script type="text/javascript" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/blog" defer="defer"></script>
+<script type="text/javascript" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/space"></script>
+
+<script>
+    // 百度分享
+    window._bd_share_config = {
+        common : {
+            bdText : '使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国',
+            bdDesc : '不是因为看到希望了才去坚持，而坚持了才知道没有希望。',
+            bdUrl  : 'https://my.oschina.net/merryyou/blog/1813546',
+            bdPic  : 'https://raw.githubusercontent.com/longfeizheng/longfeizheng.github.io/master/images/security/spring-security-OAuth206.png'
+        },
+        share : [{
+            bdSize : 16
+        }]
+    };
+    with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://static.oschina.net/new-osc/js/utils/plugins/bdshare_api/share.js?v='+~(-new Date()/36e5)];
+</script>
+                        <div name="detail_show_footer" data-traceid="detail_show" data-tracepid="detail_show_footer">
+                <style>
+    .float-adbox {display:none;position:fixed;left:15px;bottom:15px;z-index: 10001;}
+    .float-adbox .float-people {width: 180px;}
+    .float-adbox .close-left {position:absolute;top:10px;left:10px;cursor:pointer;}
+</style>
+<div class="float-adbox" style="display: block;">
+    <a href="https://gitee.com/gitee-stars/14?from=osc-gj" target="_blank">
+        <img alt="14_float_left_people" class="float-people" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/63f180a533260b1f30caad351c62fda11b7.jpg">
+        <img alt="14_float_left_close" class="close-left" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/c0e86e4cdaf79e32272f91188fffa177953.jpg">
+    </a>
+</div>
+<!-- <script src="https://www.oschina.net/public/bower_components/jquery/dist/jquery.min.js"></script> -->
+<script src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/js.cookie.min.js"></script>
+<script>
+    (function () {
+        function loadScript(src, callback) {
+            var script = document.createElement('script'),
+                head = document.getElementsByTagName('head')[0];
+            script.type = 'text/javascript';
+            script.charset = 'UTF-8';
+            script.src = src;
+            if (script.addEventListener) {
+                script.addEventListener('load', function () {
+                    callback();
+                }, false);
+            } else if (script.attachEvent) {
+                script.attachEvent('onreadystatechange', function () {
+                    var target = window.event.srcElement;
+                    if (target.readyState == 'loaded') {
+                        callback();
+                    }
+                });
+            }
+            head.appendChild(script);
+        }
+        function loadAd() {
+            var leftPeople = $('.float-adbox');
+            var cookieName = 'visit-gitee-stars-bts-14-190305';
+            var isVisit = Cookies.get(cookieName);
+            if (isVisit == 1) {
+                leftPeople.hide();
+            } else {
+                leftPeople.show();
+            }
+            $('.close-left').on('click', function (e) {
+                e.preventDefault();
+                Cookies.set(cookieName, 1, { expires: 90, path: '/' });
+                leftPeople.slideUp();
+            });
+        }
+        if (window.jQuery) {
+            loadAd();
+        } else {
+            loadScript('https://www.oschina.net/public/bower_components/jquery/dist/jquery.min.js', function () {
+                loadAd();
+            });
+        }
+    })();
+</script>
+
+            </div>
+            
+            </div>
+        </div>
+
+                <div id="footer" class="ui vertical footer segment mb-hide">
+    <div class="ui container">
+        <div class="ui grid">
+            <div class="eight wide mobile four wide tablet four wide computer column">
+                <h4 class="ui header">开源中国社区</h4>
+                <div class="ui link list">
+                    <a class="item" href="https://www.oschina.net/home/aboutosc" target="_blank">关于我们</a>
+                    <a class="item" href="https://www.oschina.net/home/aboutosc" target="_blank">联系我们</a>
+                    <a class="item" href="https://www.oschina.net/home/aboutosc#partners#" target="_blank">合作伙伴</a>
+                    <a class="item" href="https://www.oschina.net/openapi" target="_blank">Open API</a>
+                </div>
+            </div>
+            <div class="eight wide mobile four wide tablet four wide computer column">
+                <h4 class="ui header">在线工具</h4>
+                <div class="ui link list">
+                    <a class="item" href="https://gitee.com/?from=osc-bottom" target="_blank">码云 Gitee.com</a>
+                    <a class="item" href="https://gitee.com/enterprises?from=osc-bottom" target="_blank">企业研发管理</a>
+                    <a class="item" href="https://copycat.gitee.com/?from=osc-bottom" target="_blank">CopyCat-代码克隆检测</a>
+                    <a class="item" href="https://tool.oschina.net/" target="_blank">实用在线工具</a>
+                </div>
+            </div>
+            <div class="center aligned eight wide mobile two wide tablet two wide computer column">
+                <h4 class="ui header">微信公众号</h4>
+                <img src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/wechat_qrcode.jpg" alt="微信公众号">
+            </div>
+            <div class="center aligned eight wide mobile six wide tablet six wide computer column">
+                <h3 class="ui header">开源中国 APP</h3>
+                <p>聚合全网技术文章，根据你的阅读喜好进行个性推荐</p>
+                <a href="https://www.oschina.net/app" target="_blank" class="ui large primary button">下载 APP</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="copyright">
+    <div class="ui container">
+        <div class="ui clearing basic segment">
+            <div class="ui left floated horizontal link list">
+                <div class="item">©开源中国(OSChina.NET)</div>
+                <div class="item mb-hide">工信部</div>
+                <a class="item mb-hide" href="http://www.copu.org.cn/" target="_blank" title="开源软件推进联盟">开源软件推进联盟</a>
+                <div class="item mb-hide">指定官方社区</div>
+            </div>
+            <div class="ui right floated horizontal link list">
+                <div class="item mb-hide">深圳市奥思网络科技有限公司版权所有</div>
+                <a href="http://www.miitbeian.gov.cn/" target="_blank" class="item">粤ICP备12009483号-3</a>
+            </div>
+        </div>
+    </div>
+</div>    </div>
+                                                        <div class="back-to-top back-to-top-toggle" style="display: block;">
+        <div class="icon"><img src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/back-to-top.svg" alt="返回顶部"></div>
+        <div class="text">顶部</div>
+    </div>
+
+        <script src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/semantic.min.js"></script>
+    <script src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/jweixin-1.2.0.js"></script>
+                <script type="text/javascript" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/space.1f430ccd.js"></script>                
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https'){
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else{
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?cb47adfe0fabd7059a2a90a495077efe";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+    
+
+<!-- Generated by oschina (init:2[ms],page:9597[ms],ip:99.238.251.17) //--><iframe id="google_osd_static_frame_3123539544203" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/saved_resource(5).html"></iframe></body><iframe id="google_shimpl" style="display: none;" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/saved_resource(6).html"></iframe><iframe id="google_esf" name="google_esf" src="./使用Spring MVC测试Spring Security Oauth2 API - 谦和之中见卓越 - 开源中国_files/zrt_lookup.html" data-ad-client="ca-pub-7090564139599510" style="display: none;"></iframe></html>

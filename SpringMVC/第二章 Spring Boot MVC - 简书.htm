@@ -1,0 +1,2627 @@
+<!DOCTYPE html>
+<!-- saved from url=(0038)https://www.jianshu.com/p/e2d44f38287e -->
+<html><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+
+  <!-- Start of Baidu Transcode -->
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta name="applicable-device" content="pc,mobile">
+  <meta name="MobileOptimized" content="width">
+  <meta name="HandheldFriendly" content="true">
+  <meta name="mobile-agent" content="format=html5;url=https://www.jianshu.com/p/e2d44f38287e">
+  <!-- End of Baidu Transcode -->
+
+    <meta name="description" content="本章是《 Spring Boot 快速入门 》系列教程的第二章，若要查看本系列的全部章节，请点击 这里  。 本章目录 简介 源码下载 软件版本 编写 Controller 类 自动装载请求参数 处理复杂类型的返回值 自定义返回值转化类 HttpMessageConverter 总结说明 简介 在上一章《Hello Spring Boot》中，我们从一个最简单的应用程序入手，体验了 Spri...">
+
+  <meta name="360-site-verification" content="604a14b53c6b871206001285921e81d8">
+  <meta property="wb:webmaster" content="294ec9de89e7fadb">
+  <meta property="qc:admins" content="104102651453316562112116375">
+  <meta property="qc:admins" content="11635613706305617">
+  <meta property="qc:admins" content="1163561616621163056375">
+  <meta name="google-site-verification" content="cV4-qkUJZR6gmFeajx_UyPe47GW9vY6cnCrYtCHYNh4">
+  <meta name="google-site-verification" content="HF7lfF8YEGs1qtCE-kPml8Z469e2RHhGajy6JPVy5XI">
+  <meta http-equiv="mobile-agent" content="format=html5; url=https://www.jianshu.com/p/e2d44f38287e">
+
+  <!-- Apple -->
+  <meta name="apple-mobile-web-app-title" content="简书">
+
+    <!--  Meta for Smart App Banner -->
+  <meta name="apple-itunes-app" content="app-id=888237539, app-argument=jianshu://notes/15215712">
+  <!-- End -->
+
+  <!--  Meta for Twitter Card -->
+  <meta content="summary" property="twitter:card">
+  <meta content="@jianshucom" property="twitter:site">
+  <meta content="第二章 Spring Boot MVC" property="twitter:title">
+  <meta content="本章是《 Spring Boot 快速入门 》系列教程的第二章，若要查看本系列的全部章节，请点击 这里  。 本章目录 简介 源码下载 软件版本 编写 Controller ..." property="twitter:description">
+  <meta content="https://www.jianshu.com/p/e2d44f38287e" property="twitter:url">
+  <!-- End -->
+
+  <!--  Meta for OpenGraph -->
+  <meta property="fb:app_id" content="865829053512461">
+  <meta property="og:site_name" content="简书">
+  <meta property="og:title" content="第二章 Spring Boot MVC">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://www.jianshu.com/p/e2d44f38287e">
+  <meta property="og:description" content="本章是《 Spring Boot 快速入门 》系列教程的第二章，若要查看本系列的全部章节，请点击 这里  。 本章目录 简介 源码下载 软件版本 编写 Controller 类 自动装载请求参数...">
+  <!-- End -->
+
+  <!--  Meta for Facebook Applinks -->
+  <meta property="al:ios:url" content="jianshu://notes/15215712">
+  <meta property="al:ios:app_store_id" content="888237539">
+  <meta property="al:ios:app_name" content="简书">
+
+  <meta property="al:android:url" content="jianshu://notes/15215712">
+  <meta property="al:android:package" content="com.jianshu.haruki">
+  <meta property="al:android:app_name" content="简书">
+  <!-- End -->
+
+
+    <title>第二章 Spring Boot MVC - 简书</title>
+
+  <meta name="csrf-param" content="authenticity_token">
+<meta name="csrf-token" content="Ax6+3awdst2GnMfrI/wwFa+VV4gbtqPMBg/EOiDphEckbSZjiowPQPScgQEA1ZFYDdpCAS9voIx7/1TqnwpoPQ==">
+
+  <link rel="stylesheet" media="all" href="./第二章 Spring Boot MVC - 简书_files/web-274d6a76417c1f7a7da5.css">
+  
+  <link rel="stylesheet" media="all" href="./第二章 Spring Boot MVC - 简书_files/entry-aa75deb505b1b600256a.css">
+
+  <link href="https://cdn2.jianshu.io/assets/favicons/favicon-e743bfb1821442341c3ab15bdbe804f7ad97676bd07a770ccc9483473aa76f06.ico" rel="shortcut icon" type="image/x-icon">
+      <link rel="apple-touch-icon-precomposed" href="https://cdn2.jianshu.io/assets/apple-touch-icons/57-a6f1f1ee62ace44f6dc2f6a08575abd3c3b163288881c78dd8d75247682a4b27.png" sizes="57x57">
+      <link rel="apple-touch-icon-precomposed" href="https://cdn2.jianshu.io/assets/apple-touch-icons/72-fb9834bcfce738fd7b9c5e31363e79443e09a81a8e931170b58bc815387c1562.png" sizes="72x72">
+      <link rel="apple-touch-icon-precomposed" href="https://cdn2.jianshu.io/assets/apple-touch-icons/76-49d88e539ff2489475d603994988d871219141ecaa0b1a7a9a1914f4fe3182d6.png" sizes="76x76">
+      <link rel="apple-touch-icon-precomposed" href="https://cdn2.jianshu.io/assets/apple-touch-icons/114-24252fe693524ed3a9d0905e49bff3cbd0228f25a320aa09053c2ebb4955de97.png" sizes="114x114">
+      <link rel="apple-touch-icon-precomposed" href="https://cdn2.jianshu.io/assets/apple-touch-icons/120-1bb7371f5e87f93ce780a5f1a05ff1b176828ee0d1d130e768575918a2e05834.png" sizes="120x120">
+      <link rel="apple-touch-icon-precomposed" href="https://cdn2.jianshu.io/assets/apple-touch-icons/152-bf209460fc1c17bfd3e2b84c8e758bc11ca3e570fd411c3bbd84149b97453b99.png" sizes="152x152">
+
+  <!-- Start of 访问统计 -->
+    <script src="./第二章 Spring Boot MVC - 简书_files/push.js"></script><script src="./第二章 Spring Boot MVC - 简书_files/hm.js"></script><script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?0c0e9d9b1e7d617b3e6842e85b9fb068";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+  <!-- End of 访问统计 -->
+<style type="text/css">@charset "UTF-8";.image-package .image-container{position:relative;z-index:2;background-color:#eee;-webkit-transition:background-color .1s linear;-o-transition:background-color .1s linear;transition:background-color .1s linear;margin:0 auto}body.reader-night-mode .image-package .image-container{background-color:#545454}.image-package .image-container-fill{z-index:1}.image-package .image-container .image-view{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden}.image-package .image-container .image-view-error:after{content:"图片获取失败，请点击重试";position:absolute;top:50%;left:50%;width:100%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%);color:#888;font-size:14px}.image-package .image-container .image-view img.image-loading{opacity:.3}.image-package .image-container .image-view img{-webkit-transition:all .15s linear;-o-transition:all .15s linear;transition:all .15s linear;z-index:2;opacity:1}</style><style type="text/css">fieldset[disabled] .multiselect {
+  pointer-events: none;
+}
+
+.multiselect__spinner {
+  position: absolute;
+  right: 1px;
+  top: 1px;
+  width: 48px;
+  height: 35px;
+  background: #fff;
+  display: block;
+}
+
+.multiselect__spinner:after,
+.multiselect__spinner:before {
+  position: absolute;
+  content: "";
+  top: 50%;
+  left: 50%;
+  margin: -8px 0 0 -8px;
+  width: 16px;
+  height: 16px;
+  border-radius: 100%;
+  border-color: #41b883 transparent transparent;
+  border-style: solid;
+  border-width: 2px;
+  box-shadow: 0 0 0 1px transparent;
+}
+
+.multiselect__spinner:before {
+  animation: a 2.4s cubic-bezier(.41,.26,.2,.62);
+  animation-iteration-count: infinite;
+}
+
+.multiselect__spinner:after {
+  animation: a 2.4s cubic-bezier(.51,.09,.21,.8);
+  animation-iteration-count: infinite;
+}
+
+.multiselect__loading-enter-active,
+.multiselect__loading-leave-active {
+  transition: opacity .4s ease-in-out;
+  opacity: 1;
+}
+
+.multiselect__loading-enter,
+.multiselect__loading-leave-active {
+  opacity: 0;
+}
+
+.multiselect,
+.multiselect__input,
+.multiselect__single {
+  font-family: inherit;
+  font-size: 14px;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+}
+
+.multiselect {
+  box-sizing: content-box;
+  display: block;
+  position: relative;
+  width: 100%;
+  min-height: 40px;
+  text-align: left;
+  color: #35495e;
+}
+
+.multiselect * {
+  box-sizing: border-box;
+}
+
+.multiselect:focus {
+  outline: none;
+}
+
+.multiselect--disabled {
+  opacity: .6;
+}
+
+.multiselect--active {
+  z-index: 1;
+}
+
+.multiselect--active:not(.multiselect--above) .multiselect__current,
+.multiselect--active:not(.multiselect--above) .multiselect__input,
+.multiselect--active:not(.multiselect--above) .multiselect__tags {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.multiselect--active .multiselect__select {
+  transform: rotate(180deg);
+}
+
+.multiselect--above.multiselect--active .multiselect__current,
+.multiselect--above.multiselect--active .multiselect__input,
+.multiselect--above.multiselect--active .multiselect__tags {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.multiselect__input,
+.multiselect__single {
+  position: relative;
+  display: inline-block;
+  min-height: 20px;
+  line-height: 20px;
+  border: none;
+  border-radius: 5px;
+  background: #fff;
+  padding: 0 0 0 5px;
+  width: 100%;
+  transition: border .1s ease;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+  vertical-align: top;
+}
+
+.multiselect__tag~.multiselect__input,
+.multiselect__tag~.multiselect__single {
+  width: auto;
+}
+
+.multiselect__input:hover,
+.multiselect__single:hover {
+  border-color: #cfcfcf;
+}
+
+.multiselect__input:focus,
+.multiselect__single:focus {
+  border-color: #a8a8a8;
+  outline: none;
+}
+
+.multiselect__single {
+  padding-left: 6px;
+  margin-bottom: 8px;
+}
+
+.multiselect__tags-wrap {
+  display: inline;
+}
+
+.multiselect__tags {
+  min-height: 40px;
+  display: block;
+  padding: 8px 40px 0 8px;
+  border-radius: 5px;
+  border: 1px solid #e8e8e8;
+  background: #fff;
+}
+
+.multiselect__tag {
+  position: relative;
+  display: inline-block;
+  padding: 4px 26px 4px 10px;
+  border-radius: 5px;
+  margin-right: 10px;
+  color: #fff;
+  line-height: 1;
+  background: #41b883;
+  margin-bottom: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 100%;
+  text-overflow: ellipsis;
+}
+
+.multiselect__tag-icon {
+  cursor: pointer;
+  margin-left: 7px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  font-weight: 700;
+  font-style: normal;
+  width: 22px;
+  text-align: center;
+  line-height: 22px;
+  transition: all .2s ease;
+  border-radius: 5px;
+}
+
+.multiselect__tag-icon:after {
+  content: "\D7";
+  color: #266d4d;
+  font-size: 14px;
+}
+
+.multiselect__tag-icon:focus,
+.multiselect__tag-icon:hover {
+  background: #369a6e;
+}
+
+.multiselect__tag-icon:focus:after,
+.multiselect__tag-icon:hover:after {
+  color: #fff;
+}
+
+.multiselect__current {
+  min-height: 40px;
+  overflow: hidden;
+  padding: 8px 12px 0;
+  padding-right: 30px;
+  white-space: nowrap;
+  border-radius: 5px;
+  border: 1px solid #e8e8e8;
+}
+
+.multiselect__current,
+.multiselect__select {
+  line-height: 16px;
+  box-sizing: border-box;
+  display: block;
+  margin: 0;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.multiselect__select {
+  position: absolute;
+  width: 40px;
+  height: 38px;
+  right: 1px;
+  top: 1px;
+  padding: 4px 8px;
+  text-align: center;
+  transition: transform .2s ease;
+}
+
+.multiselect__select:before {
+  position: relative;
+  right: 0;
+  top: 65%;
+  color: #999;
+  margin-top: 4px;
+  border-style: solid;
+  border-width: 5px 5px 0;
+  border-color: #999 transparent transparent;
+  content: "";
+}
+
+.multiselect__placeholder {
+  color: #adadad;
+  display: inline-block;
+  margin-bottom: 10px;
+  padding-top: 2px;
+}
+
+.multiselect--active .multiselect__placeholder {
+  display: none;
+}
+
+.multiselect__content-wrapper {
+  position: absolute;
+  display: block;
+  background: #fff;
+  width: 100%;
+  max-height: 240px;
+  overflow: auto;
+  border: 1px solid #e8e8e8;
+  border-top: none;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  z-index: 1;
+  -webkit-overflow-scrolling: touch;
+}
+
+.multiselect__content {
+  list-style: none;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  min-width: 100%;
+  vertical-align: top;
+}
+
+.multiselect--above .multiselect__content-wrapper {
+  bottom: 100%;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom: none;
+  border-top: 1px solid #e8e8e8;
+}
+
+.multiselect__content::webkit-scrollbar {
+  display: none;
+}
+
+.multiselect__element {
+  display: block;
+}
+
+.multiselect__option {
+  display: block;
+  padding: 12px;
+  min-height: 40px;
+  line-height: 16px;
+  text-decoration: none;
+  text-transform: none;
+  vertical-align: middle;
+  position: relative;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.multiselect__option:after {
+  top: 0;
+  right: 0;
+  position: absolute;
+  line-height: 40px;
+  padding-right: 12px;
+  padding-left: 20px;
+}
+
+.multiselect__option--highlight {
+  background: #41b883;
+  outline: none;
+  color: #fff;
+}
+
+.multiselect__option--highlight:after {
+  content: attr(data-select);
+  background: #41b883;
+  color: #fff;
+}
+
+.multiselect__option--selected {
+  background: #f3f3f3;
+  color: #35495e;
+  font-weight: 700;
+}
+
+.multiselect__option--selected:after {
+  content: attr(data-selected);
+  color: silver;
+}
+
+.multiselect__option--selected.multiselect__option--highlight {
+  background: #ff6a6a;
+  color: #fff;
+}
+
+.multiselect__option--selected.multiselect__option--highlight:after {
+  background: #ff6a6a;
+  content: attr(data-deselect);
+  color: #fff;
+}
+
+.multiselect--disabled {
+  background: #ededed;
+  pointer-events: none;
+}
+
+.multiselect--disabled .multiselect__current,
+.multiselect--disabled .multiselect__select,
+.multiselect__option--disabled {
+  background: #ededed;
+  color: #a6a6a6;
+}
+
+.multiselect__option--disabled {
+  cursor: text;
+  pointer-events: none;
+}
+
+.multiselect__option--disabled.multiselect__option--highlight {
+  background: #dedede!important;
+}
+
+.multiselect-enter-active,
+.multiselect-leave-active {
+  transition: all .15s ease;
+}
+
+.multiselect-enter,
+.multiselect-leave-active {
+  opacity: 0;
+}
+
+.multiselect__strong {
+  margin-bottom: 8px;
+  line-height: 20px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+[dir=rtl] .multiselect {
+  text-align: right;
+}
+
+[dir=rtl] .multiselect__select {
+  right: auto;
+  left: 1px;
+}
+
+[dir=rtl] .multiselect__tags {
+  padding: 8px 8px 0 40px;
+}
+
+[dir=rtl] .multiselect__content {
+  text-align: right;
+}
+
+[dir=rtl] .multiselect__option:after {
+  right: auto;
+  left: 0;
+}
+
+[dir=rtl] .multiselect__clear {
+  right: auto;
+  left: 12px;
+}
+
+[dir=rtl] .multiselect__spinner {
+  right: auto;
+  left: 1px;
+}
+
+@keyframes a {
+  0% {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(2turn);
+  }
+}</style><style type="text/css">
+#free-reward-panel .reward-users-modal main {
+  padding: 0;
+}
+</style><style type="text/css">
+@charset "UTF-8";
+/*
+ * 变量
+*/
+.reward-note-modal .v-modal {
+  width: 620px;
+  text-align: center;
+}
+.reward-note-modal .v-modal form {
+    margin: 0 auto 25px auto;
+    padding: 0 40px;
+}
+.reward-note-modal .v-modal .reward-intro {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+.reward-note-modal .v-modal .reward-intro .avatar {
+      cursor: default !important;
+      width: 36px;
+      height: 36px;
+      margin-right: 10px;
+      display: inline-block;
+}
+.reward-note-modal .v-modal .reward-intro .intro {
+      margin-right: 5px;
+      font-weight: bold;
+      vertical-align: middle;
+}
+.reward-note-modal .v-modal .reward-intro i {
+      color: #EA6F5A;
+      vertical-align: middle;
+}
+.reward-note-modal .v-modal .main-inputs {
+    margin: 25px 0;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group {
+      margin: 0 -5px;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group input {
+        display: none;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group input:checked + .option {
+        color: #EA6F5A;
+        border-color: #EA6F5A;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .custom-amount:checked + .option .custom-text {
+        opacity: 0;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .custom-amount:checked + .option .custom-amount-input {
+        opacity: 1;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option {
+        position: relative;
+        margin: 0 5px 15px;
+        width: 156px;
+        height: 56px;
+        line-height: 54px;
+        border: 1px solid #E6E6E6;
+        border-radius: 4px;
+        font-weight: normal;
+        color: #999999;
+        cursor: pointer;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option i {
+          font-size: 16px;
+          vertical-align: middle;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option .amount {
+          font-size: 28px;
+          vertical-align: middle;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option .piece {
+          font-size: 13px;
+          vertical-align: sub;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option .custom-amount-input {
+          position: absolute;
+          top: 0;
+          z-index: -1;
+          width: 100%;
+          opacity: 0;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option .custom-amount-input i {
+            position: absolute;
+            top: 0;
+            left: 10px;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option .custom-amount-input .piece {
+            position: absolute;
+            top: 4px;
+            right: 10px;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option .custom-amount-input input {
+            display: block;
+            margin: 0 auto;
+            width: 80px;
+            height: 54px;
+            line-height: 54px;
+            border: none;
+            font-size: 28px;
+            text-align: center;
+            background: transparent;
+            -moz-appearance: textfield;
+}
+.reward-note-modal .v-modal .main-inputs .amount-group .option .custom-amount-input input::-webkit-outer-spin-button, .reward-note-modal .v-modal .main-inputs .amount-group .option .custom-amount-input input::-webkit-inner-spin-button {
+              -webkit-appearance: none !important;
+}
+.reward-note-modal .v-modal .main-inputs .message {
+      padding: 15px 20px;
+      margin-bottom: 0;
+      font-size: 14px;
+      border: 1px solid #E6E6E6;
+      color: #333333;
+      border-radius: 4px;
+      background-color: rgba(180, 180, 180, 0.1);
+}
+.reward-note-modal .v-modal .main-inputs .message textarea {
+        width: 100%;
+        height: 44px;
+        padding: 0;
+        margin: 0;
+        resize: none;
+        background: none !important;
+        border: none !important;
+        -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+        -webkit-box-shadow: none;
+                box-shadow: none;
+}
+.reward-note-modal .v-modal .main-inputs .message textarea:focus {
+          outline: none;
+}
+.reward-note-modal .v-modal .reward-info .amount {
+    font-size: 28px;
+    font-weight: bold;
+    color: #EA6F5A;
+}
+.reward-note-modal .v-modal .reward-info .pay-method {
+    font-size: 14px;
+}
+.reward-note-modal .v-modal .reward-info .pay-method a {
+      color: #3194D0;
+}
+.reward-note-modal .v-modal .choose-pay {
+    margin: 0 -5px;
+}
+.reward-note-modal .v-modal .choose-pay input {
+      display: none;
+}
+.reward-note-modal .v-modal .choose-pay input:checked + .option {
+      color: #EA6F5A;
+      border-color: #EA6F5A;
+}
+.reward-note-modal .v-modal .choose-pay .option {
+      margin: 20px 5px 10px;
+      width: 156px;
+      height: 56px;
+      line-height: 54px;
+      text-align: center;
+      border: 1px solid #E6E6E6;
+      border-radius: 4px;
+      cursor: pointer;
+}
+.reward-note-modal .v-modal .choose-pay .option img {
+        height: 30px;
+}
+.reward-note-modal .v-modal .choose-pay .option img.day.alipay, .reward-note-modal .v-modal .choose-pay .option img.night.alipay {
+        min-width: 85px;
+}
+.reward-note-modal .v-modal .choose-pay .option img.day.wechat, .reward-note-modal .v-modal .choose-pay .option img.night.wechat {
+        min-width: 112px;
+}
+.reward-note-modal .v-modal .choose-pay .option img.night {
+        display: none;
+}
+body.reader-night-mode .reward-note-modal .v-modal .choose-pay .option img.night {
+        display: inline-block;
+}
+body.reader-night-mode .reward-note-modal .v-modal .choose-pay .option img.day {
+        display: none;
+}
+.reward-note-modal .v-modal .choose-pay .tooltip {
+      width: 230px;
+}
+.reward-note-modal .v-modal .modal-footer {
+    padding: 0 15px 20px;
+    border: none;
+    background-color: transparent;
+    text-align: center;
+}
+.reward-note-modal .v-modal .modal-footer .btn {
+      padding: 8px 45px;
+      font-size: 24px;
+}
+.reward-note-modal .v-modal .btn-pay {
+    padding: 8px 25px;
+    font-size: 16px;
+    color: #ffffff;
+    background-color: #F5A623;
+}
+.weixin-pay, .success-pay {
+  text-align: center;
+}
+.weixin-pay .v-modal, .success-pay .v-modal {
+    width: 350px;
+}
+.weixin-pay .ic-successed, .success-pay .ic-successed {
+    font-size: 60px;
+    color: #3db922;
+}
+.weixin-pay h2, .weixin-pay h3, .success-pay h2, .success-pay h3 {
+    margin-bottom: 20px;
+    color: #333333;
+}
+.weixin-pay h2, .success-pay h2 {
+    margin: 0 0 40px 0;
+    font-size: 24px;
+}
+.weixin-pay .bind-text, .success-pay .bind-text {
+    position: relative;
+    margin-bottom: 30px;
+    font-size: 14px;
+    color: #999999;
+}
+.weixin-pay .bind-text:before, .weixin-pay .bind-text:after, .success-pay .bind-text:before, .success-pay .bind-text:after {
+      content: "";
+      border-top: 1px solid #999;
+      display: block;
+      position: absolute;
+      width: 40px;
+      top: 8px;
+}
+.weixin-pay .bind-text:before, .success-pay .bind-text:before {
+      left: 30px;
+}
+.weixin-pay .bind-text:after, .success-pay .bind-text:after {
+      right: 30px;
+}
+.weixin-pay .share-bind, .success-pay .share-bind {
+    display: block;
+    margin-bottom: 30px;
+}
+.weixin-pay .share-bind i, .success-pay .share-bind i {
+      margin-right: 4px;
+      font-size: 22px;
+      vertical-align: middle;
+}
+.weixin-pay .share-bind.wechat i, .success-pay .share-bind.wechat i {
+      color: #00BB29;
+}
+.weixin-pay .share-bind.weibo i, .success-pay .share-bind.weibo i {
+      color: #E05244;
+}
+.weixin-pay .wx-qr-code, .success-pay .wx-qr-code {
+    display: inline-block;
+}
+.weixin-pay .wx-qr-code img, .success-pay .wx-qr-code img {
+      margin: 0 auto;
+      padding: 10px;
+      width: 200px;
+      background-color: #ffffff;
+}
+.weixin-pay .pay-amount, .success-pay .pay-amount {
+    margin: 20px 0;
+    color: #787878;
+}
+.weixin-pay .pay-amount span, .success-pay .pay-amount span {
+      color: #F5A623;
+}
+</style><style type="text/css">
+@charset "UTF-8";
+/*
+ * 变量
+*/
+.v-modal-wrap {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  background-color: transparent;
+}
+.v-modal-wrap.modal-leave-active {
+    -webkit-transition: opacity 0.3s;
+    -o-transition: opacity 0.3s;
+    transition: opacity 0.3s;
+}
+.v-modal-wrap.modal-enter-active .v-modal-mask, .v-modal-wrap.modal-leave-active .v-modal-mask {
+    opacity: 0;
+}
+.v-modal-wrap.modal-enter-active .v-modal, .v-modal-wrap.modal-leave-active .v-modal {
+    -webkit-transform: translate(-50%, -70%);
+        -ms-transform: translate(-50%, -70%);
+            transform: translate(-50%, -70%);
+    opacity: 0;
+}
+.v-modal-wrap .v-modal-mask {
+    background-color: rgba(255, 255, 255, 0.7);
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    -webkit-transition: opacity 0.3s;
+    -o-transition: opacity 0.3s;
+    transition: opacity 0.3s;
+    opacity: 1;
+}
+.v-modal-wrap .v-modal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    -webkit-box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+    -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+    transition: opacity 0.3s, -webkit-transform 0.3s;
+    -o-transition: opacity 0.3s, transform 0.3s;
+    transition: opacity 0.3s, transform 0.3s;
+    transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s;
+    opacity: 1;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    overflow: hidden;
+}
+.v-modal-wrap .v-modal > header:before, .v-modal-wrap .v-modal > header:after, .v-modal-wrap .v-modal > main:before, .v-modal-wrap .v-modal > main:after, .v-modal-wrap .v-modal > footer:before, .v-modal-wrap .v-modal > footer:after {
+      content: '';
+      clear: both;
+      display: table;
+}
+.v-modal-wrap .v-modal > header {
+      padding: 20px;
+      border-bottom: 1px solid #F0F0F0;
+}
+.v-modal-wrap .v-modal > header h4 {
+        margin: 0;
+        color: #333;
+        text-align: left;
+}
+.v-modal-wrap .v-modal .close {
+      position: absolute;
+      right: 16px;
+      top: 20px;
+      font-size: 26px;
+      line-height: 20px;
+      color: rgba(0, 0, 0, 0.8);
+}
+.v-modal-wrap .v-modal .close:hover {
+        color: #000000;
+}
+.v-modal-wrap .v-modal > main {
+      padding: 20px 20px 20px 20px;
+      font-size: 15px;
+      color: #333;
+      -webkit-box-flex: 1;
+      -webkit-flex-grow: 1;
+          -ms-flex-positive: 1;
+              flex-grow: 1;
+      overflow-x: hidden;
+      overflow-y: auto;
+}
+.v-modal-wrap .v-modal > footer {
+      padding: 20px;
+      background-color: #fff;
+}
+.v-modal-wrap .v-modal > footer button {
+        padding: 0;
+        margin: 0;
+        background-color: transparent;
+        border: 0;
+        float: right;
+}
+.v-modal-wrap .v-modal > footer button:focus {
+          outline: 0;
+}
+.v-modal-wrap .v-modal > footer .submit {
+        padding: 4px 12px;
+        border: 1px solid;
+        border-radius: 20px;
+}
+.v-modal-wrap .v-modal > footer .cancel {
+        margin-top: 5px;
+}
+.v-modal-wrap .v-modal > footer .cancel:hover {
+          color: #333333;
+}
+.reader-night-mode .v-modal-wrap .v-modal-mask {
+  background-color: rgba(63, 63, 63, 0.7);
+}
+.reader-night-mode .v-modal-wrap .v-modal {
+  background-color: #3f3f3f;
+}
+.reader-night-mode .v-modal-wrap .v-modal header {
+    border-color: #2F2F2F;
+}
+.reader-night-mode .v-modal-wrap .v-modal header h4 {
+      color: #C8C8C8;
+}
+.reader-night-mode .v-modal-wrap .v-modal .close {
+    color: #C8C8C8;
+}
+.reader-night-mode .v-modal-wrap .v-modal .close:hover {
+      color: #ffffff;
+}
+.reader-night-mode .v-modal-wrap .v-modal main {
+    color: #C8C8C8;
+}
+.reader-night-mode .v-modal-wrap .v-modal footer {
+    background-color: #3f3f3f;
+}
+.reader-night-mode .v-modal-wrap .v-modal footer .cancel:hover {
+      color: #C8C8C8;
+}
+</style><style type="text/css">
+@charset "UTF-8";
+/*
+ * 变量
+*/
+.youdao-fixed-ad {
+  display: block;
+  position: relative;
+  width: 180px;
+  height: 180px;
+}
+.youdao-fixed-ad .img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+.youdao-fixed-ad .ad-badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: block;
+    font-size: 12px;
+    padding: 2px 5px 0 6px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    cursor: pointer;
+}
+</style><style type="text/css">
+.yuxi-fixed-ad {
+  position: relative;
+  width: 180px;
+  height: 180px;
+}
+.yuxi-fixed-ad .img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-image: url(//cdn2.jianshu.io/assets/web/yuxi-ads-d73b364baf42dfeca32d518c819a0136.jpg);
+}
+.yuxi-fixed-ad .ad-badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: block;
+    font-size: 12px;
+    padding: 2px 5px 0 6px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    cursor: pointer;
+}
+</style><style type="text/css">
+@charset "UTF-8";
+/*
+ * 变量
+*/
+.like[data-v-6ddd02c6] {
+  display: inline-block;
+}
+.like .like-group[data-v-6ddd02c6] {
+    position: relative;
+    padding: 13px 0 15px 0;
+    font-size: 0;
+    border: 1px solid #EA6F5A;
+    border-radius: 40px;
+}
+.like .like-group[data-v-6ddd02c6]:hover {
+      background-color: rgba(236, 97, 73, 0.05);
+}
+.like .like-group .btn-like[data-v-6ddd02c6] {
+      display: inline-block;
+      font-size: 19px;
+}
+.like .like-group .btn-like[data-v-6ddd02c6]:before {
+        content: '';
+        position: absolute;
+        left: 12px;
+        top: 2px;
+        width: 50px;
+        height: 50px;
+        background-image: url(//cdn2.jianshu.io/assets/web/like_animation_steps-62a00a7b52377d3069927cdb8e61fd34.png);
+        background-position: left;
+        background-repeat: no-repeat;
+        background-size: 1000px 50px;
+}
+.like .like-group .btn-like a[data-v-6ddd02c6] {
+        position: relative;
+        padding: 18px 30px 18px 55px;
+        color: #EA6F5A;
+}
+.like .like-group .modal-wrap[data-v-6ddd02c6] {
+      font-size: 18px;
+      border-left: 1px solid rgba(236, 97, 73, 0.4);
+      display: inline-block;
+      margin-left: -15px;
+}
+.like .like-group .modal-wrap a[data-v-6ddd02c6] {
+        color: #EA6F5A;
+        padding: 18px 26px 18px 18px;
+}
+.like .like-group.like-animation[data-v-6ddd02c6], .like .like-group.active[data-v-6ddd02c6] {
+      background-color: #EA6F5A;
+}
+.like .like-group.like-animation .btn-like a[data-v-6ddd02c6], .like .like-group.active .btn-like a[data-v-6ddd02c6] {
+        color: white;
+}
+.like .like-group.like-animation .modal-wrap[data-v-6ddd02c6], .like .like-group.active .modal-wrap[data-v-6ddd02c6] {
+        border-left: 1px solid white;
+}
+.like .like-group.like-animation .modal-wrap a[data-v-6ddd02c6], .like .like-group.active .modal-wrap a[data-v-6ddd02c6] {
+          color: white;
+}
+.like .like-group.like-animation .btn-like[data-v-6ddd02c6]:before {
+      -webkit-animation: likeBlast-data-v-6ddd02c6 0.6s 1 steps(19);
+              animation: likeBlast-data-v-6ddd02c6 0.6s 1 steps(19);
+      background-position: right;
+}
+@-webkit-keyframes likeBlast {
+0% {
+    background-position: left;
+}
+100% {
+    background-position: right;
+}
+}
+@keyframes likeBlast-data-v-6ddd02c6 {
+0% {
+    background-position: left;
+}
+100% {
+    background-position: right;
+}
+}
+.like .like-group.active .btn-like[data-v-6ddd02c6]:before {
+      background-position: right;
+}
+</style><style type="text/css">
+@charset "UTF-8";
+/*
+ * 变量
+*/
+.main {
+  position: relative;
+  margin: 0 auto;
+  padding: 0 0 30px 0;
+  width: 620px;
+}
+.main .title {
+    padding-left: 8px;
+    border-left: 3px solid #EA6F5A;
+    line-height: 1;
+    font-size: 15px;
+}
+.main .collection-settings {
+    position: absolute;
+    top: 2px;
+    right: 0;
+    font-size: 13px;
+    color: #A0A0A0;
+}
+.main .collection-settings span {
+      padding-left: 4px;
+}
+.main .include-collection {
+    width: 100%;
+    padding-top: 20px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-box-pack: start;
+    -webkit-justify-content: flex-start;
+        -ms-flex-pack: start;
+            justify-content: flex-start;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+}
+.main .include-collection .item {
+      display: inline-block;
+      margin: 0 12px 12px 0;
+      min-height: 32px;
+      background-color: white;
+      border: 1px solid #DCDCDC;
+      border-radius: 4px;
+      vertical-align: top;
+      overflow: hidden;
+}
+.main .include-collection .item img {
+        width: 32px;
+        height: 32px;
+}
+.main .include-collection .item .name {
+        display: inline-block;
+        padding: 0 10px;
+        font-size: 14px;
+}
+.main .include-collection .add-collection-wrap {
+      margin: 0 12px 12px 0;
+}
+.main .include-collection .add-collection {
+      padding: 8px 12px;
+      font-size: 14px;
+      border: 1px solid #DCDCDC;
+      border-radius: 4px;
+}
+.main .include-collection .add-collection i {
+        margin-right: 4px;
+        color: #969696;
+}
+.main .recommend-note a {
+    position: relative;
+    margin: 20px 2px 0 0;
+    width: 200px;
+    height: 160px;
+    display: inline-block;
+}
+.main .recommend-note a:after {
+      content: "";
+      position: absolute;
+      width: 200px;
+      height: 160px;
+      border-radius: 0 0 4px 4px;
+      -webkit-box-shadow: inset 0px -80px 50px -22px rgba(0, 0, 0, 0.6);
+              box-shadow: inset 0px -80px 50px -22px rgba(0, 0, 0, 0.6);
+      top: 0;
+      left: 0;
+      z-index: 1;
+}
+.main .recommend-note .name {
+    position: absolute;
+    bottom: 40px;
+    left: 10px;
+    right: 10px;
+    font-size: 17px;
+    font-weight: bold;
+    color: #ffffff;
+    z-index: 2;
+}
+.main .recommend-note .author {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    z-index: 2;
+}
+.main .recommend-note .avatar {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+}
+.main .recommend-note .avatar img {
+      border-radius: 50%;
+}
+.main .recommend-note .author-name {
+    font-size: 12px;
+    color: #ffffff;
+    display: inline-block;
+    vertical-align: -1px;
+}
+.main .show-more {
+    margin: 0 12px 12px 0;
+    font-size: 14px;
+    color: #A0A0A0;
+}
+</style><style type="text/css">
+#featured-comment-list {
+  margin-top: 30px;
+  margin-bottom: -15px;
+}
+</style><style type="text/css">
+@charset "UTF-8";
+/*
+ * 变量
+*/
+.pc-bind-phone-modal .modal-content, .pc-bind-phone-modal .modal-body {
+  overflow: visible;
+}
+.pc-bind-phone-modal .modal-body {
+  padding-top: 14px;
+}
+.pc-bind-phone-modal .dropdown-menu {
+  max-height: 300px;
+  overflow: auto;
+}
+.pc-bind-phone-modal .dropdown-menu .tag {
+    background-color: #efefef;
+    color: #4A4A4A;
+    height: 28px;
+    line-height: 28px;
+    padding-left: 25px;
+    font-size: 12px;
+}
+.pc-bind-phone-modal .tips {
+  color: #999999;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+  margin-bottom: 14px;
+}
+.pc-bind-phone-modal .tips a {
+    color: #3194D0;
+}
+.reader-night-mode .pc-bind-phone-modal .dropdown-menu .tag {
+  background-color: #2F2F2F;
+  color: #999999;
+}
+</style><style type="text/css">
+@charset "UTF-8";
+/*
+ * 变量
+*/
+.comment-images {
+  display: block;
+  width: 338px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  position: relative;
+  font-size: 0;
+}
+.comment-images .preview-img {
+    display: block;
+}
+.comment-images .image {
+    position: relative;
+    border-radius: 4px;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    border: 1px solid #f0f0f0;
+}
+body.reader-night-mode .comment-images .image {
+      border-color: #2f2f2f;
+}
+.comment-images .image:not(:nth-child(3n)) {
+      margin-right: 4px;
+}
+.comment-images .image:nth-child(n + 4) {
+      margin-top: 4px;
+}
+.comment-images .image.is-long:after {
+      content: '\957F\56FE';
+      position: absolute;
+      bottom: 0;
+      margin-left: -32px;
+      width: 32px;
+      height: 28px;
+      font-size: 12px;
+      text-align: center;
+      line-height: 28px;
+      background-color: #2f2f2f;
+      opacity: 0.5;
+      color: #fff;
+}
+.comment-images .one-image.is-long {
+    width: 110px;
+    height: 220px;
+    background-position: top left;
+    background-size: 110px auto;
+}
+.comment-images .one-image.is-long:after {
+      left: 100%;
+}
+.comment-images .one-image.is-normal {
+    height: 110px;
+    width: 100%;
+    background-size: contain;
+    background-position: center left;
+}
+.comment-images .many-image {
+    background-size: cover;
+    display: inline-block !important;
+    height: 110px;
+    width: 110px;
+}
+.comment-images .many-image:after {
+      left: 100%;
+}
+.comment-images .sub-image {
+    width: 105px;
+    height: 105px;
+}
+.comment-images .collapsed-btn {
+    display: block;
+    color: #3194d0;
+    font-size: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.comment-images .mask {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 32%;
+    border-radius: 2px;
+    background-color: rgba(47, 47, 47, 0.6);
+    overflow: hidden;
+    pointer-events: none;
+}
+.comment-images .mask span {
+      font-size: 15px;
+      color: #fff;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      -webkit-transform: translate(-50%, -50%);
+          -ms-transform: translate(-50%, -50%);
+              transform: translate(-50%, -50%);
+      width: 100%;
+      text-align: center;
+}
+</style><style type="text/css">
+@charset "UTF-8";
+/*
+ * 变量
+*/
+.tips-card-loading[data-v-f3bf5228], .tips-card[data-v-f3bf5228] {
+  width: 460px;
+  position: relative;
+  left: 0;
+  top: 0;
+  border-radius: 6px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  background-color: #ffffff;
+  -webkit-box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+  border: 1px solid #d9d9d9;
+}
+.tips-card-loading[data-v-f3bf5228] {
+  height: 200px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: relative;
+}
+.tips-card-loading div[data-v-f3bf5228] {
+    background-color: #EAEAEA;
+}
+.tips-card-loading .avatar[data-v-f3bf5228] {
+    width: 72px !important;
+    height: 72px !important;
+    border-radius: 50%;
+    position: absolute;
+    left: 20px;
+    top: 20px;
+}
+.tips-card-loading .name[data-v-f3bf5228] {
+    width: 120px;
+    height: 20px;
+    position: absolute;
+    left: 110px;
+    top: 31px;
+}
+.tips-card-loading .content[data-v-f3bf5228] {
+    position: absolute;
+    left: 110px;
+    top: 62px;
+    width: 238px;
+    height: 39.2px;
+    background-color: transparent;
+}
+.tips-card-loading .content .text[data-v-f3bf5228], .tips-card-loading .content .text-delay[data-v-f3bf5228] {
+      height: 14px;
+      position: absolute;
+      left: 0;
+      width: 100%;
+}
+.tips-card-loading .content .text[data-v-f3bf5228] {
+      top: 2px;
+      -webkit-animation: loading-data-v-f3bf5228 1s ease-in-out infinite;
+      animation: loading-data-v-f3bf5228 1s ease-in-out infinite;
+}
+.tips-card-loading .content .text-delay[data-v-f3bf5228] {
+      bottom: 3px;
+      -webkit-animation: loading-data-v-f3bf5228 1s ease-in-out -0.5s infinite;
+      animation: loading-data-v-f3bf5228 1s ease-in-out -0.5s infinite;
+}
+@keyframes loading-data-v-f3bf5228 {
+0% {
+    width: 60%;
+}
+50% {
+    width: 100%;
+}
+100% {
+    width: 60%;
+}
+}
+@-webkit-keyframes loading {
+0% {
+    width: 60%;
+}
+50% {
+    width: 100%;
+}
+100% {
+    width: 60%;
+}
+}
+.tips-card-loading .meta[data-v-f3bf5228] {
+    width: 30px;
+    height: 42px;
+    position: absolute;
+    bottom: 20px;
+    background-color: transparent;
+}
+.tips-card-loading .meta.meta-1[data-v-f3bf5228] {
+      left: 30px;
+}
+.tips-card-loading .meta.meta-2[data-v-f3bf5228] {
+      left: 90px;
+}
+.tips-card-loading .meta.meta-3[data-v-f3bf5228] {
+      left: 150px;
+}
+.tips-card-loading .meta .count[data-v-f3bf5228], .tips-card-loading .meta .type[data-v-f3bf5228] {
+      position: absolute;
+}
+.tips-card-loading .meta .count[data-v-f3bf5228] {
+      left: -5px;
+      top: 6px;
+      height: 18px;
+      width: 40px;
+}
+.tips-card-loading .meta .type[data-v-f3bf5228] {
+      left: 1px;
+      bottom: 2px;
+      height: 13px;
+      width: 28px;
+}
+.tips-card-loading .button[data-v-f3bf5228] {
+    position: absolute;
+    bottom: 17px;
+    width: 90px;
+    height: 40px;
+    border-radius: 40px;
+}
+.tips-card-loading .message[data-v-f3bf5228] {
+    right: 120px;
+}
+.tips-card-loading .follow[data-v-f3bf5228] {
+    right: 17px;
+}
+.tips-card[data-v-f3bf5228] {
+  z-index: 10;
+}
+.tips-card .card-content[data-v-f3bf5228] {
+    padding: 20px 20px 0 20px;
+}
+.tips-card .card-content .summary[data-v-f3bf5228] {
+      padding: 8px 0 20px 90px;
+      min-height: 92px;
+      position: relative;
+}
+.tips-card .card-content .summary .avatar[data-v-f3bf5228] {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 72px;
+        height: 72px;
+        cursor: pointer;
+        border-radius: 50%;
+        background-color: #EAEAEA;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+}
+.tips-card .card-content .summary .name[data-v-f3bf5228] {
+        height: 26px;
+        margin-right: 3px;
+        margin-bottom: 8px;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: row;
+            -ms-flex-direction: row;
+                flex-direction: row;
+        -webkit-box-pack: start;
+        -webkit-justify-content: flex-start;
+            -ms-flex-pack: start;
+                justify-content: flex-start;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+            -ms-flex-align: center;
+                align-items: center;
+}
+.tips-card .card-content .summary .name .nickname[data-v-f3bf5228] {
+          color: #333333;
+          font-size: 19px;
+          font-weight: bold;
+          overflow: hidden;
+          -o-text-overflow: ellipsis;
+             text-overflow: ellipsis;
+          white-space: nowrap;
+          cursor: pointer;
+}
+.tips-card .card-content .summary .name .sex[data-v-f3bf5228], .tips-card .card-content .summary .name .badge[data-v-f3bf5228] {
+          -webkit-flex-shrink: 0;
+              -ms-flex-negative: 0;
+                  flex-shrink: 0;
+          display: inline-block;
+}
+.tips-card .card-content .summary .name .sex[data-v-f3bf5228] {
+          font-size: 19px;
+          width: 19px;
+          margin: 0 4px;
+}
+.tips-card .card-content .summary .intro[data-v-f3bf5228] {
+        overflow: hidden;
+        -o-text-overflow: ellipsis;
+           text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        margin-bottom: 12px;
+        font-size: 14px;
+        line-height: 1.5;
+        color: #333333;
+}
+.tips-card .card-content .summary .intro.block[data-v-f3bf5228] {
+          color: #999999;
+}
+.tips-card .card-content .summary .list .item[data-v-f3bf5228] {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 13px;
+        color: #999999;
+        cursor: pointer;
+        overflow: hidden;
+        -o-text-overflow: ellipsis;
+           text-overflow: ellipsis;
+        white-space: nowrap;
+}
+.tips-card .card-content .summary .list .item i[data-v-f3bf5228] {
+          margin-right: 2px;
+}
+.tips-card .card-footer[data-v-f3bf5228] {
+    border-top: 1px solid #F0F0F0;
+    padding: 15px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+    overflow: hidden;
+    _zoom: 1;
+}
+.tips-card .card-footer .profile[data-v-f3bf5228] {
+      width: 198px;
+      overflow: hidden;
+      _zoom: 1;
+      float: left;
+}
+.tips-card .card-footer .profile div[data-v-f3bf5228] {
+        float: left;
+        width: 60px;
+        height: 44px;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
+            -ms-flex-direction: column;
+                flex-direction: column;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+            -ms-flex-align: center;
+                align-items: center;
+}
+.tips-card .card-footer .profile div span[data-v-f3bf5228] {
+          display: block;
+          width: 100%;
+          text-align: center;
+}
+.tips-card .card-footer .profile div .type[data-v-f3bf5228] {
+          font-size: 13px;
+          color: #999999;
+}
+.tips-card .card-footer .profile div .count[data-v-f3bf5228] {
+          font-size: 18px;
+          color: #333333;
+}
+.tips-card .card-footer .social[data-v-f3bf5228] {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: row;
+          -ms-flex-direction: row;
+              flex-direction: row;
+      -webkit-box-pack: end;
+      -webkit-justify-content: flex-end;
+          -ms-flex-pack: end;
+              justify-content: flex-end;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+          -ms-flex-align: center;
+              align-items: center;
+      float: right;
+      overflow: hidden;
+      _zoom: 1;
+}
+.tips-card .card-footer .social .message[data-v-f3bf5228] {
+        border: 1px solid rgba(59, 194, 29, 0.7);
+        color: #42C02E;
+        margin: 0 10px 0 16px;
+        font-size: 15px;
+        padding: 8px 0;
+        width: 90px;
+        border-radius: 40px;
+        text-align: center;
+        cursor: pointer;
+        float: left;
+        -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+}
+.tips-card .card-footer .social .message[data-v-f3bf5228]:hover {
+          border: 1px solid #42C02E;
+          color: #42C02E;
+          background-color: rgba(59, 194, 29, 0.05);
+}
+.tips-card .card-footer .social .user-follow-button[data-v-f3bf5228] {
+        font-size: 15px;
+        padding: 8px 0;
+        width: 100px;
+}
+.arrow[data-v-f3bf5228] {
+  position: absolute;
+  width: 100%;
+  height: 10px;
+  left: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+.arrow i[data-v-f3bf5228] {
+    position: absolute;
+    left: 50%;
+    margin: 0;
+    margin-left: -10px;
+    border-width: 10px;
+    border-color: transparent;
+    padding: 0;
+}
+.arrow em[data-v-f3bf5228] {
+    display: block;
+    position: absolute;
+    left: -9px;
+    border-width: 9px;
+    border-color: transparent;
+    margin: 0;
+    padding: 0;
+}
+.arrow-type-top[data-v-f3bf5228] {
+  bottom: 1px;
+}
+.arrow-type-top i[data-v-f3bf5228] {
+    border-top-color: #d9d9d9;
+    border-style: solid dashed dashed;
+    top: 0;
+}
+.arrow-type-top em[data-v-f3bf5228] {
+    border-style: solid dashed dashed;
+    border-top-color: #ffffff;
+    top: -10px;
+}
+.arrow-type-bottom[data-v-f3bf5228] {
+  top: 1px;
+}
+.arrow-type-bottom i[data-v-f3bf5228] {
+    border-bottom-color: #d9d9d9;
+    border-style: dashed dashed solid;
+    top: -10px;
+}
+.arrow-type-bottom em[data-v-f3bf5228] {
+    border-style: dashed dashed solid;
+    border-bottom-color: #ffffff;
+    top: -8px;
+}
+.reader-night-mode .tips-card-loading[data-v-f3bf5228] {
+  background-color: #3F3F3F;
+  border-color: #2F2F2F;
+}
+.reader-night-mode .tips-card-loading .avatar[data-v-f3bf5228], .reader-night-mode .tips-card-loading .name[data-v-f3bf5228], .reader-night-mode .tips-card-loading .text[data-v-f3bf5228], .reader-night-mode .tips-card-loading .text-delay[data-v-f3bf5228], .reader-night-mode .tips-card-loading .count[data-v-f3bf5228], .reader-night-mode .tips-card-loading .type[data-v-f3bf5228], .reader-night-mode .tips-card-loading .button[data-v-f3bf5228] {
+    background-color: #545454;
+}
+.reader-night-mode .tips-card[data-v-f3bf5228] {
+  background-color: #3F3F3F;
+  border-color: #2F2F2F;
+}
+.reader-night-mode .tips-card .card-content .summary .name .nickname[data-v-f3bf5228] {
+    color: #C8C8C8;
+}
+.reader-night-mode .tips-card .card-content .summary .name .nickname[data-v-f3bf5228]:hover {
+      color: #ffffff;
+}
+.reader-night-mode .tips-card .card-content .summary .intro[data-v-f3bf5228] {
+    color: #C8C8C8;
+}
+.reader-night-mode .tips-card .card-footer[data-v-f3bf5228] {
+    border-top-color: #2F2F2F;
+}
+.reader-night-mode .tips-card .card-footer .profile div .count[data-v-f3bf5228] {
+      color: #C8C8C8;
+}
+.reader-night-mode .arrow.arrow-type-top em[data-v-f3bf5228] {
+  border-top-color: #3F3F3F;
+}
+.reader-night-mode .arrow.arrow-type-top i[data-v-f3bf5228] {
+  border-top-color: #2F2F2F;
+}
+.reader-night-mode .arrow.arrow-type-bottom em[data-v-f3bf5228] {
+  border-bottom-color: #3F3F3F;
+}
+.reader-night-mode .arrow.arrow-type-bottom i[data-v-f3bf5228] {
+  border-bottom-color: #2F2F2F;
+}
+</style><style type="text/css">
+.v-tooltip-container,
+.v-tooltip-content {
+  display: inline-block;
+}
+.v-tooltip-container {
+  position: relative;
+}
+.v-tooltip-container .v-tooltip-content {
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+}
+.v-tooltip-container .v-tooltip-wrap {
+    position: absolute;
+}
+.v-tooltip-container .v-tooltip-wrap.v-tooltip-wrap-top {
+      bottom: 100%;
+      left: 50%;
+      -webkit-transform: translateX(-50%);
+          -ms-transform: translateX(-50%);
+              transform: translateX(-50%);
+      padding-bottom: 10px;
+}
+.v-tooltip-container .v-tooltip-wrap.v-tooltip-wrap-bottom {
+      top: 100%;
+      left: 50%;
+      -webkit-transform: translateX(-50%);
+          -ms-transform: translateX(-50%);
+              transform: translateX(-50%);
+      padding-top: 10px;
+}
+.v-tooltip-container .v-tooltip-wrap.v-tooltip-wrap-left {
+      top: 50%;
+      right: 100%;
+      -webkit-transform: translateY(-50%);
+          -ms-transform: translateY(-50%);
+              transform: translateY(-50%);
+      padding-right: 10px;
+}
+.v-tooltip-container .v-tooltip-wrap.v-tooltip-wrap-right {
+      top: 50%;
+      left: 100%;
+      -webkit-transform: translateY(-50%);
+          -ms-transform: translateY(-50%);
+              transform: translateY(-50%);
+      padding-left: 10px;
+}
+.v-tooltip-container .v-tooltip-wrap.v-tooltip-wrap-top-start {
+      bottom: 100%;
+      left: 0;
+      padding-bottom: 10px;
+}
+.v-tooltip-container .v-tooltip-wrap.v-tooltip-wrap-top-end {
+      bottom: 100%;
+      right: 0;
+      padding-bottom: 10px;
+}
+.v-tooltip-container .v-tooltip-wrap.v-tooltip-wrap-bottom-start {
+      top: 100%;
+      left: 0;
+      padding-top: 10px;
+}
+.v-tooltip-container .v-tooltip-wrap.v-tooltip-wrap-bottom-end {
+      top: 100%;
+      right: 0;
+      padding-top: 10px;
+}
+.v-tooltip-container .v-tooltip-wrap.v-tooltip-wrap-left-start {
+      top: 0;
+      right: 100%;
+      padding-right: 10px;
+}
+.v-tooltip-container .v-tooltip-wrap.v-tooltip-wrap-left-end {
+      bottom: 0;
+      right: 100%;
+      padding-right: 10px;
+}
+.v-tooltip-container .v-tooltip-wrap.v-tooltip-wrap-right-start {
+      top: 0;
+      left: 100%;
+      padding-left: 10px;
+}
+.v-tooltip-container .v-tooltip-wrap.v-tooltip-wrap-right-end {
+      bottom: 0;
+      left: 100%;
+      padding-left: 10px;
+}
+</style><style type="text/css">
+@charset "UTF-8";
+/*
+ * 变量
+*/
+.like-button[data-v-cdecbe24] {
+  position: relative;
+  padding-left: 23px;
+}
+.like-button[data-v-cdecbe24]:before {
+    content: '';
+    position: absolute;
+    left: -16px;
+    top: -16px;
+    width: 50px;
+    height: 50px;
+    background-image: url(//cdn2.jianshu.io/assets/web/zan_animation_steps-8d65a474b670eb6a022516f4e0b8e9a4.png);
+    background-position: left;
+    background-repeat: no-repeat;
+    background-size: 1050px 50px;
+}
+.like-button[data-v-cdecbe24]:hover:before {
+    background-position: -50px;
+}
+.like-button.zan-animation span[data-v-cdecbe24], .like-button.active span[data-v-cdecbe24] {
+    color: #333333;
+}
+body.reader-night-mode .like-button.zan-animation span[data-v-cdecbe24], body.reader-night-mode .like-button.active span[data-v-cdecbe24] {
+      color: #C8C8C8;
+}
+.like-button.zan-animation[data-v-cdecbe24]:before {
+    -webkit-animation: likeBlast-data-v-cdecbe24 0.6s 1 steps(19);
+            animation: likeBlast-data-v-cdecbe24 0.6s 1 steps(19);
+    background-position: right;
+}
+@-webkit-keyframes likeBlast {
+0% {
+    background-position: -50px;
+}
+100% {
+    background-position: right;
+}
+}
+@keyframes likeBlast-data-v-cdecbe24 {
+0% {
+    background-position: -50px;
+}
+100% {
+    background-position: right;
+}
+}
+.like-button.active[data-v-cdecbe24]:before {
+    background-position: right;
+}
+</style></head>
+
+  <!-- 只给10%的用户添加代码 -->
+  <!-- ###第四范式-智能推荐：代码直接复制 无需修改参数### -->
+  <!-- ###功能：上报内容并反馈用户行为### -->
+  <!--
+  -->
+  <body lang="zh-CN" class="reader-black-font">
+    <!-- 全局顶部导航栏 -->
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="width-limit">
+    <!-- 左上方 Logo -->
+    <a class="logo" href="https://www.jianshu.com/"><img src="./第二章 Spring Boot MVC - 简书_files/nav-logo-4c7bbafe27adc892f3046e6978459bac.png" alt="Nav logo"></a>
+
+    <!-- 右上角 -->
+      <!-- 未登录显示登录/注册/写文章 -->
+      <a class="btn write-btn" target="_blank" href="https://www.jianshu.com/writer#/">
+        <i class="iconfont ic-write"></i>写文章
+</a>      <a class="btn sign-up" id="sign_up" href="https://www.jianshu.com/sign_up">注册</a>
+      <a class="btn log-in" id="sign_in" href="https://www.jianshu.com/sign_in">登录</a>
+
+    <!-- 如果用户登录，显示下拉菜单 -->
+
+    <div class="style-mode"><a class="style-mode-btn"><i class="iconfont ic-navigation-mode"></i></a> <div class="popover-modal" style="left: 0px; display: none;"><div class="meta"><i class="iconfont ic-navigation-night"></i><span>夜间模式</span></div> <div class="switch day-night-group"><a class="switch-btn">开</a> <a class="switch-btn active">关</a></div> <hr> <div class="switch font-family-group"><a class="switch-btn font-song">宋体</a> <a class="switch-btn font-hei active">黑体</a></div> <div class="switch"><a class="switch-btn active">简</a> <a class="switch-btn">繁</a></div></div></div>
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu" aria-expanded="false">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <div class="collapse navbar-collapse" id="menu">
+        <ul class="nav navbar-nav">
+            <li class="tab ">
+              <a href="https://www.jianshu.com/">
+                <span class="menu-text">首页</span><i class="iconfont ic-navigation-discover menu-icon"></i>
+</a>            </li>
+            <li class="tab ">
+              <a id="web-nav-app-download-btn" class="app-download-btn" href="https://www.jianshu.com/apps?utm_medium=desktop&amp;utm_source=navbar-apps"><span class="menu-text">下载App</span><i class="iconfont ic-navigation-download menu-icon"></i></a>
+            </li>
+          <li class="search">
+            <form target="_blank" action="https://www.jianshu.com/search" accept-charset="UTF-8" method="get"><input name="utf8" type="hidden" value="✓">
+              <input type="text" name="q" id="q" value="" autocomplete="off" placeholder="搜索" class="search-input">
+              <a class="search-btn" href="javascript:void(null)"><i class="iconfont ic-search"></i></a>
+</form>          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+    
+<div class="note">
+  <div id="note-fixed-ad-container">
+    <div id="fixed-ad-container">
+      <div style="display: block;"><a target="_blank" href="https://www.jianshu.com/apps/redirect?utm_source=side-banner-click" id="web-note-ad-fixed"><span class="close">×</span></a></div>
+      <a href="https://dsp-click.youdao.com/clk/request.s?slot=30edd91dd8637d9f645baa8448ba90b3&amp;k=%2Bswy8WL9T9jWDUYrHqCXnF2FQOYMROOb1vjEf9kqI73Xxo%2BoRxcJpjjAgKuViCqvIxCHqA9N%2F2c%2F9Be%2FcwcSr5NhG9b7or%2BjgXLaV8QNq3dRJOso7VnGNkVIVVmgZYfwHTMFjGSc2q8piw6H52riFgXYr3n1Jf81Y03GLLtCh0Zv0yDKGUJ9hEviGVibSX2HEA7md3Hq7BOhGrSke341nqVN6BVwkooxryLvadi1XpsUmDcRLOYhYCSzGsT%2BHryqt%2B0MDz5bXHoJFk0KiyBQH8Bc8hTRkDkpUdNHMN2yVKT%2BEc%2Bd1jbbq9hGJq0XLIGZMHMNk0HBE7d6E4vICqnJAl16Cg%2BsHjwne1fg0d0rY8HhDpY6VQQhNofsrjeEHMu6T1QIUFWHw03LMFE7Md5w6L6XJ92stIBCnKrPU68xFB%2B0ckvkITsO1u5zUtRET2JoCUIY1nS%2BU%2BiXpN%2B1mBywm%2BJCvUUbD7ARLgrbV6V7v0Ap3DXt0HuGReB8cXG4v14BvDLGB0rlms2t2kmjw3g3g3tQW%2FRVuaYRauWej6r2RkfFPQxgvCMp4t8sYQNqIYTu%2Fs9AtKgE3L%2BR53%2B0SYv4o%2F%2Bl8vA2JK2tM29kOuh3nvHMIQD62Wx%2BMO0LQSJkK%2BRqM5x63sKEu1XU3FWGKGmdUzVz97NVcgcJYqfFtZWCTimZxQM0uMYrc%2FiJ7owYJL7bTGU7wkvuLhYFGSEvSOS2m71ZgBCQHJpNJaBbMC7tLpGg%2FAIGQFO9h4t4eURKu85GVbQDpPkcQcretGO7UJIt6OrmUL8OavJaH2kM%2FPqStXXkN8iKayYLt8l5UrDa4dNxFkJzxT5Cb2QwI1BeEyq%2FDBZFUuw8NFH5E4Z9iRJcluZ8taYbrBJfeSA9sK7EdpEX243QAYhSbftDWSFmrnNmyrX6%2BjKdnxB1au83z8Vqtg7CzyYMZCMnrQi6bbKuO%2BYnlk1JDARoF9IqUkrmaMaDn1C32SVYz0VnoJ2ROLfw72a03xq3TUT3IKWahwLudbQMvYJPDD3Q2C1GHywmrYV5s7QgSuyYB3Fe2FvvqVD%2FNNNcaInJ2tdzxNNr9OMFNXjSF7OUdKm0h3P1%2BadurfqtkHMkanKkz1LBns1MXlewSF%2Fu%2FTDlpM5Cja2cjcPkXxBQjOTp%2FZW07cwoE0FW0rT9GtfGj6hHFwmmOMCAq5WIKq%2FXxo%2BoRxcJpjjAgKuViCqvSEqXFEw2FMjQdEHp9AowcPpj7yPmc0jg3HkCorK4%2Bn4%3D&amp;youdao_bid=41167fa0-3240-491a-b2db-4d73b3b596e5&amp;iid=%7B%221592605208704938054%22%3A4%7D&amp;sid=17024" target="_blank" class="youdao-fixed-ad"><div class="img" style="background-image: url(&quot;https://oimagea3.ydstatic.com/image?id=1592605208704938054&amp;product=adpublish&amp;w=360&amp;h=360&amp;sc=0&amp;rm=2&amp;gsb=0&amp;gsbd=60&quot;);"></div> <span class="ad-badge">广告</span></a>
+      <a href="http://e.cn.miaozhen.com/r/k=2110413&amp;p=7L9Gn&amp;dx=__IPDX__&amp;rt=2&amp;ns=__IP__&amp;ni=__IESID__&amp;v=__LOC__&amp;xa=__ADPLATFORM__&amp;tr=__REQUESTID__&amp;mo=__OS__&amp;m0=__OPENUDID__&amp;m0a=__DUID__&amp;m1=__ANDROIDID1__&amp;m1a=__ANDROIDID__&amp;m2=__IMEI__&amp;m4=__AAID__&amp;m5=__IDFA__&amp;m6=__MAC1__&amp;m6a=__MAC__&amp;vo=3f2e070eb&amp;vr=2&amp;o=https%3A%2F%2Fwww.jianshu.com%2Fp%2Fee05f7eff678" target="_blank" class="yuxi-fixed-ad" style="display: none;"><div class="img"></div> <span class="ad-badge">广告</span></a>
+      <div id="_so_pdsBy_0"></div>
+    </div>
+  </div>
+  <div class="post">
+    <div class="article">
+        <h1 class="title">第二章 Spring Boot MVC</h1>
+
+        <!-- 作者区域 -->
+        <div class="author">
+          <a class="avatar" href="https://www.jianshu.com/u/25f9dd9ea218">
+            <img src="./第二章 Spring Boot MVC - 简书_files/3e7e3aae-fde1-4acb-8a17-4cce8b0765a5.jpg" alt="96">
+</a>          <div class="info">
+            <span class="name"><a href="https://www.jianshu.com/u/25f9dd9ea218">terran4j</a></span>
+            <!-- 关注用户按钮 -->
+            <a class="btn btn-success follow"><i class="iconfont ic-follow"></i><span>关注</span></a>
+            <!-- 文章数据信息 -->
+            <div class="meta">
+              <!-- 简书钻 -->
+              <!-- 如果文章更新时间大于发布时间，那么使用 tooltip 显示更新时间 -->
+                <span class="publish-time" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="最后编辑于 2017.12.09 14:46">2017.08.03 06:34*</span>
+              <span class="wordage">字数 2215</span>
+            <span class="views-count">阅读 2162</span><span class="comments-count">评论 1</span><span class="likes-count">喜欢 2</span></div>
+          </div>
+          <!-- 如果是当前作者，加入编辑按钮 -->
+        </div>
+
+
+        <!-- 文章内容 -->
+        <div data-note-content="" class="show-content">
+          <div class="show-content-free">
+            <p>本章是《<a href="https://www.jianshu.com/nb/14688855?order_by=seq" target="_blank"> Spring Boot 快速入门 </a>》系列教程的第二章，若要查看本系列的全部章节，请点击<a href="https://www.jianshu.com/nb/14688855?order_by=seq" target="_blank"> 这里 </a> 。</p>
+<h2>本章目录</h2>
+<ul>
+<li>简介</li>
+<li>源码下载</li>
+<li>软件版本</li>
+<li>编写 Controller 类</li>
+<li>自动装载请求参数</li>
+<li>处理复杂类型的返回值</li>
+<li>自定义返回值转化类 HttpMessageConverter</li>
+<li>总结说明</li>
+</ul>
+<h2>简介</h2>
+<p>在上一章《Hello Spring Boot》中，我们从一个最简单的应用程序入手，体验了 Spring Boot 的开发流程。<br>
+本章我们会带着大家继续 Spring Boot 体验之旅，将 Hello Spring Boot  程序升级成 Web 版。<br>
+现在WEB开发比较流行的开发模式是前后端分离，也就是前端工程师专注于写前端的代码，用 ajax 调用后端的 Http Restful API 获取数据，而后台工程师则专注于实现 Http Restful API 即可，前后端在代码工程和部署上都是完全分离的，这样只要接口定义好了就可以各自开发相互不干扰，协作效率更高。<br>
+因此，本文的重点是描述如何用 Spring Boot 开发 Http Restful API 服务。</p>
+<h2>源码下载</h2>
+<p>本章的示例代码放在“码云”上，大家可以免费下载或浏览：</p>
+<p><a href="https://link.jianshu.com/?t=https://git.oschina.net/terran4j/springboot/tree/master/springboot-web" target="_blank" rel="nofollow">https://git.oschina.net/terran4j/springboot/tree/master/springboot-web</a></p>
+<h2>软件版本</h2>
+<p>相关软件使用的版本：</p>
+<ul>
+<li>Java:  1.8</li>
+<li>Maven:  3.3.9</li>
+</ul>
+<p>程序在以上版本均调试过，可以正常运行，其它版本仅作参考。</p>
+<h2>编写 Controller 类</h2>
+<p>Spring Boot 默认使用 Spring MVC 作为WEB框架，处理HTTP请求需要编写 Controller 类，如下代码所示：</p>
+<pre class="hljs java"><code class="java"><span class="hljs-keyword">package</span> com.terran4j.springboot.web;
+
+<span class="hljs-keyword">import</span> java.io.IOException;
+
+<span class="hljs-keyword">import</span> javax.servlet.http.HttpServletRequest;
+<span class="hljs-keyword">import</span> javax.servlet.http.HttpServletResponse;
+
+<span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Autowired;
+<span class="hljs-keyword">import</span> org.springframework.stereotype.Controller;
+<span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;
+<span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RequestMethod;
+
+<span class="hljs-meta">@Controller</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HelloController</span> </span>{
+
+    <span class="hljs-meta">@Autowired</span>
+    <span class="hljs-keyword">private</span> HelloService helloService;
+    
+    <span class="hljs-meta">@RequestMapping</span>(value = <span class="hljs-string">"/hello"</span>, method = RequestMethod.GET)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sayHello</span><span class="hljs-params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="hljs-keyword">throws</span> IOException </span>{
+        String name = request.getParameter(<span class="hljs-string">"name"</span>);
+        String msg = helloService.hello(name);
+        response.getWriter().println(msg);
+    }
+    
+}
+</code></pre>
+<p>首先， 要在类上面加 @Controller 注解，然后处理 HTTP 请求的方法上要加 @RequestMapping 注解，如：</p>
+<pre class="hljs java"><code class="java"><span class="hljs-meta">@RequestMapping</span>(value = <span class="hljs-string">"/hello"</span>, method = RequestMethod.GET)
+</code></pre>
+<p>其中 value 是匹配的路径，method 是匹配的方法，主要有GET, POST, PUT, DELETE这么几种，上面这行的意思是路径为 /hello 的 GET 请求，都会让这个方法来处理，如：</p>
+<pre class="hljs cpp"><code class="cpp">http:<span class="hljs-comment">//localhost:8080/hello?name=terran4j</span>
+</code></pre>
+<p>这里方法参数我们先用原始的 HttpServletRequest 和<br>
+HttpServletResponse 作为入参，如：</p>
+<pre class="hljs undefined"><code>sayHello(HttpServletRequest request, HttpServletResponse response)
+</code></pre>
+<p>有的场景下我们直接使用 HttpServletRequest 和<br>
+HttpServletResponse 对象会更灵活，但大多数实际场景下我们用<br>
+<code>@RequestParam</code> 直接自动装载参数会更简单一些（这点后面的例子会讲到）。</p>
+<p>然后我们写一个 main 函数并运行它：</p>
+<pre class="hljs java"><code class="java"><span class="hljs-keyword">package</span> com.terran4j.springboot.web;
+
+<span class="hljs-keyword">import</span> org.springframework.boot.SpringApplication;
+<span class="hljs-keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;
+
+<span class="hljs-meta">@SpringBootApplication</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HelloWebApp</span> </span>{
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{
+        SpringApplication.run(HelloWebApp.class, args);
+    }
+
+}
+</code></pre>
+<p>运行起来后，我们在浏览器输入URL:</p>
+<pre class="hljs cpp"><code class="cpp">http:<span class="hljs-comment">//localhost:8080/hello?name=terran4j</span>
+</code></pre>
+<p>访问结果为：</p>
+<div class="image-package">
+<div class="image-container" style="max-width: 433px; max-height: 148px; background-color: transparent;">
+<div class="image-container-fill" style="padding-bottom: 34.18%;"></div>
+<div class="image-view" data-width="433" data-height="148"><img data-original-src="//upload-images.jianshu.io/upload_images/4489584-dfc37e515d7e1c24.png" data-original-width="433" data-original-height="148" data-original-format="image/png" data-original-filesize="7950" class="" style="cursor: zoom-in;" src="./第二章 Spring Boot MVC - 简书_files/4489584-dfc37e515d7e1c24.png"></div>
+</div>
+<div class="image-caption">Spring Boot MVC 1.png</div>
+</div>
+<h2>自动装载请求参数</h2>
+<p>上面的示例中我们直接从 HttpServletRequest 对象中读取参数，然而Spring MVC提供了更简单的方式，就是通过注解 @RequestParam 自动装载请求参数，如下代码所示：</p>
+<pre class="hljs java"><code class="java">    <span class="hljs-comment">// URL示例：  http://localhost:8080/hello2/param?name=terran4j</span>
+    <span class="hljs-meta">@RequestMapping</span>(value = <span class="hljs-string">"/hello2/param"</span>, method = RequestMethod.GET)
+    <span class="hljs-meta">@ResponseBody</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">sayHelloByParam</span><span class="hljs-params">(@RequestParam(<span class="hljs-string">"name"</span>)</span> String name) </span>{
+        <span class="hljs-keyword">return</span> helloService.hello(name);
+    }
+</code></pre>
+<p>代码 <code>@RequestParam("name") String name</code> 的意思是自动读取key为<br>
+name 的 HTTP 请求参数，值装载到方法入参 name 中。<br>
+但这样写的话，如果HTTP请求中没有 name 参数时Spring MVC就会报错，解决的方法是这样写 <code>@RequestParam(value = "name", defaultValue = "")</code> 意思是给它设置一个默认值，当没有请求参数时就用默认值，默认值为空串。</p>
+<p>这种自动装载的方式很智能，它还会根据参数对象的类型自动解析，比如还要一个 count 参数是数字类型的，可以直接定义成Integer 或 Long 类型的，如：</p>
+<pre class="hljs java"><code class="java">sayHello(<span class="hljs-meta">@RequestParam</span>(<span class="hljs-string">"count"</span>) Integer count, <span class="hljs-meta">@RequestParam</span>(<span class="hljs-string">"name"</span>) String name)
+</code></pre>
+<p>Spring MVC 会根据方法入参的类型自动解析成 Integer 类型，当然如果对应的 HTTP 参数不是数字就会报错。</p>
+<p>另外，还可以用 @PathVariable 来装载URL路径中的值作为参数，如：</p>
+<pre class="hljs java"><code class="java">    <span class="hljs-comment">// URL示例：  http://localhost:8080/hello2/path/terran4j</span>
+    <span class="hljs-meta">@RequestMapping</span>(value = <span class="hljs-string">"/hello2/path/{name}"</span>, method = RequestMethod.GET)
+    <span class="hljs-meta">@ResponseBody</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">sayHelloByPath</span><span class="hljs-params">(@PathVariable(<span class="hljs-string">"name"</span>)</span> String name) </span>{
+        <span class="hljs-keyword">return</span> helloService.hello(name);
+    }
+</code></pre>
+<p>它会自动从URL路径中 /hello2/path/ 后面的一节作为 name 参数的值。<br>
+如果读者比较了解 Restful 风格的 API 就知道这种方式非常适合 Restful API 。</p>
+<p>注意，<strong>方法上一定不能少了 @ResponseBody 注解</strong>，它的意思是该方法的返回结果直接写入 HTTP Response Body 中。<br>
+至于写入的内容具体是什么，则由 HttpMessageConverter 来决定，Spring MVC中默认的 HttpMessageConverter 是将返回对象自动转成的json串，关于这一点下一节会讲到。</p>
+<h2>处理复杂类型的返回值</h2>
+<p>目前为止，我们的返回值只是简单的 String 类型，如果是一个自己定义的复杂的 java bean 会怎么样呢？<br>
+我们先自己定义一个名为 HelloBean 的java bean类，代码如下：</p>
+<pre class="hljs java"><code class="java"><span class="hljs-keyword">package</span> com.terran4j.springboot.web;
+
+<span class="hljs-keyword">import</span> java.util.Date;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HelloBean</span> </span>{
+    
+    <span class="hljs-keyword">private</span> String name;
+    
+    <span class="hljs-keyword">private</span> String message;
+    
+    <span class="hljs-keyword">private</span> Date time;
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> String <span class="hljs-title">getName</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> name;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setName</span><span class="hljs-params">(String name)</span> </span>{
+        <span class="hljs-keyword">this</span>.name = name;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> String <span class="hljs-title">getMessage</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> message;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setMessage</span><span class="hljs-params">(String message)</span> </span>{
+        <span class="hljs-keyword">this</span>.message = message;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> Date <span class="hljs-title">getTime</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> time;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setTime</span><span class="hljs-params">(Date time)</span> </span>{
+        <span class="hljs-keyword">this</span>.time = time;
+    }
+
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">toString</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-string">"Hello [name="</span> + name + <span class="hljs-string">", message="</span> + message + <span class="hljs-string">", time="</span> + time + <span class="hljs-string">"]"</span>;
+    }
+    
+}
+</code></pre>
+<p>这个 Bean 中有 name, msg 两个 String 类型的属性，还有 time 这个 Date 类型的属性，以及它们的 getter , setter 方法。</p>
+<p>然后我们将之前的Controller类改造成这样：</p>
+<pre class="hljs java"><code class="java"><span class="hljs-keyword">package</span> com.terran4j.springboot.web;
+
+<span class="hljs-keyword">import</span> java.util.Date;
+
+<span class="hljs-keyword">import</span> org.slf4j.Logger;
+<span class="hljs-keyword">import</span> org.slf4j.LoggerFactory;
+<span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Autowired;
+<span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;
+<span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RequestMethod;
+<span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RequestParam;
+<span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RestController;
+
+<span class="hljs-meta">@RestController</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HelloController3</span> </span>{
+    
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> Logger log = LoggerFactory.getLogger(HelloController3.class);
+
+    <span class="hljs-meta">@Autowired</span>
+    <span class="hljs-keyword">private</span> HelloService helloService;
+    
+    <span class="hljs-comment">// URL示例：  http://localhost:8080/hello3?name=terran4j</span>
+    <span class="hljs-meta">@RequestMapping</span>(value = <span class="hljs-string">"/hello3"</span>, method = RequestMethod.GET)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> HelloBean <span class="hljs-title">sayHello</span><span class="hljs-params">(@RequestParam(<span class="hljs-string">"name"</span>)</span> String name) </span>{
+        HelloBean hello = <span class="hljs-keyword">new</span> HelloBean();
+        hello.setName(name);
+        hello.setMessage(helloService.hello(name));
+        hello.setTime(<span class="hljs-keyword">new</span> Date());
+        <span class="hljs-keyword">if</span> (log.isInfoEnabled()) {
+            log.info(<span class="hljs-string">"hello bean is: {}"</span>, hello);
+        }
+        <span class="hljs-keyword">return</span> hello;
+    }
+    
+}
+</code></pre>
+<p>注意： 上面代码中，类上的注解从 @Controller 变成 @RestController，而方法的注解少了个 @ResponseBody 。<br>
+其实 @RestController = @Controller + @ResponseBody，也就是说有了@RestController之后，相当于每个方法（有@RequestMapping的）自动加上了 @ResponseBody 注解。</p>
+<p>上面代码中，方法返回一个 HelloBean 对象，我们运行main程序，然后访问URL:</p>
+<pre class="hljs cpp"><code class="cpp">http:<span class="hljs-comment">//localhost:8080/hello3?name=terran4j</span>
+</code></pre>
+<p>结果如下：</p>
+<div class="image-package">
+<div class="image-container" style="max-width: 486px; max-height: 106px; background-color: transparent;">
+<div class="image-container-fill" style="padding-bottom: 21.81%;"></div>
+<div class="image-view" data-width="486" data-height="106"><img data-original-src="//upload-images.jianshu.io/upload_images/4489584-7988c66045dcb1c8.png" data-original-width="486" data-original-height="106" data-original-format="image/png" data-original-filesize="5536" class="" style="cursor: zoom-in;" src="./第二章 Spring Boot MVC - 简书_files/4489584-7988c66045dcb1c8.png"></div>
+</div>
+<div class="image-caption">Spring Boot MVC 3.1</div>
+</div>
+<p>可以看到Spring MVC 自动将 java bean 对象转成 json 串返回了。</p>
+<p>但这还是有一个问题， 属性 <code>Date time</code> 显示成了 long 类型的时间戳格式，而不是人类容易理解的格式（如“2017-03-09 18:42:00”），还有这个<br>
+json 串被压缩成一行很不好看，通常正式的项目返回的数据是比较多的，如果也像这样挤成一坨，那调试程序时看着也费劲啊。</p>
+<p>那有没有办法对返回的 json 串结果优化一下呢？ 答案显然是有的，下一节我们将讲解如何通过注入自定义的 HttpMessageConverter 将返回值转化成我们希望的json串格式。</p>
+<h2>自定义返回值转化类 HttpMessageConverter</h2>
+<p>Spring MVC 在调用 Controller 的方法后，是用 HttpMessageConverter 类来将返回值转化成最终结果并写入到 Http Response Body 中的。<br>
+我们可以自己定义一个 HttpMessageConverter 的对象，来代替 Spring MVC 默认提供的 HttpMessageConverter 对象。</p>
+<p>如下代码所示：</p>
+<pre class="hljs java"><code class="java"><span class="hljs-keyword">package</span> com.terran4j.springboot.web;
+
+<span class="hljs-keyword">import</span> java.text.SimpleDateFormat;
+<span class="hljs-keyword">import</span> java.util.List;
+
+<span class="hljs-keyword">import</span> org.slf4j.Logger;
+<span class="hljs-keyword">import</span> org.slf4j.LoggerFactory;
+<span class="hljs-keyword">import</span> org.springframework.http.converter.HttpMessageConverter;
+<span class="hljs-keyword">import</span> org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+<span class="hljs-keyword">import</span> org.springframework.web.servlet.config.annotation.EnableWebMvc;
+<span class="hljs-keyword">import</span> org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+<span class="hljs-keyword">import</span> com.fasterxml.jackson.annotation.JsonInclude;
+<span class="hljs-keyword">import</span> com.fasterxml.jackson.core.JsonParser;
+<span class="hljs-keyword">import</span> com.fasterxml.jackson.databind.DeserializationFeature;
+<span class="hljs-keyword">import</span> com.fasterxml.jackson.databind.ObjectMapper;
+<span class="hljs-keyword">import</span> com.fasterxml.jackson.databind.PropertyNamingStrategy;
+<span class="hljs-keyword">import</span> com.fasterxml.jackson.databind.SerializationFeature;
+
+<span class="hljs-meta">@EnableWebMvc</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HelloWebMvcConfigurer</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">WebMvcConfigurerAdapter</span> </span>{
+    
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> Logger log = LoggerFactory.getLogger(HelloWebMvcConfigurer.class);
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> ObjectMapper <span class="hljs-title">createObjectMapper</span><span class="hljs-params">()</span> </span>{
+        ObjectMapper objectMapper = <span class="hljs-keyword">new</span> ObjectMapper();
+
+        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE);
+
+        <span class="hljs-comment">// 属性为空时（包括 null, 空串，空集合，空对象），不参与序列化。</span>
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+
+        <span class="hljs-comment">// Date 对象在序列化时，格式为 yyyy年MM月dd日 HH时mm分ss秒 。</span>
+        objectMapper.setDateFormat(<span class="hljs-keyword">new</span> SimpleDateFormat(<span class="hljs-string">"yyyy年MM月dd日 HH时mm分ss秒"</span>));
+
+        objectMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, <span class="hljs-keyword">true</span>);
+        objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, <span class="hljs-keyword">true</span>);
+        objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, <span class="hljs-keyword">true</span>);
+        objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, <span class="hljs-keyword">true</span>);
+
+        <span class="hljs-comment">// json串以良好的格式输出。</span>
+        objectMapper.configure(SerializationFeature.INDENT_OUTPUT, <span class="hljs-keyword">true</span>);
+
+        <span class="hljs-comment">// 当属性为空或有问题时不参与序列化。</span>
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, <span class="hljs-keyword">false</span>);
+
+        <span class="hljs-comment">// 未知的属性不参与反序列化。</span>
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, <span class="hljs-keyword">false</span>);
+        
+        <span class="hljs-keyword">if</span> (log.isInfoEnabled()) {
+            log.info(<span class="hljs-string">"create objectMapper done."</span>);
+        }
+        <span class="hljs-keyword">return</span> objectMapper;
+    }
+
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">extendMessageConverters</span><span class="hljs-params">(List&lt;HttpMessageConverter&lt;?&gt;&gt; converters)</span> </span>{
+        ObjectMapper objectMapper = createObjectMapper();
+        MappingJackson2HttpMessageConverter convertor = <span class="hljs-keyword">new</span> MappingJackson2HttpMessageConverter(objectMapper);
+        converters.add(<span class="hljs-number">0</span>, convertor);
+    }
+
+}
+</code></pre>
+<p>首先我们用<code>createObjectMapper()</code>方法自己创建一个 ObjectMapper 对象，ObjectMapper 是由开源项目 Jackson 提供的一个高性能 json 处理工具，它提供了 json 与 java 对象互相转化能力，并且有非常强大的可配置性，比如下面这行代码：</p>
+<pre class="hljs java"><code class="java">        <span class="hljs-comment">// Date 对象在序列化时，格式为 yyyy年MM月dd日 HH时mm分ss秒 。</span>
+        objectMapper.setDateFormat(<span class="hljs-keyword">new</span> SimpleDateFormat(<span class="hljs-string">"yyyy年MM月dd日 HH时mm分ss秒"</span>));
+</code></pre>
+<p>它的意思是说，可以把 Date 类型的对象，转成自己希望的日期格式。<br>
+当然 ObjectMapper 还有很多配置项，就不一一详述了，有兴趣的朋友们可以自行在网上查找相关资料了解。</p>
+<p>然后我们将自定义的 HttpMessageConverter 注入到 Spring MVC中，如下代码所示：</p>
+<pre class="hljs java"><code class="java">    <span class="hljs-meta">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">extendMessageConverters</span><span class="hljs-params">(List&lt;HttpMessageConverter&lt;?&gt;&gt; converters)</span> </span>{
+        ObjectMapper objectMapper = createObjectMapper();
+        MappingJackson2HttpMessageConverter convertor = <span class="hljs-keyword">new</span> MappingJackson2HttpMessageConverter(objectMapper);
+        converters.add(<span class="hljs-number">0</span>, convertor);
+    }
+</code></pre>
+<p>Spring MVC 中可能有很多 HttpMessageConverter 对象，运行时是从 converters 列表中遍历，直到找到了一个 HttpMessageConverter 对象能处理当前的HTTP请求为止。<br>
+我们要把自己的 HttpMessageConverter 对象加到 converters 列表的第1位，以便获得最高优先权，如代码： <code>converters.add(0, convertor);</code><br>
+我们使用了 jackson 项目提供的现成的 MappingJackson2HttpMessageConverter 类（它实现了 HttpMessageConverter 接口），我们只要把自己创建的 ObjectMapper 对象传进去就可以了。</p>
+<p>最后，我们用 @Import 注解在主程序中引入这个类，代码如下：</p>
+<pre class="hljs java"><code class="java"><span class="hljs-keyword">package</span> com.terran4j.springboot.web;
+
+<span class="hljs-keyword">import</span> org.springframework.boot.SpringApplication;
+<span class="hljs-keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;
+<span class="hljs-keyword">import</span> org.springframework.context.annotation.Import;
+
+<span class="hljs-meta">@Import</span>(HelloWebMvcConfigurer.class)
+<span class="hljs-meta">@SpringBootApplication</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HelloWebApp</span> </span>{
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>{
+        SpringApplication.run(HelloWebApp.class, args);
+    }
+
+}
+</code></pre>
+<p>上面的 <code>@Import(HelloWebMvcConfigurer.class)</code> 就引入了我们定义的 HelloWebMvcConfigurer 类到主程序中。</p>
+<p>最后，我们运行主程序，在浏览器输入URL：</p>
+<pre class="hljs cpp"><code class="cpp">http:<span class="hljs-comment">//localhost:8080/hello3?name=terran4j</span>
+</code></pre>
+<p>结果如下：</p>
+<div class="image-package">
+<div class="image-container" style="max-width: 401px; max-height: 149px; background-color: transparent;">
+<div class="image-container-fill" style="padding-bottom: 37.16%;"></div>
+<div class="image-view" data-width="401" data-height="149"><img data-original-src="//upload-images.jianshu.io/upload_images/4489584-754b497c0916ccb2.png" data-original-width="401" data-original-height="149" data-original-format="image/png" data-original-filesize="4530" class="" style="cursor: zoom-in;" src="./第二章 Spring Boot MVC - 简书_files/4489584-754b497c0916ccb2.png"></div>
+</div>
+<div class="image-caption">引入 HelloWebMvcConfigurer 之后的结果</div>
+</div>
+<p>与之前的 json 串结果相比，格式变优雅了，Date 的显示格式也易读了：</p>
+<br>
+<div class="image-package">
+<div class="image-container" style="max-width: 486px; max-height: 106px; background-color: transparent;">
+<div class="image-container-fill" style="padding-bottom: 21.81%;"></div>
+<div class="image-view" data-width="486" data-height="106"><img data-original-src="//upload-images.jianshu.io/upload_images/4489584-7988c66045dcb1c8.png" data-original-width="486" data-original-height="106" data-original-format="image/png" data-original-filesize="5536" class="" style="cursor: zoom-in;" src="./第二章 Spring Boot MVC - 简书_files/4489584-7988c66045dcb1c8.png"></div>
+</div>
+<div class="image-caption">引入 HelloWebMvcConfigurer 之前的结果</div>
+</div>
+<h2>总结说明</h2>
+<p>本章是《<a href="https://www.jianshu.com/nb/14688855?order_by=seq" target="_blank"> Spring Boot 快速入门 </a>》系列的第二章，本章我们讲解了如何使用 Spring Boot 开发 Http Restful 服务，下一章我们会讲解在 Spring Boot 中如何访问数据库，欢迎大家继续学习下一章《 Spring Boot JPA 》。</p>
+<p>点击<a href="https://www.jianshu.com/nb/14688855?order_by=seq" target="_blank"> 这里 </a> 可以查看本系列的全部章节。<br>
+（本系列的目标是帮助有 Java 开发经验的程序员们快速掌握使用 Spring Boot 开发的基本技巧，感受到 Spring Boot 的极简开发风格及超爽编程体验。）</p>
+<p>另外，我们有一个名为 <strong>SpringBoot及微服务</strong> 的微信公众号，感兴趣的同学请扫描下面的二维码关注下吧，关注后就可以收到我们定期分享的技术干货哦！<br>
+</p><div class="image-package">
+<div class="image-container" style="max-width: 258px; max-height: 258px; background-color: transparent;">
+<div class="image-container-fill" style="padding-bottom: 100.0%;"></div>
+<div class="image-view" data-width="258" data-height="258"><img data-original-src="//upload-images.jianshu.io/upload_images/4489584-f4f91efb322bd92c.jpg" data-original-width="258" data-original-height="258" data-original-format="image/jpeg" data-original-filesize="28133" class="" style="cursor: zoom-in;" src="./第二章 Spring Boot MVC - 简书_files/4489584-f4f91efb322bd92c.jpg"></div>
+</div>
+<div class="image-caption">SpringBoot及微服务-公众号二维码</div>
+</div><p></p>
+
+          </div>
+        </div>
+    </div>
+
+    <!-- 如果是付费文章，未购买，则显示购买按钮 -->
+
+    <!-- 连载目录项 -->
+
+    <!-- 如果是付费文章 -->
+      <!-- 如果是付费连载，已购买，且作者允许赞赏，则显示付费信息和赞赏 -->
+        <div id="free-reward-panel" class="support-author"><p>小礼物走一走，来简书关注我</p> <div class="btn btn-pay">赞赏支持</div> <div class="supporter"><ul class="support-list"></ul> <!----></div> <!----> <!----></div>
+
+      <div class="show-foot">
+        <a class="notebook" href="https://www.jianshu.com/nb/14688855">
+          <i class="iconfont ic-search-notebook"></i>
+          <span>Spring Boot 快速入门</span>
+</a>        <div class="copyright" data-toggle="tooltip" data-html="true" data-original-title="转载请联系作者获得授权，并标注“简书作者”。">
+          © 著作权归作者所有
+        </div>
+        <div class="modal-wrap" data-report-note="">
+          <a id="report-modal">举报文章</a>
+        </div>
+      </div>
+
+      <!-- 文章底部作者信息 -->
+        <div class="follow-detail">
+          <div class="info">
+            <a class="avatar" href="https://www.jianshu.com/u/25f9dd9ea218">
+              <img src="./第二章 Spring Boot MVC - 简书_files/3e7e3aae-fde1-4acb-8a17-4cce8b0765a5.jpg" alt="96">
+</a>            <a class="btn btn-success follow"><i class="iconfont ic-follow"></i><span>关注</span></a>
+            <a class="title" href="https://www.jianshu.com/u/25f9dd9ea218">terran4j</a>
+          <p>写了 23842 字，被 27 人关注，获得了 31 个喜欢</p></div>
+        </div>
+
+    <div class="meta-bottom">
+      <div data-v-6ddd02c6="" class="like"><div data-v-6ddd02c6="" class="btn like-group"><div data-v-6ddd02c6="" class="btn-like"><a data-v-6ddd02c6="">喜欢</a></div> <div data-v-6ddd02c6="" class="modal-wrap"><a data-v-6ddd02c6="">2</a></div></div> <!----></div>
+      <div class="share-group">
+        <a class="share-circle" data-action="weixin-share" data-toggle="tooltip" data-original-title="分享到微信">
+          <i class="iconfont ic-wechat"></i>
+        </a>
+        <a class="share-circle" data-action="weibo-share" data-toggle="tooltip" href="javascript:void((function(s,d,e,r,l,p,t,z,c){var%20f=&#39;http://v.t.sina.com.cn/share/share.php?appkey=1881139527&#39;,u=z||d.location,p=[&#39;&amp;url=&#39;,e(u),&#39;&amp;title=&#39;,e(t||d.title),&#39;&amp;source=&#39;,e(r),&#39;&amp;sourceUrl=&#39;,e(l),&#39;&amp;content=&#39;,c||&#39;gb2312&#39;,&#39;&amp;pic=&#39;,e(p||&#39;&#39;)].join(&#39;&#39;);function%20a(){if(!window.open([f,p].join(&#39;&#39;),&#39;mb&#39;,[&#39;toolbar=0,status=0,resizable=1,width=440,height=430,left=&#39;,(s.width-440)/2,&#39;,top=&#39;,(s.height-430)/2].join(&#39;&#39;)))u.href=[f,p].join(&#39;&#39;);};if(/Firefox/.test(navigator.userAgent))setTimeout(a,0);else%20a();})(screen,document,encodeURIComponent,&#39;&#39;,&#39;&#39;,&#39;&#39;, &#39;推荐 terran4j 的文章《第二章 Spring Boot MVC》（ 分享自 @简书 ）&#39;,&#39;https://www.jianshu.com/p/e2d44f38287e?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=weibo&#39;,&#39;页面编码gb2312|utf-8默认gb2312&#39;));" data-original-title="分享到微博">
+          <i class="iconfont ic-weibo"></i>
+        </a>
+        <a class="share-circle" data-toggle="tooltip" id="longshare" target="_blank" data-original-title="" title="">
+            <div class="qrcode" id="qrcode">
+             <img src="./第二章 Spring Boot MVC - 简书_files/download-index-side-qrcode-cb13fc9106a478795f8d10f9f632fccf.png" alt="Download index side qrcode">
+             <p>下载app生成长微博图片</p>
+             </div>
+          <i class="iconfont ic-picture"></i>
+        </a>
+        <a class="share-circle more-share" tabindex="0" data-toggle="popover" data-placement="top" data-html="true" data-trigger="focus" href="javascript:void(0);" data-content="
+          &lt;ul class=&quot;share-list&quot;&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=&#39;+e(&#39;https://www.jianshu.com/p/e2d44f38287e?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=qzone&#39;)+&#39;&amp;title=&#39;+e(&#39;推荐 terran4j 的文章《第二章 Spring Boot MVC》&#39;),x=function(){if(!window.open(r,&#39;qzone&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=600,height=600&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-zone&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到QQ空间&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://twitter.com/share?url=&#39;+e(&#39;https://www.jianshu.com/p/e2d44f38287e?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=twitter&#39;)+&#39;&amp;text=&#39;+e(&#39;推荐 terran4j 的文章《第二章 Spring Boot MVC》（ 分享自 @jianshucom ）&#39;)+&#39;&amp;related=&#39;+e(&#39;jianshucom&#39;),x=function(){if(!window.open(r,&#39;twitter&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=600,height=600&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-twitter&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到Twitter&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://www.facebook.com/dialog/share?app_id=483126645039390&amp;display=popup&amp;href=https://www.jianshu.com/p/e2d44f38287e?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=facebook&#39;,x=function(){if(!window.open(r,&#39;facebook&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-facebook&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到Facebook&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://plus.google.com/share?url=&#39;+e(&#39;https://www.jianshu.com/p/e2d44f38287e?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=google_plus&#39;),x=function(){if(!window.open(r,&#39;google_plus&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-google&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到Google+&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,s1=window.getSelection,s2=d.getSelection,s3=d.selection,s=s1?s1():s2?s2():s3?s3.createRange().text:&#39;&#39;,r=&#39;http://www.douban.com/recommend/?url=&#39;+e(&#39;https://www.jianshu.com/p/e2d44f38287e?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=douban&#39;)+&#39;&amp;title=&#39;+e(&#39;第二章 Spring Boot MVC&#39;)+&#39;&amp;sel=&#39;+e(s)+&#39;&amp;v=1&#39;,x=function(){if(!window.open(r,&#39;douban&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r+&#39;&amp;r=1&#39;};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})()&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-douban&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到豆瓣&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+          &lt;/ul&gt;
+        " data-original-title="" title="">更多分享</a>
+      </div>
+    </div>
+
+      <a id="web-note-ad-1" target="_blank" href="https://www.jianshu.com/apps/redirect?utm_source=note-bottom-click"><img src="./第二章 Spring Boot MVC - 简书_files/web-note-ad-1-c2e1746859dbf03abe49248893c9bea4.png" alt="Web note ad 1"></a>
+
+    <!--
+    <div id="note-comment-above-ad-container">
+      <span id="youdao-comment-ad" class="ad-badge">广告</span>
+    </div>
+    -->
+    <div><div id="comment-list" class="comment-list"><div><form class="new-comment"><a class="avatar"><img src="./第二章 Spring Boot MVC - 简书_files/avatar_default-78d4d1f68984cd6d4379508dd94b4210.png"></a> <div class="sign-container"><a href="https://www.jianshu.com/sign_in?utm_source=desktop&amp;utm_medium=not-signed-in-comment-form" class="btn btn-sign">登录</a> <span>后发表评论</span></div></form> <!----></div> <!----> <div class="comments-placeholder" style="display: none;"><div class="author"><div class="avatar"></div> <div class="info"><div class="name"></div> <div class="meta"></div></div></div> <div class="text"></div> <div class="text animation-delay"></div> <div class="tool-group"><i class="iconfont ic-zan-active"></i><div class="zan"></div> <i class="iconfont ic-list-comments"></i><div class="zan"></div></div></div> <div id="normal-comment-list" class="normal-comment-list"><div><div><div class="top-title"><span>1条评论</span> <a class="author-only">只看作者</a> <a class="close-btn" style="display: none;">关闭评论</a> <div class="pull-right"><a class="active">按时间倒序</a><a class="">按时间正序</a></div></div></div> <!----> <!----> <div class="comments-placeholder" style="display: none;"><div class="author"><div class="avatar"></div> <div class="info"><div class="name"></div> <div class="meta"></div></div></div> <div class="text"></div> <div class="text animation-delay"></div> <div class="tool-group"><i class="iconfont ic-zan-active"></i><div class="zan"></div> <i class="iconfont ic-list-comments"></i><div class="zan"></div></div></div> <div id="comment-29890491" class="comment"><div><div class="author"><div data-v-f3bf5228="" class="v-tooltip-container" style="z-index: 0;"><div class="v-tooltip-content"><a href="https://www.jianshu.com/u/c1e83ff09cae" target="_blank" class="avatar"><img src="./第二章 Spring Boot MVC - 简书_files/a699b723-b326-45c9-9a83-68a25acf7258.jpg"></a>  </div> <!----></div> <div class="info"><a href="https://www.jianshu.com/u/c1e83ff09cae" target="_blank" class="name">阿懒土灵</a> <!----> <!----> <div class="meta"><span>2楼 · 2018.10.22 23:43</span></div></div></div> <div class="comment-wrap"><p>请问以下，如果返回的对象为null，我要返回这种格式该怎么做：data:{}</p> <!----> <div class="tool-group"><a data-v-cdecbe24="" id="like-button-29890491" class="like-button"><span data-v-cdecbe24="">赞</span></a> <a class=""><i class="iconfont ic-comment"></i> <span>回复</span></a> <!----> <!----></div></div></div> <div class="sub-comment-list hide"><!----> <!----></div></div></div></div> <!----> <div><!----></div></div></div>
+  </div>
+
+  <div class="side-tool"><ul><li data-placement="left" data-toggle="tooltip" data-container="body" data-original-title="回到顶部" style=""><a class="function-button"><i class="iconfont ic-backtop"></i></a></li> <!----> <!----> <!----> <!----> <li data-placement="left" data-toggle="tooltip" data-container="body" data-original-title="分享文章" id="share"><a tabindex="0" role="button" data-toggle="popover" data-placement="left" data-html="true" data-trigger="focus" href="javascript:void(0);" data-content="&lt;ul class=&#39;share-list&#39; style=&quot;width:220px&quot;&gt;
+                  &lt;li&gt;&lt;a class=&quot;weixin-share&quot;&gt;&lt;i class=&quot;social-icon-sprite social-icon-weixin&quot;&gt;&lt;/i&gt;&lt;span&gt;分享到微信&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                  &lt;li&gt;&lt;a href=&quot;javascript:void((function(s,d,e,r,l,p,t,z,c){var%20f=&#39;http://v.t.sina.com.cn/share/share.php?appkey=1881139527&#39;,u=z||d.location,p=[&#39;&amp;url=&#39;,e(u),&#39;&amp;title=&#39;,e(t||d.title),&#39;&amp;source=&#39;,e(r),&#39;&amp;sourceUrl=&#39;,e(l),&#39;&amp;content=&#39;,c||&#39;gb2312&#39;,&#39;&amp;pic=&#39;,e(p||&#39;&#39;)].join(&#39;&#39;);function%20a(){if(!window.open([f,p].join(&#39;&#39;),&#39;mb&#39;,[&#39;toolbar=0,status=0,resizable=1,width=440,height=430,left=&#39;,(s.width-440)/2,&#39;,top=&#39;,(s.height-430)/2].join(&#39;&#39;)))u.href=[f,p].join(&#39;&#39;);};if(/Firefox/.test(navigator.userAgent))setTimeout(a,0);else%20a();})(screen,document,encodeURIComponent,&#39;&#39;,&#39;&#39;,&#39;&#39;, &#39;推荐 terran4j 的文章《第二章 Spring Boot MVC》（ 分享自 @简书 ）&#39;,&#39;https://www.jianshu.com/p/e2d44f38287e?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=weibo&#39;,&#39;页面编码gb2312|utf-8默认gb2312&#39;));&quot;&gt;&lt;i class=&#39;social-icon-sprite social-icon-weibo&#39;&gt;&lt;/i&gt;&lt;span&gt;分享到微博&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                  
+                  &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=&#39;+e(&#39;https://www.jianshu.com/p/e2d44f38287e?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=qzone&#39;)+&#39;&amp;title=&#39;+e(&#39;推荐 terran4j 的文章《第二章 Spring Boot MVC》&#39;),x=function(){if(!window.open(r,&#39;qzone&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=600,height=600&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&#39;social-icon-sprite social-icon-zone&#39;&gt;&lt;/i&gt;&lt;span&gt;分享到QQ空间&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                  &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://twitter.com/share?url=&#39;+e(&#39;https://www.jianshu.com/p/e2d44f38287e?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=twitter&#39;)+&#39;&amp;text=&#39;+e(&#39;推荐 terran4j 的文章《第二章 Spring Boot MVC》（ 分享自 @jianshucom ）&#39;)+&#39;&amp;related=&#39;+e(&#39;jianshucom&#39;),x=function(){if(!window.open(r,&#39;twitter&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=600,height=600&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&#39;social-icon-sprite social-icon-twitter&#39;&gt;&lt;/i&gt;&lt;span&gt;分享到Twitter&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                  &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://www.facebook.com/dialog/share?app_id=483126645039390&amp;display=popup&amp;href=https://www.jianshu.com/p/e2d44f38287e?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=facebook&#39;,x=function(){if(!window.open(r,&#39;facebook&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&#39;social-icon-sprite social-icon-facebook&#39;&gt;&lt;/i&gt;&lt;span&gt;分享到Facebook&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                  &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,r=&#39;https://plus.google.com/share?url=&#39;+e(&#39;https://www.jianshu.com/p/e2d44f38287e?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=google_plus&#39;),x=function(){if(!window.open(r,&#39;google_plus&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})();&quot;&gt;&lt;i class=&#39;social-icon-sprite social-icon-google&#39;&gt;&lt;/i&gt;&lt;span&gt;分享到Google+&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                  &lt;li&gt;&lt;a href=&quot;javascript:void(function(){var d=document,e=encodeURIComponent,s1=window.getSelection,s2=d.getSelection,s3=d.selection,s=s1?s1():s2?s2():s3?s3.createRange().text:&#39;&#39;,r=&#39;http://www.douban.com/recommend/?url=&#39;+e(&#39;https://www.jianshu.com/p/e2d44f38287e?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=reader_share&amp;utm_source=douban&#39;)+&#39;&amp;title=&#39;+e(&#39;第二章 Spring Boot MVC&#39;)+&#39;&amp;sel=&#39;+e(s)+&#39;&amp;v=1&#39;,x=function(){if(!window.open(r,&#39;douban&#39;,&#39;toolbar=0,resizable=1,scrollbars=yes,status=1,width=450,height=330&#39;))location.href=r+&#39;&amp;r=1&#39;};if(/Firefox/.test(navigator.userAgent)){setTimeout(x,0)}else{x()}})()&quot;&gt;&lt;i class=&#39;social-icon-sprite social-icon-douban&#39;&gt;&lt;/i&gt;&lt;span&gt;分享到豆瓣&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                &lt;/ul&gt;" data-original-title="" title="" class="function-button"><i class="iconfont ic-share"></i></a> <!----></li> <!----></ul></div>
+</div>
+<div class="note-bottom">
+  <div><div class="main"><div class="title">被以下专题收入，发现更多相似内容</div> <!----> <div class="include-collection"><!----> <a href="https://www.jianshu.com/c/7847442e0728?utm_source=desktop&amp;utm_medium=notes-included-collection" target="_blank" class="item"><img src="./第二章 Spring Boot MVC - 简书_files/CodeHeader-1920x1200.jpg"><div class="name">我爱编程</div></a> <!----></div></div> <!----> <!----></div>
+  <div data-vcomp="recommended-notes" data-note-id="15215712"></div>
+  <!-- 相关文章 -->
+    <!-- 未登录用户 -->
+    <div class="seo-recommended-notes">
+
+          <div class="note ">
+                        <a class="title" target="_blank" href="https://www.jianshu.com/p/67a0e41dfe05?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">Spring boot参考指南</a>
+            <p class="description">Spring Boot 参考指南 介绍 转载自:https://www.gitbook.com/book/qbgbook/spring-boot-reference-guide-zh/details带目录浏览地址:http://www.maoyupeng.com/sprin...</p>
+            <a class="author" target="_blank" href="https://www.jianshu.com/u/d3ea915e1e0f?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+              <div class="avatar">
+                <img src="./第二章 Spring Boot MVC - 简书_files/9b5b9b6de8b7.jpg" alt="48">
+              </div>
+              <span class="name">毛宇鹏</span>
+</a>          </div>
+
+          <div class="note have-img">
+            <a class="cover" target="_blank" href="https://www.jianshu.com/p/46fd0faecac1?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+              <img src="./第二章 Spring Boot MVC - 简书_files/7328262-54f7992145380c10.png" alt="240">
+</a>            <a class="title" target="_blank" href="https://www.jianshu.com/p/46fd0faecac1?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">Spring Cloud</a>
+            <p class="description">Spring Cloud为开发人员提供了快速构建分布式系统中一些常见模式的工具（例如配置管理，服务发现，断路器，智能路由，微代理，控制总线）。分布式系统的协调导致了样板模式, 使用Spring Cloud开发人员可以快速地支持实现这些模式的服务和应用程序。他们将在任何分布式...</p>
+            <a class="author" target="_blank" href="https://www.jianshu.com/u/d90908cb0d85?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+              <div class="avatar">
+                <img src="./第二章 Spring Boot MVC - 简书_files/2-9636b13945b9ccf345bc98d0d81074eb.jpg" alt="48">
+              </div>
+              <span class="name">卡卡罗2017</span>
+</a>          </div>
+
+          <div class="note have-img">
+            <a class="cover" target="_blank" href="https://www.jianshu.com/p/989fa1d43849?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+              <img src="./第二章 Spring Boot MVC - 简书_files/1233356-a5d1edf135c517c9.png" alt="240">
+</a>            <a class="title" target="_blank" href="https://www.jianshu.com/p/989fa1d43849?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">《Spring Boot开发：从0到1》大纲结构</a>
+            <p class="description">《Spring Boot开发：从0到1》 大纲结构v2.0 第一部分Spring Boot基础 第1章 Spring Boot史前简述1.1 J2EE（Java 2 Platform Enterprise Edition）简介1.2 Java企业级开发框架概述1.3 Spr...</p>
+            <a class="author" target="_blank" href="https://www.jianshu.com/u/c55c7a9c8de6?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+              <div class="avatar">
+                <img src="./第二章 Spring Boot MVC - 简书_files/7babd7d8-2ad8-489b-b739-68db16892840.jpg" alt="48">
+              </div>
+              <span class="name">一个会写诗的程序员</span>
+</a>          </div>
+
+          <div class="note have-img">
+            <a class="cover" target="_blank" href="https://www.jianshu.com/p/094b68778ef4?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+              <img src="./第二章 Spring Boot MVC - 简书_files/2888418-8d2e90d6d887dc12" alt="240">
+</a>            <a class="title" target="_blank" href="https://www.jianshu.com/p/094b68778ef4?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">无标题文章</a>
+            <p class="description">spring官方文档：http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/一、Spring框架概述Spring框架是一个轻量级的解决方案，可以一站式地构建企业级应用。...</p>
+            <a class="author" target="_blank" href="https://www.jianshu.com/u/f109f1576a46?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+              <div class="avatar">
+                <img src="./第二章 Spring Boot MVC - 简书_files/aaf7b0e6a9f9.jpg" alt="48">
+              </div>
+              <span class="name">牛马风情</span>
+</a>          </div>
+
+          <div class="note have-img">
+            <a class="cover" target="_blank" href="https://www.jianshu.com/p/9ca24265292f?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+              <img src="./第二章 Spring Boot MVC - 简书_files/6560373-bfd7365f887b5011.jpg" alt="240">
+</a>            <a class="title" target="_blank" href="https://www.jianshu.com/p/9ca24265292f?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">长大一一献给而立之年的女儿</a>
+            <p class="description">在小女十岁左右时就很想写一篇我家有女初长成的文章，来記叙小女的成长，一晃就二十多年过去了，感觉时间过去的好快好快，如梦如幻，一下子就从身边滑走，女儿好像只一会儿功夫就长大成人了，如今也成女儿的妈妈了。 女儿出生于一九八六年一个盛夏，经过七小时的阵痛，降生于子时，当得知是女儿...</p>
+            <a class="author" target="_blank" href="https://www.jianshu.com/u/2b196bc10dde?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+              <div class="avatar">
+                <img src="./第二章 Spring Boot MVC - 简书_files/3cffdb45-30da-4437-8ec2-07474b0884c6" alt="48">
+              </div>
+              <span class="name">五蕴皆空行者</span>
+</a>          </div>
+
+          <div class="note have-img">
+            <a class="cover" target="_blank" href="https://www.jianshu.com/p/2ddb0cda93bf?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+              <img src="./第二章 Spring Boot MVC - 简书_files/1278309-3b9643859a5503a3.jpg" alt="240">
+</a>            <a class="title" target="_blank" href="https://www.jianshu.com/p/2ddb0cda93bf?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">理发记</a>
+            <p class="description">一 今天是二月二龙抬头的日子，我就来写写关于理发的事吧。 记得在我很小的时候，我看到很多故事里的小孩子都不喜欢去理发，于是我也就认为那是一件很可怕的事情，就也很不喜欢去理发。 我不喜欢理发的原因其实还有一个，就是在那个年代理发师们所用的推子经常会因为老化缺油而发出一种很刺耳...</p>
+            <a class="author" target="_blank" href="https://www.jianshu.com/u/890e546cbeaa?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+              <div class="avatar">
+                <img src="./第二章 Spring Boot MVC - 简书_files/971b16dac618.jpeg" alt="48">
+              </div>
+              <span class="name">疯岩疯语sun</span>
+</a>          </div>
+
+          <div class="note have-img">
+            <a class="cover" target="_blank" href="https://www.jianshu.com/p/4c2330954dee?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+              <img src="./第二章 Spring Boot MVC - 简书_files/5418568-b8c8a6f7041ec159.jpeg" alt="240">
+</a>            <a class="title" target="_blank" href="https://www.jianshu.com/p/4c2330954dee?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">原创 苍天圣地阿拉善全域旅游品牌引人关注 郝小学</a>
+            <p class="description">苍天圣地阿拉善全域旅游品牌推介会在河北召开 阿拉善旅游资源推介会开始 现场 阿拉善盟旅游发展委员会墨孟军致辞 阿拉善盟旅游发展委员会娜布琪介绍优惠政策 马慧琴阿拉善右旗旅游资源推介 ​ 额济纳旗旅游资源推介 河北中联旅业李颖精品旅游线路推介  文\图   郝小学  刘刚  ...</p>
+            <a class="author" target="_blank" href="https://www.jianshu.com/u/7c79e2d3f3f2?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+              <div class="avatar">
+                <img src="./第二章 Spring Boot MVC - 简书_files/c7449f43-0ec1-4dae-83ac-68455465967e.jpg" alt="48">
+              </div>
+              <span class="name">新媒体联盟</span>
+</a>          </div>
+
+          <div class="note have-img">
+            <a class="cover" target="_blank" href="https://www.jianshu.com/p/ed138b3046a3?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+              <img src="./第二章 Spring Boot MVC - 简书_files/1601266-4645a685f7788d7f.jpg" alt="240">
+</a>            <a class="title" target="_blank" href="https://www.jianshu.com/p/ed138b3046a3?utm_campaign=maleskine&amp;utm_content=note&amp;utm_medium=seo_notes&amp;utm_source=recommendation">人格教育决定孩子幸福 ——培养幸福的孩子</a>
+            <p class="description">近年来，关于中小学生自杀的新闻屡见报端，让人扼腕叹息。如2016年6月，娄底新化实验小学，六年级毕业生12岁的小吴因不满座位摆放在学校跳楼身亡。小吴是一个活泼开朗的孩子，也是当天毕业典礼的主持人。为了毕业典礼他提前一天组织同学们将座椅摆成“回”字形，但当天上课，老师要求将桌...</p>
+            <a class="author" target="_blank" href="https://www.jianshu.com/u/ccea1473a5c9?utm_campaign=maleskine&amp;utm_content=user&amp;utm_medium=seo_notes&amp;utm_source=recommendation">
+              <div class="avatar">
+                <img src="./第二章 Spring Boot MVC - 简书_files/982b2b92-3d10-472d-b230-fc41b62a4563.jpg" alt="48">
+              </div>
+              <span class="name">晶亮晶</span>
+</a>          </div>
+    </div>
+</div>
+
+    <script type="application/json" data-name="page-data">{"user_signed_in":false,"locale":"zh-CN","os":"mac","read_mode":"day","read_font":"font2","note_show":{"is_author":false,"is_following_author":false,"is_liked_note":false,"follow_state":0,"uuid":"0d2ed7ea-a2cf-4932-9201-118f7f7ea8f8"},"note":{"id":15215712,"slug":"e2d44f38287e","user_id":4489584,"notebook_id":14688855,"commentable":true,"likes_count":2,"views_count":2162,"public_wordage":2215,"comments_count":1,"featured_comments_count":0,"total_rewards_count":0,"is_author":false,"paid_type":"free","paid":false,"paid_content_accessible":false,"author":{"nickname":"terran4j","total_wordage":23842,"followers_count":27,"total_likes_count":31}}}</script>
+    
+    <script src="./第二章 Spring Boot MVC - 简书_files/babel-polyfill-6cd2d6b53fe3184b71cc.js" crossorigin="anonymous"></script>
+    <script src="./第二章 Spring Boot MVC - 简书_files/web-base-3b7a998a7b10ca934883.js" crossorigin="anonymous"></script>
+<script src="./第二章 Spring Boot MVC - 简书_files/web-e6b84e754666e4009b66.js" crossorigin="anonymous"></script>
+    
+    <script src="./第二章 Spring Boot MVC - 简书_files/entry-82e44627b2e2d73431d6.js" crossorigin="anonymous"></script>
+    <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+
+  
+
+<!----><!----></body></html>

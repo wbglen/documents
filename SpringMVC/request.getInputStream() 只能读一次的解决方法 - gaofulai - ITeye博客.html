@@ -1,0 +1,990 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0043)https://gaofulai1988.iteye.com/blog/2264755 -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" dir="ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script type="text/javascript" async="" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/lclm"></script><script type="text/javascript" async="" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/lclm(1)"></script><script type="text/javascript" async="" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/lclm(2)"></script>
+  
+  <title>
+    request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客
+  </title>
+  <meta name="description" content="我们知道request.getInputStream()只能读一次，如果下一次读，就会报告Stream closed的错误。下面是解决方法。   InputStream input =  request.getInputStream();                        ByteArrayOutputStream bytebuffer= new ByteArrayOutputStrea ...">
+  <meta name="keywords" content="request.getInputStream() 只能读一次的解决方法 request.getInputStream() 只能读一次的解决方法">
+  <link rel="shortcut icon" href="https://gaofulai1988.iteye.com/images/favicon.ico" type="image/x-icon">
+  <link rel="search" type="application/opensearchdescription+xml" href="https://gaofulai1988.iteye.com/open_search.xml" title="ITeye">
+  <link href="https://gaofulai1988.iteye.com/rss" rel="alternate" title="gaofulai" type="application/rss+xml">
+  <link href="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/blog.css" media="screen" rel="stylesheet" type="text/css">
+<link href="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/blue.css" media="screen" rel="stylesheet" type="text/css">
+  <script type="text/javascript" async="" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/auto_dup"></script><script src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/hm.js"></script><script type="text/javascript" async="" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/analytics.js"></script><script src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/hm(1).js"></script><script src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/application.js" type="text/javascript"></script>
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?e19a8b00cf63f716d774540875007664";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+<style>
+/* 折叠效果 */
+.hide-main-content{
+    position: relative;
+}
+.hide-article-box {
+    display: none;
+    position: absolute;
+    z-index: 9999;
+    bottom: -1px;
+    width: 100%;
+    padding-top: 160px;
+    background-image: -webkit-gradient(linear,left top, left bottom,from(rgba(255,255,255,0)),color-stop(70%, #fff));
+    background-image: linear-gradient(-180deg,rgba(255,255,255,0) 0%,#fff 70%);
+}
+.hide-article-box #btn-readmore{
+    color: #ca0c16;
+    border: 1px solid #ca0c16;
+    margin: 10px auto;
+    padding: 0 8px;
+    display: block;
+    font-size: 14px;
+    border-radius: 4px;
+    text-align: center;
+    background-color: transparent;
+    height: 34px;
+    width: 74px;
+    line-height: 32px;
+    min-width: 72px;
+    cursor: pointer;
+}
+.hide-article-box #btn-readmore:hover{
+    background: #ca0c16;
+    color:#fff;
+    text-decoration: none;
+}
+</style>
+<!-- 因INS广告原因 需要提前引入jquery -->
+<script src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script type="text/javascript">var jQuery = jQuery.noConflict();// 解决jq与prototype.js命名空间冲突的问题</script>
+<script src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/fixed-sidebar.js" type="text/javascript"></script>
+
+    <link href="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/SyntaxHighlighter.css" media="screen" rel="stylesheet" type="text/css">
+  <script src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/shCoreCommon.js" type="text/javascript"></script>
+<script src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/hotkey.js" type="text/javascript"></script>
+  <script src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/code_favorites.js" type="text/javascript"></script>
+<script src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/weiboshare.js" type="text/javascript"></script>
+
+  <!-- 请置于所有广告位代码之前 -->
+  <script src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/ds.js"></script>
+  <link ref="canonical" href="http://gaofulai1988.iteye.com/blog/2264755">
+  <script src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/c.js"></script><style type="text/css">.dp-j .annotation { color: #646464; }.dp-j .number { color: #C00000; }</style><style type="text/css">.dp-j .annotation { color: #646464; }.dp-j .number { color: #C00000; }</style><link rel="stylesheet" type="text/css" href="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/recommend.css"><link rel="stylesheet" type="text/css" href="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/iconfont.css"></head><body><div id="BAIDU_DUP_fp_wrapper" style="position: absolute; left: -1px; bottom: -1px; z-index: 0; width: 0px; height: 0px; overflow: hidden; visibility: hidden; display: none;"><iframe id="BAIDU_DUP_fp_iframe" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/o.html" style="width: 0px; height: 0px; visibility: hidden; display: none;"></iframe></div><svg aria-hidden="true" style="position: absolute; width: 0px; height: 0px; overflow: hidden;"><symbol id="fanyi" viewBox="0 0 1084 1024"><path d="M602.416429 647.439059v75.390494h120.470588v-120.470588h-75.029082l195.493647-193.939577V481.882353h180.597459c33.322165 0 60.289506 26.967341 60.289506 60.235294 0 0.722824-0.012047 1.439624-0.036141 2.1504v236.640377c0.024094 0.710776 0.036141 1.427576 0.036141 2.1504 0 33.261929-26.967341 60.235294-60.235294 60.235294H843.357606v120.470588c0 33.261929-26.967341 60.229271-60.235294 60.22927s-60.235294-26.967341-60.235295-60.235294v-120.470588H542.090782c-33.267953 0-60.235294-26.967341-60.235294-60.235294l0.006024-16.022588 120.554917-119.597177z m240.935153-45.080094v120.470588h120.380235v-120.470588h-120.380235z m-403.534306-46.585977l-27.732329-67.861082H186.479676l-70.716235 167.936c-12.9024 30.659765-48.224376 45.056-78.884141 32.141553-30.659765-12.908424-45.049976-48.2304-32.141553-78.890165l240.941176-572.223247A60.253365 60.253365 0 0 1 301.782076 0.006024a60.253365 60.253365 0 0 1 56.380236 37.466352l174.242635 426.429742 352.798117-350.033318c23.612235-23.431529 61.7472-23.280941 85.17873 0.331294 23.431529 23.612235 23.280941 61.753224-0.331294 85.184753L200.394029 963.029835c-23.612235 23.431529-61.753224 23.280941-85.184753-0.331294-23.431529-23.612235-23.280941-61.753224 0.337318-85.184753l324.270682-321.7408z m-138.842353-339.787294L237.209841 367.441318H362.860664L300.974923 215.979671z"></path></symbol><symbol id="shouji" viewBox="0 0 1024 1024"><path d="M768 670.72V102.4H256v568.32h512z m0 51.2H256v199.68h512v-199.68z m102.4-619.52v819.2c0 56.55552-45.84448 102.4-102.4 102.4H256c-56.55552 0-102.4-45.84448-102.4-102.4V102.4C153.6 45.84448 199.44448 0 256 0h512c56.55552 0 102.4 45.84448 102.4 102.4zM512 870.4c-28.27776 0-51.2-22.92224-51.2-51.2s22.92224-51.2 51.2-51.2 51.2 22.92224 51.2 51.2-22.92224 51.2-51.2 51.2z"></path></symbol><symbol id="yuedushu" viewBox="0 0 1462 1024"><path d="M731.428571 1024c-259.320686 0-495.879314-146.753829-709.668571-440.246857-29.015771-39.840914-29.015771-103.665371 0-143.506286C235.556571 146.761143 472.107886 0 731.428571 0c259.320686 0 495.879314 146.753829 709.668572 440.246857 29.015771 39.840914 29.015771 103.665371 0 143.506286C1227.300571 877.238857 990.749257 1024 731.428571 1024z m0-841.142857c-195.2256 0-375.632457 107.132343-545.865142 329.142857 170.232686 222.010514 350.639543 329.142857 545.865142 329.142857 195.2256 0 375.632457-107.132343 545.865143-329.142857C1107.053714 289.989486 926.646857 182.857143 731.428571 182.857143z m0 621.714286c-161.579886 0-292.571429-130.991543-292.571428-292.571429s130.991543-292.571429 292.571428-292.571429 292.571429 130.991543 292.571429 292.571429-130.991543 292.571429-292.571429 292.571429z m0-182.857143c60.591543 0 109.714286-49.122743 109.714286-109.714286 0-60.591543-49.122743-109.714286-109.714286-109.714286-60.591543 0-109.714286 49.122743-109.714285 109.714286 0 60.591543 49.122743 109.714286 109.714285 109.714286z"></path></symbol></svg><script onload="window[&#39;cambrian_sync_loader_success15527492121223&#39;]()" onerror="window[&#39;cambrian_sync_loader_fail_15527492121223&#39;]()" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/main.8b2bc869.js"></script>
+  <script src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/recommend.js"></script><script language="javascript" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/iconfont.js"></script>
+
+
+
+  <div id="header">
+    <div id="blog_site_nav">
+  <a href="https://www.iteye.com/" class="homepage">首页</a>
+  <a href="https://www.iteye.com/news">资讯</a>
+  <a href="https://www.iteye.com/magazines">精华</a>
+  <a href="https://www.iteye.com/forums">论坛</a>
+  <a href="https://www.iteye.com/ask">问答</a>
+  <a href="https://www.iteye.com/blogs">博客</a>
+  <a href="https://www.iteye.com/blogs/subjects">专栏</a>
+  <a href="https://www.iteye.com/groups">群组</a>
+<!--  <a href="#" onclick="return false;" id="msna"><u>更多</u> <small>▼</small></a>-->
+<!--  <div class="quick_menu" style="display:none;">-->
+<!--    <a target="_blank" href="https://job.iteye.com/iteye">知识库</a>-->
+<!--    <a href="https:///search">搜索</a>-->
+<!--  </div>-->
+</div>
+
+    <div id="user_nav">
+
+      <a href="https://gaofulai1988.iteye.com/login" class="welcome" title="登录">您还未登录 !</a>
+    <a href="https://gaofulai1988.iteye.com/login">登录</a>
+    <!--<a href="/signup" class="nobg">注册</a>-->
+    <!--<a href="https://passport.csdn.net/account/mobileregister?from=https://www.iteye.com">注册</a>-->
+  </div>
+
+
+  </div>
+
+  <div id="page">
+<!--    <div id="branding" class="clearfix">-->
+<!--      <div id="blog_name">-->
+<!--        <h1><a href="/">-->
+<!--            </a></h1>-->
+<!--      </div>-->
+<!--      <div id='fd'></div>-->
+<!--      <div id="blog_navbar">-->
+<!--        <ul>-->
+          
+          
+          
+          
+          
+          
+<!--        </ul>-->
+
+<!--        <div class="search">-->
+<!--          <form action="/blog/search" method="get">-->
+<!--            <input class="search_text" id="query" name="query" style="margin-left: 10px;width: 110px;" type="text"-->
+<!--              value="" />-->
+<!--            <input class="submit_search" type="submit" value="" />-->
+<!--          </form>-->
+<!--        </div>-->
+<!--        <div id="fd"></div>-->
+<!--      </div>-->
+<!--    </div>-->
+    `
+    <div id="content" class="clearfix">
+      <div id="local">
+        <div class="local_top"></div>
+        <div id="blog_owner">
+  <div id="blog_owner_logo"><a href="https://gaofulai1988.iteye.com/"><img alt="以矫健身姿飞跃的博客" class="logo" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/user-logo.gif" title="以矫健身姿飞跃的博客: gaofulai" width=""></a></div>
+  <div id="blog_owner_name">以矫健身姿飞跃</div>
+</div>
+
+        <div id="blog_actions">
+          <ul>
+            <li>浏览:
+              20904 次</li>
+            
+            
+            <li>
+              <img src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/offline.gif">
+            </li>
+            
+          </ul>
+        </div>
+
+        <div id="user_visits" class="clearfix">
+          <h5>最近访客 <span style="font-weight:normal;font-size:12px;padding-left:30px;">
+              <a href="https://gaofulai1988.iteye.com/blog/user_visits">更多访客&gt;&gt;</a></span></h5>
+          
+          <div class="user_visit">
+            <div class="logo"><a href="https://jyyy410.iteye.com/" target="_blank"><img alt="jyyy410的博客" class="logo" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/user-logo-thumb.gif" title="jyyy410的博客: " width="48px"></a></div>
+            <div class="left">
+              <a href="https://jyyy410.iteye.com/" target="_blank" title="jyyy410">jyyy410</a>
+            </div>
+          </div>
+          
+          <div class="user_visit">
+            <div class="logo"><a href="https://353144988.iteye.com/" target="_blank"><img alt="353144988的博客" class="logo" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/user-logo-thumb.gif" title="353144988的博客: " width="48px"></a></div>
+            <div class="left">
+              <a href="https://353144988.iteye.com/" target="_blank" title="353144988">353144988</a>
+            </div>
+          </div>
+          
+          <div class="user_visit">
+            <div class="logo"><a href="https://zaq369cde.iteye.com/" target="_blank"><img alt="zaq369cde的博客" class="logo" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/8d3f7ba0-9b87-3f7a-8641-e39dd7696f1a-thumb.jpg" title="zaq369cde的博客: 那B小心" width="48px"></a></div>
+            <div class="left">
+              <a href="https://zaq369cde.iteye.com/" target="_blank" title="zaq369cde">zaq369cde</a>
+            </div>
+          </div>
+          
+          <div class="user_visit">
+            <div class="logo"><a href="https://mao103.iteye.com/" target="_blank"><img alt="mao103的博客" class="logo" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/070ecd6c-31ba-37ea-96bb-df2d1274e65b-thumb.jpg" title="mao103的博客: " width="48px"></a></div>
+            <div class="left">
+              <a href="https://mao103.iteye.com/" target="_blank" title="mao103">mao103</a>
+            </div>
+          </div>
+          
+        </div>
+
+        <div id="user_title_list" class="clearfix">
+          <h5>博主相关</h5>
+          <li>
+            <a href="https://gaofulai1988.iteye.com/">博客</a>
+          </li>
+
+          <li>
+            <a href="https://gaofulai1988.iteye.com/weibo">微博</a>
+          </li>
+
+          <li>
+            <a href="https://gaofulai1988.iteye.com/album">相册</a>
+          </li>
+
+          <li>
+            <a href="https://gaofulai1988.iteye.com/link">收藏</a>
+          </li>
+
+          <li>
+            <a href="https://gaofulai1988.iteye.com/blog/guest_book">留言</a>
+          </li>
+
+          <li>
+            <a href="https://gaofulai1988.iteye.com/blog/profile">关于我</a>
+          </li>
+        </div>
+
+        
+
+                <div id="blog_menu">
+          <h5>文章分类</h5>
+          <ul>
+            <li>
+              <a href="https://gaofulai1988.iteye.com/">全部博客 (60)</a>
+            </li>
+            
+            <li>
+              <a href="https://gaofulai1988.iteye.com/category/348441">JDK源码 (13)</a>
+              </li>
+              
+            <li>
+              <a href="https://gaofulai1988.iteye.com/category/348457">Netty (1)</a>
+              </li>
+              
+            <li>
+              <a href="https://gaofulai1988.iteye.com/category/348487">Mysql (9)</a>
+              </li>
+              
+            <li>
+              <a href="https://gaofulai1988.iteye.com/category/348508">AngularJS (4)</a>
+              </li>
+              
+            <li>
+              <a href="https://gaofulai1988.iteye.com/category/348585">Java (27)</a>
+              </li>
+              
+            <li>
+              <a href="https://gaofulai1988.iteye.com/category/349083">Redis (1)</a>
+              </li>
+              
+            <li>
+              <a href="https://gaofulai1988.iteye.com/category/349101">Jquery (1)</a>
+              </li>
+              
+            <li>
+              <a href="https://gaofulai1988.iteye.com/category/349189">java框架 (4)</a>
+              </li>
+              
+            <li>
+              <a href="https://gaofulai1988.iteye.com/category/351414">Hadoop (1)</a>
+              </li>
+              
+          </ul>
+        </div>
+        <div id="month_blogs">
+          <h5>社区版块</h5>
+          <ul>
+            <li>
+              <a href="https://gaofulai1988.iteye.com/blog/news">我的资讯</a> (
+              0)</li>
+            <li>
+              <a href="https://gaofulai1988.iteye.com/blog/post">我的论坛</a> (
+              0)
+            </li>
+            <li>
+              <a href="https://gaofulai1988.iteye.com/blog/answered_problems">我的问答</a> (
+              0)</li>
+          </ul>
+        </div>
+        <div id="month_blogs">
+          <h5>存档分类</h5>
+          <ul>
+            
+            <li>
+              <a href="https://gaofulai1988.iteye.com/blog/monthblog/2016-01">2016-01</a>
+              (
+              1)</li>
+            
+            <li>
+              <a href="https://gaofulai1988.iteye.com/blog/monthblog/2015-12">2015-12</a>
+              (
+              28)</li>
+            
+            <li>
+              <a href="https://gaofulai1988.iteye.com/blog/monthblog/2015-11">2015-11</a>
+              (
+              22)</li>
+            
+            <li>
+              <a href="https://gaofulai1988.iteye.com/blog/monthblog_more">更多存档...</a>
+            </li>
+          </ul>
+        </div>
+        
+        
+
+        <div id="guest_books">
+          <h5>最新评论</h5>
+          <ul>
+            
+          </ul>
+        </div>
+
+        <div class="local_bottom"></div>
+        
+        <div id="nav_show_top_stop" style="position: fixed; top: 1431.48px;">
+            <div>
+              <!-- 广告位：PC端-iteye博客详情页左侧Button1-200*200 -->
+              
+              <!-- Ads ID 423 -->
+              
+            </div>
+            <div>
+              <!-- 广告位：PC端-iteye博客详情页左侧Button2-200*200 -->
+              
+              <!-- Ads ID 424 -->
+              
+            </div>
+          </div>
+      </div>
+      
+      <div id="main" class="">
+        
+
+
+
+        
+
+
+<div class="h-entry" style="display:none">
+  <a href="https://gaofulai1988.iteye.com/" class="p-author" target="_blank">以矫健身姿飞跃</a>
+</div>
+
+
+<div class="blog_main">
+  <script type="application/ld+json">
+    {
+        "@context": "https://zhanzhang.baidu.com/contexts/cambrian.jsonld",
+        "@id": "http://gaofulai1988.iteye.com/blog/2264755",
+        "title": "request.getInputStream() 只能读一次的解决方法",
+        "images": [],
+        "description": "",
+        "pubDate": "2015-12-17T12:17:22"
+    }
+  </script>
+  <div class="blog_title">
+    <h3>
+      <a href="https://gaofulai1988.iteye.com/blog/2264755">request.getInputStream() 只能读一次的解决方法</a>
+      <em class="actions">      </em>
+    </h3>
+    <ul class="blog_categories"><strong>博客分类：</strong> <li><a href="https://gaofulai1988.iteye.com/category/348585">Java</a></li> </ul>
+        <div class="news_tag"><a href="http://www.iteye.com/blogs/tag/request.getInputStream()%20%E5%8F%AA%E8%83%BD%E8%AF%BB%E4%B8%80%E6%AC%A1%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95">request.getInputStream() 只能读一次的解决方法</a>&nbsp;</div>
+  </div>
+
+  <div id="blog_content" class="hide-main-content">
+    <div class="hide-article-box text-center" style="display: none;">
+      <a class="btn" id="btn-readmore">阅读更多</a>
+    </div>
+    我们知道request.getInputStream()只能读一次，如果下一次读，就会报告Stream closed的错误。下面是解决方法。
+<br>
+<br><div class="dp-highlighter" id=""><div class="bar"><div class="tools">Java代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=InputStream%20input%20%3D%20%20request.getInputStream()%3B%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0AByteArrayOutputStream%20bytebuffer%3D%20new%20ByteArrayOutputStream()%3B%20%20%0Abyte%5B%5D%20buffer%20%3D%20new%20byte%5B1024%5D%3B%20%20%0Aint%20len%3B%20%20%0Awhile%20((len%20%3D%20input.read(buffer))%20%3E%20-1%20)%20%7B%20%20%0A%20%20%20%20bytebuffer.write(buffer%2C%200%2C%20len)%3B%20%20%0A%7D%20%20%0Abytebuffer.flush()%3B%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%0AInputStream%20stream1%20%3D%20new%20ByteArrayInputStream(bytebuffer.toByteArray())%3B%20%20%0A%0A" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/icon_star.png" alt="收藏代码"><img class="spinner" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-j"><li><span><span>InputStream&nbsp;input&nbsp;=&nbsp;&nbsp;request.getInputStream();&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li><li><span>ByteArrayOutputStream&nbsp;bytebuffer=&nbsp;<span class="keyword">new</span><span>&nbsp;ByteArrayOutputStream();&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">byte</span><span>[]&nbsp;buffer&nbsp;=&nbsp;</span><span class="keyword">new</span><span>&nbsp;</span><span class="keyword">byte</span><span>[</span><span class="number">1024</span><span>];&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">int</span><span>&nbsp;len;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span><span class="keyword">while</span><span>&nbsp;((len&nbsp;=&nbsp;input.read(buffer))&nbsp;&gt;&nbsp;-</span><span class="number">1</span><span>&nbsp;)&nbsp;{&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;bytebuffer.write(buffer,&nbsp;<span class="number">0</span><span>,&nbsp;len);&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li><span>}&nbsp;&nbsp;&nbsp;&nbsp;</span></li><li><span>bytebuffer.flush();&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></li><li><span>InputStream&nbsp;stream1&nbsp;=&nbsp;<span class="keyword">new</span><span>&nbsp;ByteArrayInputStream(bytebuffer.toByteArray());&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li></ol></div><pre class="java" name="code" style="display: none;">InputStream input =  request.getInputStream();  
+                  
+ByteArrayOutputStream bytebuffer= new ByteArrayOutputStream();  
+byte[] buffer = new byte[1024];  
+int len;  
+while ((len = input.read(buffer)) &gt; -1 ) {  
+    bytebuffer.write(buffer, 0, len);  
+}  
+bytebuffer.flush();                
+  
+InputStream stream1 = new ByteArrayInputStream(bytebuffer.toByteArray());  
+
+</pre>
+<br>
+<br>
+<br>输出request.getInputStream()内容的方法如下：
+<br>
+<br><div class="dp-highlighter" id=""><div class="bar"><div class="tools">Java代码 <embed wmode="transparent" src="/javascripts/syntaxhighlighter/clipboard_new.swf" width="14" height="15" flashvars="clipboard=StringBuffer%20buffer%20%3D%20new%20StringBuffer()%3B%0A%09%09try%20(BufferedReader%20reader%20%3D%20new%20BufferedReader(new%20InputStreamReader(inputStream)))%20%7B%0A%09%09%09String%20line%20%3D%20%22%22%3B%0A%09%09%09while%20((line%20%3D%20reader.readLine())%20!%3D%20null)%0A%09%09%09%09buffer.append(line)%3B%0A%09%09%7D%0A%0A%09%09logger.info(%22%E6%8E%A5%E6%94%B6xml%E6%95%B0%E6%8D%AE%3A%22%20%2B%20buffer)%3B%0A" quality="high" allowscriptaccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">&nbsp;<a href="javascript:void()" title="收藏这段代码" onclick="code_favorites_do_favorite(this);return false;"><img class="star" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/icon_star.png" alt="收藏代码"><img class="spinner" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/spinner.gif" style="display:none"></a></div></div><ol start="1" class="dp-j"><li><span><span>StringBuffer&nbsp;buffer&nbsp;=&nbsp;</span><span class="keyword">new</span><span>&nbsp;StringBuffer();&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span><span>&nbsp;(BufferedReader&nbsp;reader&nbsp;=&nbsp;</span><span class="keyword">new</span><span>&nbsp;BufferedReader(</span><span class="keyword">new</span><span>&nbsp;InputStreamReader(inputStream)))&nbsp;{&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String&nbsp;line&nbsp;=&nbsp;<span class="string">""</span><span>;&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">while</span><span>&nbsp;((line&nbsp;=&nbsp;reader.readLine())&nbsp;!=&nbsp;</span><span class="keyword">null</span><span>)&nbsp;&nbsp;</span></span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buffer.append(line);&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;</span></li><li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logger.info(<span class="string">"接收xml数据:"</span><span>&nbsp;+&nbsp;buffer);&nbsp;&nbsp;</span></span></li></ol></div><pre class="java" name="code" style="display: none;">StringBuffer buffer = new StringBuffer();
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+			String line = "";
+			while ((line = reader.readLine()) != null)
+				buffer.append(line);
+		}
+
+		logger.info("接收xml数据:" + buffer);
+</pre>
+
+  
+
+  <div>
+    <!-- 广告位：PC端-iteye博客详情页底部banner2-728*90 -->
+    <script>
+      (function() {
+          var s = "_" + Math.random().toString(36).slice(2);
+          document.write('<div id="' + s + '"></div>');
+          (window.slotbydup=window.slotbydup || []).push({
+              id: '4774193',
+              container: s,
+              size: '728,90',
+              display: 'inlay-fix'
+          });
+      })();
+      jQuery(function(){
+        window.csdn.recommendSide({
+          contentBox: "recommend",
+          postBox: jQuery(".news-right-side"),
+          query:'request.getInputStream() 只能读一次的解决方法',
+          popu:'725'
+        })
+      });
+    </script><div id="_d0j6ueh87ja"></div><script charset="utf-8" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/lclm(3)"></script><a href="http://www.baidu.com/cb.php?c=IgF_pyfqnHmkPjbvrHT0IZ0qnfK9ujYzrHfLnH6Y0Aw-5Hnsn16YnjT0TAq15HfLP1fkrHn0T1dWujK-ryn3nW01uWbLPynv0AwY5HDdPHcLPjbznHR0IgF_5y9YIZK1rBtEuywdQhP1uA38UhNYQLwETA-WQvG9IhDk5LNYUNq1ULNzmvRqmhkEuv-Yug--0ZFb5Hb4rfKBUHYk0ZKz5H00Iy-b5HDdP1f1PWD0Uv-b5HDzrH63nHf0mv-b5HT1rHR1nsKEIv3qn0KsXHYznjm0mLFW5Hf1rHf3" target="_blank" style="text-decoration:none;">
+<div style="font-size:17px;color:#f13d3d;font-family: SF Pro Display,Roboto,Noto,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif;width:728px;height:25px;font-weight:bold;">面试时如何在众多Java工程师中脱颖而出？</div>
+<div style="font-size:13px;color:#666;font-family: SF Pro Display,Roboto,Noto,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif;height:35px;margin-top:10px;">Java 程序员必备的知识盘点， Java从小白到大牛的学习规划！</div>
+
+</a>
+  </div>
+
+
+
+  <div id="bottoms" class="clearfix">
+    
+    <div id="share_weibo">分享到：
+      <a data-type="sina" href="javascript:;" title="分享到新浪微博"><img src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/sina.jpg"></a>
+      <a data-type="qq" href="javascript:;" title="分享到腾讯微博"><img src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/tec.jpg"></a>
+    </div>
+  </div>
+
+  <div class="blog_nav">
+    <div class="pre_next">
+      <a href="https://gaofulai1988.iteye.com/blog/2265171" class="next" title="Java Restful">Java Restful</a>
+      |
+      <a href="https://gaofulai1988.iteye.com/blog/2264668" class="pre" title="Tomcat7 编译并导入ecplise中运行">Tomcat7 编译并导入ecplise中运行</a>
+    </div>
+  </div>
+  <div class="blog_bottom">
+    <ul>
+      <li>2015-12-17 12:17</li>
+      <li>浏览 943</li>
+      <li><a href="https://gaofulai1988.iteye.com/blog/2264755#comments">评论(0)</a></li>
+      
+      
+      <li>分类:<a href="https://www.iteye.com/blogs/category/language">编程语言</a></li>      
+      <li class="last"><a href="https://www.iteye.com/wiki/blog/2264755" target="_blank" class="more">查看更多</a></li>
+    </ul>    
+  </div>
+    
+  <div class="blog_comment">
+    <h5>评论</h5>
+    <a id="comments" name="comments"></a>
+    
+    
+    
+  </div>
+
+  <div class="blog_comment">
+    <h5>发表评论</h5>
+            <p style="text-align:center; margin-top:30px;margin-bottom:0px;"><a href="https://gaofulai1988.iteye.com/login" style="background-color:white;"> <img src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/login_icon.png" style="vertical-align:middle; margin-right: 10px;"></a><a href="https://gaofulai1988.iteye.com/login">  您还没有登录,请您登录后再发表评论 </a></p>
+      </div>
+  </div>
+  
+      
+<div class="boutique-curr-box blog_comment">
+	  <div class="boutique-curr clearfix" id="album_detail_wrap">
+	    <h5 class="h3titles">相关资源推荐</h5>
+			<ul style="margin-top: 8px" class="clearfix">
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/fz13768884254/article/details/81365203" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/fz13768884254/article/details/81365203,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="request.getInputStream()只能读取一次的解决方案"><em class="related_suggestion_highlight">request.getInputStream</em>()只<em class="related_suggestion_highlight">能读</em>取<em class="related_suggestion_highlight">一次</em>的解决方案</a>
+              <p>
+                最近，接手一个相关项目，而前端传递参数都是已json方式，在拦截器中要对某个必传参数进行校验，我就使用<em class="related_suggestion_highlight">request.getInputStream</em>()，这样到了controller时，对象属性都为空，后来确定问题是由于<em class="related_suggestion_highlight">request.getInputStream</em>()只能够读取<em class="related_suggestion_highlight">一次</em>。但是在实际的开发中往往需要多次读取。这样就需要我们将流写入进去，提供后续使用。方法可能有很多，
+
+
+
+1：创建Req...
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/we_are_young_on_way/article/details/79421724" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/we_are_young_on_way/article/details/79421724,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/we_are_young_on_way/article/details/79421724,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="过滤器中ServletInputStream只能读取一次问题">过滤器中ServletInputStream只<em class="related_suggestion_highlight">能读</em>取<em class="related_suggestion_highlight">一次</em>问题</a>
+              <p>
+                在使用Servlet进行Web开发的时候，有时候为了增加必要的业务处理而又不想修改现有的程序，往往采用Filter。这样在各个Filter中可能都要读取ServletInputStream流的内容，而ServletInputStream却只<em class="related_suggestion_highlight">能读</em><em class="related_suggestion_highlight">一次</em>，这时候必须备份HttpServleRequest。
+class BufferedServletInputStream extends ServletI...
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/XiWangDeFengChe/article/details/80678249" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/XiWangDeFengChe/article/details/80678249,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/XiWangDeFengChe/article/details/80678249,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="处理request.getInputStream()输入流只能读取一次问题">处理<em class="related_suggestion_highlight">request.getInputStream</em>()输入流只<em class="related_suggestion_highlight">能读</em>取<em class="related_suggestion_highlight">一次</em>问题</a>
+              <p>
+                一般我们会在InterceptorAdapter拦截器中对请求进行验证正常普通接口请求，request.getParameter()可以获取，能多次读取如果我们的接口是用@RequestBody来接受数据，那么我们在拦截器中需要读取request的输入流 &nbsp;，因为 ServletRequest中getReader()和getInputStream()只能调用<em class="related_suggestion_highlight">一次</em>这样就会导致controller 无...
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/Fdiskall/article/details/80564141" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/Fdiskall/article/details/80564141,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/Fdiskall/article/details/80564141,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="解决 request.getInputStream()只能获取一次的问题">解决 <em class="related_suggestion_highlight">request.getInputStream</em>()只能获取<em class="related_suggestion_highlight">一次</em>的问题</a>
+              <p>
+                在开发中有时候我们会在filter中获取上传文件然后验证其合法性，但是在filter中获取<em class="related_suggestion_highlight">一次</em>以后，我们在controller想再次获取上传文件对象是获取不到的。<em class="related_suggestion_highlight">request.getInputStream</em>()返回的是ServletInputStream，此方法没有实现流的mark/reset方法，我们在filter中读取以后无法对流进行复位。实现方法，直接贴代码了。
+
+BodyReaderHtt...
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/beflyabot/article/details/78053130" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/beflyabot/article/details/78053130,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/beflyabot/article/details/78053130,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="拦截器中，request中getReader()和getInputStream()只能调用一次，构建可重复读取inputStream的request.">拦截器中，request中getReader()和getInputStream()只能调用<em class="related_suggestion_highlight">一次</em>，构建可重复读取inputStream的request.</a>
+              <p>
+                由于 request中getReader()和getInputStream()只能调用<em class="related_suggestion_highlight">一次</em> 在项目中，可能会出现需要针对接口参数进行校验等问题。因此，针对这问题，给出一下解决方案step 1:添加RepeatedlyReadRequestWrapper 类并继承 HttpServletRequestWrapper 包装类package com.config;import org.apache.com
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/qq_28988969/article/details/78845300" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/qq_28988969/article/details/78845300,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/qq_28988969/article/details/78845300,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="InputStream只能读取一次的解决方法">InputStream只<em class="related_suggestion_highlight">能读</em>取<em class="related_suggestion_highlight">一次</em>的<em class="related_suggestion_highlight">解决方法</em></a>
+              <p>
+                有时候我们需要对同一个InputStream对象使用多次。但第<em class="related_suggestion_highlight">一次</em>读取InputStream对象后，第二次再读取时可能已经到Stream的结尾了（EOFException）或者Stream已经close掉了。而InputStream对象本身不能复制，因为它没有实现Cloneable接口。此时，可以先把InputStream转化成ByteArrayOutputStream，后面要使用InputStre
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/lnniyunlong99/article/details/53490423" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/lnniyunlong99/article/details/53490423,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/lnniyunlong99/article/details/53490423,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="ServletRequest中getReader()和getInputStream()只能调用一次的解决办法-续网友">ServletRequest中getReader()和getInputStream()只能调用<em class="related_suggestion_highlight">一次</em>的解决办法-续网友</a>
+              <p>
+                本文的实现根据网友的文章-ServletRequest中getReader()和getInputStream()只能调用<em class="related_suggestion_highlight">一次</em>的解决办法
+我做的是springmvc项目，项目经理提出需求：每一个请求都要记录放到日志的功能，记录的内容有IP地址、请求的路径、和访问的参数，并定期转移日志。
+遇到的问题就是：ServletRequest的getReader()和getInputStream()两个方法
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/lxhjh/article/details/51025329" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/lxhjh/article/details/51025329,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/lxhjh/article/details/51025329,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="request.getInputStream()只能获取一次的问题"><em class="related_suggestion_highlight">request.getInputStream</em>()只能获取<em class="related_suggestion_highlight">一次</em>的问题</a>
+              <p>
+                来自：
+http://ayaoxinchao.iteye.com/blog/2110902
+
+问题：在使用HTTP协议实现应用间接口通信时，服务端读取客户端请求过来的数据，会用到<em class="related_suggestion_highlight">request.getInputStream</em>()，第<em class="related_suggestion_highlight">一次</em>读取的时候可以读取到数据，但是接下来的读取操作都读取不到数据
+&nbsp;
+原因：
+1. 一个InputStream对象在被读取完成后，将无法被再次读取，始终返回-
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/qq_24698193/article/details/76725424" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/qq_24698193/article/details/76725424,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/qq_24698193/article/details/76725424,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="解决request.getInputStream()只能读取一次的问题">解决<em class="related_suggestion_highlight">request.getInputStream</em>()只<em class="related_suggestion_highlight">能读</em>取<em class="related_suggestion_highlight">一次</em>的问题</a>
+              <p>
+                <em class="related_suggestion_highlight">request.getInputStream</em>()只能够读取<em class="related_suggestion_highlight">一次</em>，但是在实际的开发中往往需要多次读取。这样就需要我们将流写入进去，提供后续使用。方法可能有很多，
+这里提供其中一种！
+1：创建HttpHelper类获取流中的数据。
+public class HttpHelper {
+
+    /**
+     * 获取请求Body
+     * @param request
+     * @re
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/mmzz_tsz/article/details/84065554" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/mmzz_tsz/article/details/84065554,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/mmzz_tsz/article/details/84065554,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="在SpringMVC框架下HttpServletRequest inputStream只能读取一次的问题">在SpringMVC框架下HttpServletRequest inputStream只<em class="related_suggestion_highlight">能读</em>取<em class="related_suggestion_highlight">一次</em>的问题</a>
+              <p>
+                
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/qq_37446493/article/details/67636867" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/qq_37446493/article/details/67636867,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/qq_37446493/article/details/67636867,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="浅谈request.getinputstream只能读取一次的问题">浅谈<em class="related_suggestion_highlight">request.getinputstream</em>只<em class="related_suggestion_highlight">能读</em>取<em class="related_suggestion_highlight">一次</em>的问题</a>
+              <p>
+                首先，我们复习一下InputStream read方法的基础知识，
+　　java InputStream read方法内部有一个，postion，标志当前流读取到的位置，每读取<em class="related_suggestion_highlight">一次</em>，位置就会移动<em class="related_suggestion_highlight">一次</em>，如果读到最后，InputStream.read方法会返回-1，标志已经读取完了，如果想再次读取，可以调用inputstream.reset方法，position就会移动到上次调用mark的位置，ma
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/qq_19560943/article/details/69242449" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/qq_19560943/article/details/69242449,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/qq_19560943/article/details/69242449,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="InputStream只能读取一次的解决办法">InputStream只<em class="related_suggestion_highlight">能读</em>取<em class="related_suggestion_highlight">一次</em>的解决办法</a>
+              <p>
+                有时候我们需要对同一个InputStream对象使用多次。比如，客户端从服务器获取数据 ，利用HttpURLConnection的getInputStream()方法获得Stream对象，这时既要把数据显示到前台（第<em class="related_suggestion_highlight">一次</em>读取），又想把数据写进文件缓存到本地（第二次读取）。但第<em class="related_suggestion_highlight">一次</em>读取InputStream对象后，第二次再读取时可能已经到Stream的结尾了（EOFException）或者Stream
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/ZuoYanYouYan/article/details/80225148" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/ZuoYanYouYan/article/details/80225148,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/ZuoYanYouYan/article/details/80225148,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="request获取inputStream只能获取一次解决方法">request获取inputStream只能获取<em class="related_suggestion_highlight">一次</em><em class="related_suggestion_highlight">解决方法</em></a>
+              <p>
+                
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/SHIYUN123zw/article/details/60324580" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/SHIYUN123zw/article/details/60324580,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/SHIYUN123zw/article/details/60324580,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="有关inputstream流只能读取一次的问题">有关inputstream流只<em class="related_suggestion_highlight">能读</em>取<em class="related_suggestion_highlight">一次</em>的问题</a>
+              <p>
+                最近在学习servlete,无意中发现在以post方法提交表单信息后，在servlet端用getInputStream()接收实体信息后，再用getParameter()获取是，发现为null.我就十分困惑。代码如下
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp;//post获取实体信息 &nbsp; &nbsp;getinputstream
+
+InputStream in = <em class="related_suggestion_highlight">request.getInputStream</em>
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/wenxingchen/article/details/85125216" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/wenxingchen/article/details/85125216,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/wenxingchen/article/details/85125216,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="解决Request和Response只能获取一次的问题">解决Request和Response只能获取<em class="related_suggestion_highlight">一次</em>的问题</a>
+              <p>
+                
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/GX_BUG/article/details/82716194" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/GX_BUG/article/details/82716194,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/GX_BUG/article/details/82716194,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="流只能读取一次的问题">流只<em class="related_suggestion_highlight">能读</em>取<em class="related_suggestion_highlight">一次</em>的问题</a>
+              <p>
+                
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/dream8062/article/details/72674559" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/dream8062/article/details/72674559,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/dream8062/article/details/72674559,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="ServletInputStream的重复读取（多次读取）">https://blog.csdn.net/dream8062/article/details/72674559</a>
+              <p>
+                
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/Onlyonefate/article/details/52185349" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/Onlyonefate/article/details/52185349,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/Onlyonefate/article/details/52185349,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="关于用Getline读取文件只能读取首行的问题">关于用Getline读取文件只<em class="related_suggestion_highlight">能读</em>取首行的问题</a>
+              <p>
+                自己再代码中用getline读取文件时只<em class="related_suggestion_highlight">能读</em>取首行，这个问题困扰了我很久，最开始我以为是函数没有识别换行，任然再第一行读取东西，但这个行getline这个函数的基本功能就相悖了，在稍作测试后我就换了其他思路，转向其他方向。
+void ReadMan(list &amp;Gtm,char *filename)
+{
+	ifstream ifile(filename,ios::in);
+	if (ifile.
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/weixin_41973131/article/details/84956793" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/weixin_41973131/article/details/84956793,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/weixin_41973131/article/details/84956793,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="Request IO流无法重复读取的原因和解决方法">Request IO流无法重复读取的原因和<em class="related_suggestion_highlight">解决方法</em></a>
+              <p>
+                Request IO流只<em class="related_suggestion_highlight">能读</em>取<em class="related_suggestion_highlight">一次</em>的原因和<em class="related_suggestion_highlight">解决方法</em>
+欢迎关注驿外残香 | HC的博客
+使用环境
+SpringBoot 2.x, Spring 4.x
+探索路线
+只<em class="related_suggestion_highlight">能读</em><em class="related_suggestion_highlight">一次</em>的原因
+首先要知道为什么httpServletRequest的流只<em class="related_suggestion_highlight">能读</em>取<em class="related_suggestion_highlight">一次</em>。
+调用httpServlet<em class="related_suggestion_highlight">Request.getInputStream</em>()可以看到获取的流类型为ServletInputStream，继承InputS...
+              </p>
+						</li>
+				
+						<li class="news-recommends-ajax">
+              
+              <a href="https://blog.csdn.net/kissandlove/article/details/83898490" data-track-click="{&quot;con&quot;:&quot;,https://blog.csdn.net/kissandlove/article/details/83898490,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" data-track-view="{&quot;con&quot;:&quot;,https://blog.csdn.net/kissandlove/article/details/83898490,-&quot;,&quot;mod&quot;:&quot;popu_712&quot;}" target="_blank" title="解决request body的内容，只能获取一次的问题">解决request body的内容，只能获取<em class="related_suggestion_highlight">一次</em>的问题</a>
+              <p>
+                
+              </p>
+						</li>
+				
+			</ul>
+	  </div>
+</div>
+
+    
+
+</div>
+
+
+<script type="text/javascript">
+  dp.SyntaxHighlighter.HighlightAll('code', true, true);
+
+  $$('#main .blog_content pre[name=code]').each(function(pre, index){ // blog content
+    var post_id = 2264755;
+    var location = window.location;
+    source_url = location.protocol + "//" + location.host + location.pathname + location.search;
+    pre.writeAttribute('codeable_id', post_id);
+    pre.writeAttribute('codeable_type', "Blog");
+    pre.writeAttribute('source_url', source_url);
+    pre.writeAttribute('pre_index', index);
+    pre.writeAttribute('title', 'request.getInputStream() 只能读一次的解决方法');
+  });
+
+  fix_image_size($$('div.blog_content img'), 700);
+
+  function processComment() {
+    $$('#main .blog_comment > div').each(function(comment){// comment
+      var post_id = comment.id.substr(2);
+      $$("#"+comment.id+" pre[name=code]").each(function(pre, index){
+        var location = window.location;
+        source_url = location.protocol + "//" + location.host + location.pathname + location.search;
+        source_url += "#" + comment.id;
+        pre.writeAttribute('codeable_id', post_id);
+        pre.writeAttribute('codeable_type', "BlogComment");
+        pre.writeAttribute('source_url', source_url);
+        pre.writeAttribute('pre_index', index);
+        pre.writeAttribute('title', 'request.getInputStream() 只能读一次的解决方法');
+      });
+    });
+  }
+
+  function quote_comment(id) {
+    new Ajax.Request('/editor/quote', {
+      parameters: {'id':id, 'type':'BlogComment'},
+      onSuccess:function(response){editor.bbcode_editor.textarea.insertAfterSelection(response.responseText);
+        Element.scrollTo(editor.bbcode_editor.textarea.element);}
+    });
+  }
+
+  code_favorites_init();
+  processComment();
+  new WeiboShare({share_buttons: $('share_weibo'), img_scope: $('blog_content')});
+</script>
+
+
+
+
+      </div>
+      
+        <div class="blog-sidebar">
+          <div class="blog-sidebar-fixed">
+            <div class="news-right-side">
+
+            <div class="newbox recommend"><div class="recommend-right">
+  <ul class="recommend-fixed-box">  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/fz13768884254/article/details/81365203,-&quot;}"><a href="https://blog.csdn.net/fz13768884254/article/details/81365203" target="_blank"><div class="content clearfix"><h5 class="" title="request.getInputStream()只能读取一次的解决方案">request.getInputStream()只能读取一次的解决方案</h5><span class="time">2018-08-02</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>1028</span></div><div class="right-item-desc">
+最近，接手一个相关项目，而前端传递参数都是已json方式，在拦截器中要对某个必传参数进行校验，我就使用request.getInputStream()，这样到了controller时，对象属性都为空，后来确定问题是由于request.getInputStream()只能够读取一次。但是在实际的开发中往往需要多次读取。这样就需要我们将流写入进去，提供后续使用。方法可能有很多，
+
+
+
+1：创建Req...</div></a></li>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/we_are_young_on_way/article/details/79421724,-&quot;}"><a href="https://blog.csdn.net/we_are_young_on_way/article/details/79421724" target="_blank"><div class="content clearfix"><h5 class="" title="过滤器中ServletInputStream只能读取一次问题">过滤器中ServletInputStream只能读取一次问题</h5><span class="time">2018-03-02</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>569</span></div><div class="right-item-desc">在使用Servlet进行Web开发的时候，有时候为了增加必要的业务处理而又不想修改现有的程序，往往采用Filter。这样在各个Filter中可能都要读取ServletInputStream流的内容，而ServletInputStream却只能读一次，这时候必须备份HttpServleRequest。
+class BufferedServletInputStream extends ServletI...</div></a></li><div style="border-bottom: none;" id="_7oxbyr1my9k" class="right-item ad_item"><iframe id="iframeu3586193_0" name="iframeu3586193_0" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/lclm.html" width="280" height="70" align="center,center" vspace="0" hspace="0" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" style="border:0;vertical-align:bottom;margin:0;width:280px;height:70px" allowtransparency="true"></iframe></div>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/XiWangDeFengChe/article/details/80678249,-&quot;}"><a href="https://blog.csdn.net/XiWangDeFengChe/article/details/80678249" target="_blank"><div class="content clearfix"><h5 class="" title="处理request.getInputStream()输入流只能读取一次问题">处理request.getInputStream()输入流只能读取一次问题</h5><span class="time">2018-06-13</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>2349</span></div><div class="right-item-desc">一般我们会在InterceptorAdapter拦截器中对请求进行验证正常普通接口请求，request.getParameter()可以获取，能多次读取如果我们的接口是用@RequestBody来接受数据，那么我们在拦截器中需要读取request的输入流 &nbsp;，因为 ServletRequest中getReader()和getInputStream()只能调用一次这样就会导致controller 无...</div></a></li>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/Fdiskall/article/details/80564141,-&quot;}"><a href="https://blog.csdn.net/Fdiskall/article/details/80564141" target="_blank"><div class="content clearfix"><h5 class="" title="解决" request.getinputstream()&#21482;&#33021;&#33719;&#21462;&#19968;&#27425;&#30340;&#38382;&#39064;="">解决 request.getInputStream()只能获取一次的问题</h5><span class="time">2018-06-04</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>2348</span></div><div class="right-item-desc">在开发中有时候我们会在filter中获取上传文件然后验证其合法性，但是在filter中获取一次以后，我们在controller想再次获取上传文件对象是获取不到的。request.getInputStream()返回的是ServletInputStream，此方法没有实现流的mark/reset方法，我们在filter中读取以后无法对流进行复位。实现方法，直接贴代码了。
+
+BodyReaderHtt...</div></a></li>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/beflyabot/article/details/78053130,-&quot;}"><a href="https://blog.csdn.net/beflyabot/article/details/78053130" target="_blank"><div class="content clearfix"><h5 class="" title="拦截器中，request中getReader()和getInputStream()只能调用一次，构建可重复读取inputStream的request.">拦截器中，request中getReader()和getInputStream()只能调用一次，构建可重复读取inputStream的request.</h5><span class="time">2017-09-21</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>4152</span></div><div class="right-item-desc">由于 request中getReader()和getInputStream()只能调用一次 在项目中，可能会出现需要针对接口参数进行校验等问题。因此，针对这问题，给出一下解决方案step 1:添加RepeatedlyReadRequestWrapper 类并继承 HttpServletRequestWrapper 包装类package com.config;import org.apache.com</div></a></li>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/qq_28988969/article/details/78845300,-&quot;}"><a href="https://blog.csdn.net/qq_28988969/article/details/78845300" target="_blank"><div class="content clearfix"><h5 class="" title="InputStream只能读取一次的解决方法">InputStream只能读取一次的解决方法</h5><span class="time">2017-12-19</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>2461</span></div><div class="right-item-desc">有时候我们需要对同一个InputStream对象使用多次。但第一次读取InputStream对象后，第二次再读取时可能已经到Stream的结尾了（EOFException）或者Stream已经close掉了。而InputStream对象本身不能复制，因为它没有实现Cloneable接口。此时，可以先把InputStream转化成ByteArrayOutputStream，后面要使用InputStre</div></a></li><div style="border-bottom: none;" id="_rzpz6o5nvw" class="right-item ad_item"><iframe id="iframeu3591305_0" name="iframeu3591305_0" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/lclm(4).html" width="280" height="70" align="center,center" vspace="0" hspace="0" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" style="border:0;vertical-align:bottom;margin:0;width:280px;height:70px" allowtransparency="true"></iframe></div>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/lnniyunlong99/article/details/53490423,-&quot;}"><a href="https://blog.csdn.net/lnniyunlong99/article/details/53490423" target="_blank"><div class="content clearfix"><h5 class="" title="ServletRequest中getReader()和getInputStream()只能调用一次的解决办法-续网友">ServletRequest中getReader()和getInputStream()只能调用一次的解决办法-续网友</h5><span class="time">2016-12-06</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>3905</span></div><div class="right-item-desc">本文的实现根据网友的文章-ServletRequest中getReader()和getInputStream()只能调用一次的解决办法
+我做的是springmvc项目，项目经理提出需求：每一个请求都要记录放到日志的功能，记录的内容有IP地址、请求的路径、和访问的参数，并定期转移日志。
+遇到的问题就是：ServletRequest的getReader()和getInputStream()两个方法</div></a></li>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/qq_24698193/article/details/76725424,-&quot;}"><a href="https://blog.csdn.net/qq_24698193/article/details/76725424" target="_blank"><div class="content clearfix"><h5 class="" title="解决request.getInputStream()只能读取一次的问题">解决request.getInputStream()只能读取一次的问题</h5><span class="time">2017-08-05</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>6844</span></div><div class="right-item-desc">request.getInputStream()只能够读取一次，但是在实际的开发中往往需要多次读取。这样就需要我们将流写入进去，提供后续使用。方法可能有很多，
+这里提供其中一种！
+1：创建HttpHelper类获取流中的数据。
+public class HttpHelper {
+
+    /**
+     * 获取请求Body
+     * @param request
+     * @re</div></a></li>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/lxhjh/article/details/51025329,-&quot;}"><a href="https://blog.csdn.net/lxhjh/article/details/51025329" target="_blank"><div class="content clearfix"><h5 class="" title="request.getInputStream()只能获取一次的问题">request.getInputStream()只能获取一次的问题</h5><span class="time">2016-03-31</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>2430</span></div><div class="right-item-desc">来自：
+http://ayaoxinchao.iteye.com/blog/2110902
+
+问题：在使用HTTP协议实现应用间接口通信时，服务端读取客户端请求过来的数据，会用到request.getInputStream()，第一次读取的时候可以读取到数据，但是接下来的读取操作都读取不到数据
+&nbsp;
+原因：
+1. 一个InputStream对象在被读取完成后，将无法被再次读取，始终返回-</div></a></li>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/mmzz_tsz/article/details/84065554,-&quot;}"><a href="https://blog.csdn.net/mmzz_tsz/article/details/84065554" target="_blank"><div class="content clearfix"><h5 class="" title="在SpringMVC框架下HttpServletRequest" inputstream&#21482;&#33021;&#35835;&#21462;&#19968;&#27425;&#30340;&#38382;&#39064;="">在SpringMVC框架下HttpServletRequest inputStream只能读取一次的问题</h5><span class="time">2018-11-14</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>218</span></div><div class="right-item-desc">场景描述：在异常日中打印请求url和请求传入的参数
+
+采用的方式：使用slf4j+logback管理日志，在进入controller前将参数放入MDC中，在logba.xml中使用&amp;amp;lt;pattern&amp;amp;gt;%d &nbsp;- %X{requestBody} - %X{requestUrl} - %msg%n&amp;amp;lt;/pattern&amp;amp;gt;输入日志
+
+遇到问题：1、在获取body需采用获取request...</div></a></li>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/qq_37446493/article/details/67636867,-&quot;}"><a href="https://blog.csdn.net/qq_37446493/article/details/67636867" target="_blank"><div class="content clearfix"><h5 class="" title="浅谈request.getinputstream只能读取一次的问题">浅谈request.getinputstream只能读取一次的问题</h5><span class="time">2017-03-28</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>415</span></div><div class="right-item-desc">首先，我们复习一下InputStream read方法的基础知识，
+　　java InputStream read方法内部有一个，postion，标志当前流读取到的位置，每读取一次，位置就会移动一次，如果读到最后，InputStream.read方法会返回-1，标志已经读取完了，如果想再次读取，可以调用inputstream.reset方法，position就会移动到上次调用mark的位置，ma</div></a></li><div style="border-bottom: none;" id="_syjf5n1xz9e" class="right-item ad_item"><iframe id="iframeu3591311_0" name="iframeu3591311_0" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/lclm(5).html" width="280" height="70" align="center,center" vspace="0" hspace="0" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" style="border:0;vertical-align:bottom;margin:0;width:280px;height:70px" allowtransparency="true"></iframe></div>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/qq_19560943/article/details/69242449,-&quot;}"><a href="https://blog.csdn.net/qq_19560943/article/details/69242449" target="_blank"><div class="content clearfix"><h5 class="" title="InputStream只能读取一次的解决办法">InputStream只能读取一次的解决办法</h5><span class="time">2017-04-05</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>4542</span></div><div class="right-item-desc">有时候我们需要对同一个InputStream对象使用多次。比如，客户端从服务器获取数据 ，利用HttpURLConnection的getInputStream()方法获得Stream对象，这时既要把数据显示到前台（第一次读取），又想把数据写进文件缓存到本地（第二次读取）。但第一次读取InputStream对象后，第二次再读取时可能已经到Stream的结尾了（EOFException）或者Stream</div></a></li>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/ZuoYanYouYan/article/details/80225148,-&quot;}"><a href="https://blog.csdn.net/ZuoYanYouYan/article/details/80225148" target="_blank"><div class="content clearfix"><h5 class="" title="request获取inputStream只能获取一次解决方法">request获取inputStream只能获取一次解决方法</h5><span class="time">2018-05-07</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>698</span></div><div class="right-item-desc">1、编写HttpWrapper继承HttpServletRequestWrapper:package com.xx.httpwrapper;
+
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequ...</div></a></li>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/dream8062/article/details/72674559,-&quot;}"><a href="https://blog.csdn.net/dream8062/article/details/72674559" target="_blank"><div class="content clearfix"><h5 class="" title="ServletInputStream的重复读取（多次读取）">ServletInputStream的重复读取（多次读取）</h5><span class="time">2017-05-24</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>5725</span></div><div class="right-item-desc">欢迎和大家交流技术相关问题：
+邮箱: jiangxinnju@163.com
+博客园地址: http://www.cnblogs.com/jiangxinnju
+GitHub地址: https://github.com/jiangxincode
+知乎地址: 
+https://www.zhihu.com/people/jiangxinnju
+在使用Servlet进行Web开发的时候，有时</div></a></li>  <li class="right-item cebian_item" data-track-click="{&quot;mod&quot;:&quot;popu_725&quot;,&quot;con&quot;:&quot;,https://blog.csdn.net/SHIYUN123zw/article/details/60324580,-&quot;}"><a href="https://blog.csdn.net/SHIYUN123zw/article/details/60324580" target="_blank"><div class="content clearfix"><h5 class="" title="有关inputstream流只能读取一次的问题">有关inputstream流只能读取一次的问题</h5><span class="time">2017-03-04</span><span class="read so_read"> <svg class="icon no-active hover-hide" aria-hidden="true"><use xlink:href="#yuedushu"></use></svg>2841</span></div><div class="right-item-desc">最近在学习servlete,无意中发现在以post方法提交表单信息后，在servlet端用getInputStream()接收实体信息后，再用getParameter()获取是，发现为null.我就十分困惑。代码如下
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp;//post获取实体信息 &nbsp; &nbsp;getinputstream
+
+InputStream in = request.getInputStream</div></a></li></ul>
+</div></div></div>
+            <div class="persion_article">
+
+            <div class="right_box footer_box csdn-tracking-statistics" data-mod="popu_475" data-dsm="post">        <div class="contact-box" id="footer-contact-box"><div class="img-box"><a href="https://edu.csdn.net/?utm_source=csdn_footer" target="_blank"><img src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/edu-QR.png" alt="CSDN学院" style="padding: 6px;"></a><p class="app-text">CSDN学院</p></div><div class="img-box fr"><img style="padding:6px;" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/job-QR.png" alt="CSDN企业招聘"><p class="app-text">CSDN企业招聘</p></div></div>        <div class="contact-info">        <p><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path d="M2.167 2h11.666C14.478 2 15 2.576 15 3.286v9.428c0 .71-.522 1.286-1.167 1.286H2.167C1.522 14 1 13.424 1 12.714V3.286C1 2.576 1.522 2 2.167 2zm-.164 3v1L8 10l6-4V5L8 9 2.003 5z" fill="#5c5c5c" fill-rule="evenodd"></path></svg><a href="mailto:webmaster@csdn.net" target="_blank"><span class="txt">kefu@csdn.net</span></a>        <em class="width126"><svg t="1538013544186" width="17" height="17" style="" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="23556" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><style type="text/css"></style></defs><path d="M902.60033922 650.96445566c-18.0718526-100.84369837-94.08399771-166.87723736-94.08399771-166.87723737 10.87530062-91.53186599-28.94715402-107.78733693-28.94715401-107.78733691C771.20003413 93.08221664 517.34798062 98.02553561 511.98620441 98.16348824 506.65661791 98.02553561 252.75857992 93.08221664 244.43541101 376.29988138c0 0-39.79946279 16.25547094-28.947154 107.78733691 0 0-75.98915247 66.03353901-94.0839977 166.87723737 0 0-9.63372291 170.35365477 86.84146124 20.85850523 0 0 21.70461757 56.79068296 61.50407954 107.78733692 0 0-71.1607951 23.19910867-65.11385185 83.46161052 0 0-2.43717093 67.16015592 151.93232126 62.56172014 0 0 108.5460788-8.0932473 141.10300432-52.14626271H526.33792324c32.57991817 44.05301539 141.10300431 52.1462627 141.10300431 52.14626271 154.3235077 4.59843579 151.95071457-62.56172013 151.95071457-62.56172014 6.00095876-60.26250183-65.11385185-83.46161053-65.11385185-83.46161052 39.77647014-50.99665395 61.4810877-107.78733693 61.4810877-107.78733692 96.45219231 149.49514952 86.84146124-20.85850523 86.84146125-20.85850523" p-id="23557" fill="#5c5c5c"></path></svg><a href="http://wpa.b.qq.com/cgi/wpa.php?ln=1&amp;key=XzgwMDE4MDEwNl80ODc3MzVfODAwMTgwMTA2XzJf" class="qqcustomer_s" target="_blank"><span class="txt">QQ客服</span></a></em></p>        <p><em class="width126"><svg t="1538012951761" width="17" height="17" style="" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="23083" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><style type="text/css"></style></defs><path d="M466.4934485 880.02006511C264.6019863 859.18313878 107.13744214 688.54706608 107.13744214 481.14947309 107.13744214 259.68965394 286.68049114 80.14660493 508.14031029 80.14660493s401.00286817 179.54304901 401.00286814 401.00286816v1.67343191C908.30646249 737.58941724 715.26799489 943.85339507 477.28978337 943.85339507c-31.71423369 0-62.61874229-3.67075386-92.38963569-10.60739903 30.09478346-11.01226158 56.84270313-29.63593923 81.5933008-53.22593095z m-205.13036267-398.87059202a246.77722444 246.77722444 0 0 0 493.5544489 0 30.85052691 30.85052691 0 0 0-61.70105383 0 185.07617062 185.07617062 0 0 1-370.15234125 0 30.85052691 30.85052691 0 0 0-61.70105382 0z" p-id="23084" fill="#5c5c5c"></path></svg><a href="http://bbs.csdn.net/forums/Service" target="_blank"><span class="txt">客服论坛</span></a></em>        <svg t="1538013874294" width="17" height="17" style="" viewBox="0 0 1194 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="23784" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><style type="text/css"></style></defs><path d="M1031.29689505 943.85339507h-863.70679012A71.98456279 71.98456279 0 0 1 95.60554212 871.86883228v-150.85178906c0-28.58329658 16.92325492-54.46750945 43.13135785-65.93861527l227.99160176-99.75813425c10.55341735-4.61543317 18.24580594-14.0082445 20.72896295-25.23643277l23.21211998-105.53417343a71.95757195 71.95757195 0 0 1 70.28414006-56.51881307h236.95255971c33.79252817 0 63.02360485 23.5090192 70.28414004 56.51881307l23.21211997 105.53417343c2.48315701 11.25517912 10.17554562 20.62099961 20.72896296 25.23643277l227.99160177 99.75813425a71.98456279 71.98456279 0 0 1 43.13135783 65.93861527v150.85178906A71.98456279 71.98456279 0 0 1 1031.26990421 943.85339507z m-431.85339506-143.94213475c143.94213474 0 143.94213474-48.34058941 143.94213474-107.96334876s-64.45411922-107.96334877-143.94213474-107.96334877c-79.51500637 0-143.94213474 48.34058941-143.94213475 107.96334877s0 107.96334877 143.94213475 107.96334876zM1103.254467 296.07330247v148.9894213a35.97878598 35.97878598 0 0 1-44.15700966 35.03410667l-143.94213473-33.57660146a36.0057768 36.0057768 0 0 1-27.80056231-35.03410668V296.1002933c-35.97878598-47.98970852-131.95820302-71.98456279-287.91126031-71.98456279S347.53801649 248.11058478 311.53223967 296.1002933v115.385829c0 16.73431906-11.52508749 31.25538946-27.80056233 35.03410668l-143.94213473 33.57660146A35.97878598 35.97878598 0 0 1 95.63253297 445.06272377V296.07330247C162.81272673 152.13116772 330.77670658 80.14660493 599.47049084 80.14660493s436.63077325 71.98456279 503.81096699 215.92669754z" p-id="23785" fill="#5c5c5c"></path></svg>400-660-0108 </p>        <p style="text-align:center">工作时间 8:30-22:00</p>        </div>        <div class="bg-gray">            <div class="feed_copyright">            <p><a class="right-dotte" href="https://www.csdn.net/company/index.html#about" target="_blank">关于我们</a><a href="https://www.csdn.net/company/index.html#recruit" target="_blank" class="right-dotte">招聘</a><a href="https://www.csdn.net/company/index.html#contact" target="_blank" class="right-dotte">广告服务</a>            <a href="https://www.csdn.net/gather/A" target="_blank" class="footer_baidu">            网站地图</a></p>            <p class="fz12_baidu"><a href="https://zn.baidu.com/cse/home/index" target="_blank"><svg width="13" height="14" xmlns="http://www.w3.org/2000/svg"><path d="M8.392 7.013c1.014 1.454 2.753 2.8 2.753 2.8s1.303 1.017.47 2.98c-.833 1.962-3.876.942-3.876.942s-1.122-.36-2.424-.072c-1.303.291-2.426.181-2.426.181s-1.523.037-1.957-1.888c-.434-1.927 1.52-2.982 1.666-3.161.145-.183 1.159-.873 1.81-1.963.653-1.09 2.608-1.962 3.984.181zm1.23 5.706V9.346H8.64v2.534h-.937s-.3-.044-.356-.285V9.33l-.925.015v2.518s.042.627.925.855h2.277zm-3.685.013V7.951l-.896-.014v1.295H3.987s-1.054.086-1.422 1.28c-.129.798.114 1.266.156 1.368.043.099.383.682 1.238.852h1.978zm-2.433-1.45c-.087-.286.013-.613.057-.741.042-.128.228-.427.61-.54h.855v1.948h-.797s-.555-.029-.725-.668zm6.877-8.775c-.143.909-.865 2.108-1.99 1.962-1.121-.144-1.375-1.16-1.267-2.179C7.214 1.458 8.21.18 9.007.364c.796.18 1.52 1.235 1.374 2.143zm-4.09-.345c0 1.197-.68 2.164-1.52 2.164S3.25 3.36 3.25 2.162C3.25.967 3.932 0 4.77 0c.842 0 1.52.967 1.52 2.162zm4.854 2.09c1.34 0 1.701 1.309 1.701 1.743 0 .438.182 2.29-1.485 2.326-1.667.037-1.737-1.126-1.737-1.96 0-.874.179-2.11 1.52-2.11zm-7.93.581c.045.398.253 2.217-1.27 2.544C.427 7.704-.14 5.947.028 5.124c0 0 .18-1.78 1.412-1.89.98-.085 1.7.986 1.774 1.6z" fill="#999" fill-rule="evenodd"></path></svg><em>百度提供站内搜索</em></a>&nbsp;<a href="http://www.miibeian.gov.cn/" target="_blank" class="ml14">京ICP证19004658号</a></p>            <p class="fz12_baidu">©1999-2019 北京创新乐知网络技术有限公司 </p>            </div>        </div>        <div class="allow-info-box">        <p><span>经营性网站备案信息</span>        <em class="width126"><a href="http://www.cyberpolice.cn/" target="_blank"><span>网络110报警服务</span></a></em></p>        <p><a href="http://www.bjjubao.org/" target="_blank"><span>北京互联网违法和不良信息举报中心</span></a></p>        <p><a href="http://www.12377.cn/" target="_blank"><span>中国互联网举报中心</span></a></p>        </div>        </div></div>
+          </div>
+        </div>
+            <script>
+        setTimeout(function () {
+          var naviga_offsetTop = 0;
+
+          function onload_function() {
+            naviga_offsetTop = jQuery("#nav_show_top_stop").position().top;
+            jQuery(window).bind("scroll", naviga_stay_top);
+            jQuery(window).bind("mousewheel", naviga_stay_top);
+            jQuery(document).bind("scroll", naviga_stay_top);
+            jQuery(document).bind("mousewheel", naviga_stay_top);
+          }
+
+          function naviga_stay_top() {
+
+            var scrollTop = jQuery(document).scrollTop();
+            if (scrollTop > (naviga_offsetTop + 250)) {
+              jQuery("#nav_show_top_stop").css({
+                "position": "fixed"
+              });
+              jQuery("#nav_show_top_stop").css({
+                "top": "0px"
+              });
+            } else {
+              jQuery("#nav_show_top_stop").css({
+                "position": "fixed"
+              });
+              jQuery("#nav_show_top_stop").css({
+                "top": naviga_offsetTop + 250 - scrollTop + "px"
+              });
+            }
+          }
+          jQuery(document).ready(onload_function());
+        }, 200);
+      </script>
+    </div>
+          <script>
+          setTimeout(function () {
+              not_loading = true;
+              pageNum = 3;
+              oList = jQuery("#album_detail_wrap");
+              jQuery(window).scroll(function() {
+                  var scrollTop = jQuery(this).scrollTop();
+                  var scrollHeight = jQuery(document).height() ;
+                  var windowHeight = jQuery(this).height();
+                  if (scrollTop + windowHeight >= scrollHeight) {
+                      if(not_loading){
+                          refreshMore();
+                          setTimeout(function(){
+                              getMore();
+                          },100);
+                      }else{
+                          jQuery(".dl_more").remove();
+                      }
+                  }
+              });
+
+              function getMore(){
+                  not_loading = false;
+                  console.log("getMore......");
+                  jQuery.ajax({
+                      type: 'get',
+                      url: "/blog/ajax_get_blog_recommends/2264755",
+                      data:{
+                          page:pageNum
+                      },
+                      //async: false,
+                      dataType: 'json',
+                      success: function (resobj) {
+                          var totalNum = resobj.total_pages;
+                          if(pageNum <= totalNum && resobj.oHtml != '' ){
+                              jQuery(".dl_more").remove();
+                              oList.find('ul').append(resobj.oHtml);
+                              refreshMore();
+                              not_loading = true;
+                              pageNum++;
+                          }else{
+                              not_loading = false;
+                              noMore();
+                          }
+                      },
+                      error: function (err) {
+                          console.log(err);
+                      }
+                  });
+              }
+
+              function noMore(){
+                  jQuery(".dl_more").remove();
+                  if(oList.find(".dl_no_more").length ==0){
+                      oList.append('<div class="dl_no_more" style="font-size:14px; color:#0F8AC6; text-align:center;padding-top:10px; ">我们是很有底线的</div>');
+                  }
+              }
+
+              function refreshMore(){
+                  if(oList.find(".dl_more").length ==0){
+                      oList.append('<div class="dl_more" style="font-size:14px; color:#0F8AC6; text-align:center;padding-top:10px;">上滑加载更多</div>');
+                  }
+              }
+          }, 200);
+      </script>
+  
+    <div id="footer" class="clearfix">
+      <!-- <div id="copyright">
+        <hr />
+        声明：ITeye文章版权属于作者，受法律保护。没有作者书面许可不得转载。若作者同意转载，必须以超链接形式标明文章原始出处和作者。<br />
+        &copy; 2003-
+        2019 ITeye.com. All rights reserved. [ 京ICP证110151号 京公网安备110105010620 ]
+      </div> -->
+      <div id="ad_pop">
+        <div class="J_adv" data-view="true" data-mod="ad_popu_64" data-mtp="62" data-order="21" data-con="ad_content_2070">
+          <script id="popuLayer_js_q" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/popuLayer.js" defer="" type="text/javascript"></script>
+          <!-- 广告位：PC端-iteye博客详情右侧弹窗-300*250 -->
+          
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+  document.write("<img src='https://stat.iteye.com/?url="+ encodeURIComponent(document.location.href) + "&referrer=" + encodeURIComponent(document.referrer) + "&user_id=' width='0' height='0' />");
+</script><img src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/saved_resource" width="0" height="0">
+
+
+
+   Global site tag (gtag.js) - Google Analytics
+  <script async="" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/js"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-127895514-6');
+  </script>
+
+  
+  
+  <link href="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/content_toolbar.css" rel="stylesheet">
+<script src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/publib_footer-1.0.3.js" data-isfootertrack="false" type="text/javascript"></script><link rel="stylesheet" type="text/css" href="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/pub_footer_1.0.3.css">
+<script id="csdn-toolbar-id" btnid="header_notice_num" wrapid="note1" count="5" subcount="5" type="text/javascript" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/content_toolbar.js"></script><script src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/notify.js"></script><script src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/main.js"></script>
+<script src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/tracking-1.0.1.js" type="text/javascript"></script>
+<script language="javascript" type="text/javascript" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/async-1.0.1.js"></script>
+<script type="text/javascript" charset="utf-8" src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/track.js"></script>
+<style>
+  .userinfo {display: none !important;}
+  .persion_article h3{
+    background: none !important;
+    border-bottom: none!important;
+    padding: 0!important;
+    margin-bottom: 0!important;
+    line-height: 1!important;
+  }
+  .persion_article .right_box{
+    margin-top: 0!important;
+  }
+  .persion_article .footer_box .feed_new_tit span{
+    padding-left: 0!important;
+  }
+</style>
+<script>
+(function($){
+  var windowHeight = $(window).height(),
+      contentHeight = $(".hide-main-content").height()
+      windowHeight = windowHeight * 1.2 //获得可视区域高度
+      if(contentHeight > windowHeight){
+        $(".hide-article-box").show()
+        $(".hide-main-content").css({'height': windowHeight,'overflow':'hidden'})
+        $(".hide-article-box").find("#btn-readmore").click(function(){
+          $(this).parents('.hide-main-content').removeAttr('style')
+          $(this).parent().hide()
+        })
+      }
+})(jQuery)
+</script>
+<script type="text/javascript">var $csdn_iteye_jq = jQuery.noConflict();// 解决jq与prototype.js命名空间冲突的问题</script>
+  
+  
+  <script src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/web-storage-cache.min.js" type="text/javascript"></script>
+  <script src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/replace.min.js" type="text/javascript"></script>
+  
+
+
+<script>
+  var jQuery = jQuery.noConflict();
+  setTimeout(function($){
+    window.csdn.fixedSidebar({
+        targetBox: $('.persion_article'), //判断到达底部的div,公共footer可选 $('.persion_article'),$('.public_pc_right_footer2018')
+        mainBox: $("#main"), //侧边栏旁边的主体div,默认 $("main")
+        sidebar: $(".blog-sidebar-fixed"), //侧边栏,默认 $("aside")
+        direction: 'right', //侧边栏浮动方向,可选'right','left',
+        position: 'fixed',//定位方式
+        bottom: 0,
+        zIndex: 99,
+        sidebarRightMargin: 8,//direction为left,侧边栏距离mainbox的右边距
+        sidebarLeftMargin: 37,//direction为right,侧边栏距离mainbox的左边距
+    })
+  },200,jQuery)
+  </script>
+
+<script src="./request.getInputStream() 只能读一次的解决方法 - gaofulai - ITeye博客_files/c(1).js" async="" defer=""></script></body></html>
