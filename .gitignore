@@ -1,0 +1,10 @@
+# apple OSX index file
+**/.DS_Store
+
+**/.idea/*
+
+# Intellij IDEA project configureation file
+*.iml
+
+# Maven build folder
+**/target/*
